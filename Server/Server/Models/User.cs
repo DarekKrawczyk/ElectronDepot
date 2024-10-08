@@ -7,7 +7,7 @@ namespace Server.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid UserID { get; set; }
+        public int UserID { get; set; }
 
         [Required]
         [Column(TypeName = "nvarchar(100)")]
