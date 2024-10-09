@@ -20,5 +20,7 @@ namespace Server.Models
         [Required]
         [Column(TypeName = "nvarchar(255)")]
         public string Email { get; set; }
+
+        public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
     }
 }

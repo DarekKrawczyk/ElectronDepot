@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Context;
 
@@ -11,9 +12,11 @@ using Server.Context;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241009195751_#7")]
+    partial class _7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,27 +24,6 @@ namespace Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Server.Models.Category", b =>
-                {
-                    b.Property<int>("CategoryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("CategoryID");
-
-                    b.ToTable("Categories");
-                });
 
             modelBuilder.Entity("Server.Models.Purchase", b =>
                 {
@@ -164,17 +146,12 @@ namespace Server.Migrations
             modelBuilder.Entity("Server.Models.PurchaseItem", b =>
                 {
                     b.HasOne("Server.Models.Purchase", "Purchase")
-                        .WithMany("PurchaseItems")
+                        .WithMany()
                         .HasForeignKey("PurchaseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Purchase");
-                });
-
-            modelBuilder.Entity("Server.Models.Purchase", b =>
-                {
-                    b.Navigation("PurchaseItems");
                 });
 
             modelBuilder.Entity("Server.Models.Supplier", b =>

@@ -1,4 +1,35 @@
 ﻿# Endpoints
+## Users endpoints
+Podstawowe operacje na użytkownikach.
+- [x] Create - tworzenie użytkownika
+- [x] Get all - zwrócenie wszystkich użytkowników w bazie.
+- [x] Get by ID - użytkownik po ID.
+- [x] Update - zmiana danych użytkownika hasło/email.
+- [x] Delete - usunięcie użytkownika z bazy.
+## Suppliers endpoints
+Informacje na temat dostawców takich jak Botland, Kamami itp...
+- [x] Create - dodanie nowego dostawcy
+- [x] Get all
+- [x] Get by ID
+- [x] Update
+- [x] Delete
+## Purchases endpoints
+Informacje na temat zakupu, coś rodzaju koszyka. Nie widze potrzeby żeby modyfikować
+tego typu rekordy.
+- [x] Create
+- [x] Get all
+- [x] Get by id
+- [x] Delete
+## PurchaseItems endpoints
+To jest jeden rodzaj przedmiotu kupionego w ramach koszyka.
+Nie widze potrzeby żeby można było to modyfikować. Jak już coś zostało dodane
+i miało jakąś cene to nie widze sensu żeby to zmieniać.
+- [x] Create
+- [x] Get all
+- [x] Get by id
+- [x] Delete
+
+---
 ## Users
 Default json representation
 ``` json
