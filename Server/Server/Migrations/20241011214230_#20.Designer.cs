@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Context;
 
@@ -11,9 +12,11 @@ using Server.Context;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241011214230_#20")]
+    partial class _20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,10 +53,7 @@ namespace Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComponentID"));
 
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoryID1")
+                    b.Property<int?>("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -79,8 +79,6 @@ namespace Server.Migrations
                     b.HasKey("ComponentID");
 
                     b.HasIndex("CategoryID");
-
-                    b.HasIndex("CategoryID1");
 
                     b.HasIndex("UserID");
 
@@ -248,14 +246,8 @@ namespace Server.Migrations
             modelBuilder.Entity("Server.Models.Component", b =>
                 {
                     b.HasOne("Server.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Server.Models.Category", null)
                         .WithMany("Components")
-                        .HasForeignKey("CategoryID1");
+                        .HasForeignKey("CategoryID");
 
                     b.HasOne("Server.Models.User", "User")
                         .WithMany("Components")

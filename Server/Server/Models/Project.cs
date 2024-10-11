@@ -3,15 +3,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Server.Models
 {
-    public class Category
+    public class Project
     {
         #region Primary Key
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CategoryID { get; set; }
+        public int ProjectID { get; set; }
         #endregion
         #region Foreign Keys
-        public ICollection<Component> Components { get; set; } = new List<Component>();
+        [Required]
+        [ForeignKey(nameof(User))]
+        public int UserID { get; set; }
+        public User? User { get; set; }
+
+        public ICollection<ProjectComponent> ProjectComponents { get; set; } = new List<ProjectComponent>();
         #endregion
         #region Fields
         [Required]
@@ -20,6 +25,9 @@ namespace Server.Models
 
         [Column(TypeName = "nvarchar(255)")]
         public string? Description { get; set; }
+        
+        [Required]
+        public DateTime CreatedAt { get; set; }
         #endregion
     }
 }

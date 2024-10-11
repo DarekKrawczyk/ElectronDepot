@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Context;
 
@@ -11,9 +12,11 @@ using Server.Context;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241011210412_#16")]
+    partial class _16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,6 +79,9 @@ namespace Server.Migrations
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserID1")
+                        .HasColumnType("int");
+
                     b.HasKey("ComponentID");
 
                     b.HasIndex("CategoryID");
@@ -83,6 +89,8 @@ namespace Server.Migrations
                     b.HasIndex("CategoryID1");
 
                     b.HasIndex("UserID");
+
+                    b.HasIndex("UserID1");
 
                     b.ToTable("Components");
                 });
@@ -258,10 +266,14 @@ namespace Server.Migrations
                         .HasForeignKey("CategoryID1");
 
                     b.HasOne("Server.Models.User", "User")
-                        .WithMany("Components")
+                        .WithMany()
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Server.Models.User", null)
+                        .WithMany("Components")
+                        .HasForeignKey("UserID1");
 
                     b.Navigation("Category");
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Context;
 
@@ -11,9 +12,11 @@ using Server.Context;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241010171942_#11")]
+    partial class _11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,6 +34,7 @@ namespace Server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Name")
@@ -53,13 +57,12 @@ namespace Server.Migrations
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CategoryID1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Manufacturer")
@@ -73,72 +76,11 @@ namespace Server.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
                     b.HasKey("ComponentID");
 
                     b.HasIndex("CategoryID");
 
-                    b.HasIndex("CategoryID1");
-
-                    b.HasIndex("UserID");
-
                     b.ToTable("Components");
-                });
-
-            modelBuilder.Entity("Server.Models.Project", b =>
-                {
-                    b.Property<int>("ProjectID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("Server.Models.ProjectComponent", b =>
-                {
-                    b.Property<int>("ProjectComponentID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectComponentID"));
-
-                    b.Property<int>("ComponentID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectComponentID");
-
-                    b.HasIndex("ComponentID");
-
-                    b.HasIndex("ProjectID");
-
-                    b.ToTable("ProjectComponents");
                 });
 
             modelBuilder.Entity("Server.Models.Purchase", b =>
@@ -178,7 +120,7 @@ namespace Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PurchaseItemID"));
 
-                    b.Property<int>("ComponentID")
+                    b.Property<int?>("ComponentID")
                         .HasColumnType("int");
 
                     b.Property<double>("PricePerUnit")
@@ -250,52 +192,10 @@ namespace Server.Migrations
                     b.HasOne("Server.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Server.Models.Category", null)
-                        .WithMany("Components")
-                        .HasForeignKey("CategoryID1");
-
-                    b.HasOne("Server.Models.User", "User")
-                        .WithMany("Components")
-                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Server.Models.Project", b =>
-                {
-                    b.HasOne("Server.Models.User", "User")
-                        .WithMany("Projects")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Server.Models.ProjectComponent", b =>
-                {
-                    b.HasOne("Server.Models.Component", "Component")
-                        .WithMany("ProjectComponents")
-                        .HasForeignKey("ComponentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Server.Models.Project", "Project")
-                        .WithMany("ProjectComponents")
-                        .HasForeignKey("ProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Component");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Server.Models.Purchase", b =>
@@ -319,11 +219,9 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.PurchaseItem", b =>
                 {
-                    b.HasOne("Server.Models.Component", "Component")
+                    b.HasOne("Server.Models.Component", null)
                         .WithMany("PurchaseItems")
-                        .HasForeignKey("ComponentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ComponentID");
 
                     b.HasOne("Server.Models.Purchase", "Purchase")
                         .WithMany("PurchaseItems")
@@ -331,26 +229,12 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Component");
-
                     b.Navigation("Purchase");
-                });
-
-            modelBuilder.Entity("Server.Models.Category", b =>
-                {
-                    b.Navigation("Components");
                 });
 
             modelBuilder.Entity("Server.Models.Component", b =>
                 {
-                    b.Navigation("ProjectComponents");
-
                     b.Navigation("PurchaseItems");
-                });
-
-            modelBuilder.Entity("Server.Models.Project", b =>
-                {
-                    b.Navigation("ProjectComponents");
                 });
 
             modelBuilder.Entity("Server.Models.Purchase", b =>
@@ -365,10 +249,6 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.User", b =>
                 {
-                    b.Navigation("Components");
-
-                    b.Navigation("Projects");
-
                     b.Navigation("Purchases");
                 });
 #pragma warning restore 612, 618
