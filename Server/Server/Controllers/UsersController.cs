@@ -86,6 +86,34 @@ namespace Server.Controllers
 
             return Ok(user);
         }
+
+        /// <summary>
+        /// GET: ElectronDepot/Users/{userId}/GetAllComponents
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>All components with their quantity for User with given ID</returns>
+        [HttpGet("{userId}/GetAllComponents")]
+        public async Task<IActionResult> GetComponentsWithQuantityForUser(int userId)
+        {
+            var componentsWithQuantity = await (from ownsComponent in _context.OwnsComponent
+                                               join component in _context.Components on ownsComponent.ComponentID equals component.ComponentID
+                                               where ownsComponent.UserID == userId
+                                               select new
+                                               {
+                                                   ComponentID = component.ComponentID,
+                                                   ComponentName = component.Name,
+                                                   Manufacturer = component.Manufacturer,
+                                                   Description = component.Description,
+                                                   Quantity = ownsComponent.Quantity
+                                               }).ToListAsync();
+
+            if (componentsWithQuantity == null || !componentsWithQuantity.Any())
+            {
+                return NotFound(new { title = "No components found", status = 404, message = "No components found for the given user." });
+            }
+
+            return Ok(componentsWithQuantity);
+        }
         #endregion
         #region Update
         /// <summary>
@@ -122,8 +150,6 @@ namespace Server.Controllers
 
             return NoContent();
         }
-
-
         #endregion
         #region Delete
         /// <summary>

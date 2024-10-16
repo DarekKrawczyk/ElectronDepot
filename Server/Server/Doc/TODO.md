@@ -1,11 +1,7 @@
 ﻿# TODO
-* [ ] Database architecture
-	* [ ] Keep track of each module in project	
-* [ ] Add models with controllers
-	* [x] User
-	* [x] Category
-	* [x] Purchase
-	* [x] PurchaseItem
-	* [x] Supplier
-	* [ ] Component
-	* [ ] ComponentProjects
+- [ ] CRUD dla Usera nie powinien zwracal hasła tylko ID, Name, EMail
+- [ ] Dane zwracane z 'Categories' są zbyt obszerne
+
+Implement functions that allow:
+- [ ] For given 'User' return all owned 'Components' with its amount
+- [ ] 

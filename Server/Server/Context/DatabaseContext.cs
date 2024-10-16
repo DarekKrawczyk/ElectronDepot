@@ -15,6 +15,7 @@ namespace Server.Context
         public DbSet<Component> Components { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectComponent> ProjectComponents { get; set; }
+        public DbSet<OwnsComponent> OwnsComponent { get; set; }
         #endregion
         #region Constructor
         public DatabaseContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
@@ -24,20 +25,19 @@ namespace Server.Context
         #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //// Correct the foreign key relationship between Component and Category
+            //modelBuilder.Entity<Component>()
+            //    .HasOne(c => c.Category)            // Navigation property
+            //    .WithMany()                         // Assuming no reverse navigation from Category
+            //    .HasForeignKey(c => c.CategoryID)   // Explicitly specify the FK property
+            //    .OnDelete(DeleteBehavior.Restrict); // Use restrict to avoid cascading deletes for now
 
-            // Correct the foreign key relationship between Component and Category
-            modelBuilder.Entity<Component>()
-                .HasOne(c => c.Category)            // Navigation property
-                .WithMany()                         // Assuming no reverse navigation from Category
-                .HasForeignKey(c => c.CategoryID)   // Explicitly specify the FK property
-                .OnDelete(DeleteBehavior.Restrict); // Use restrict to avoid cascading deletes for now
-
-            // Ensure proper relationship for User -> Component
-            modelBuilder.Entity<Component>()
-                .HasOne(c => c.User)
-                .WithMany(u => u.Components)
-                .HasForeignKey(c => c.UserID)
-                .OnDelete(DeleteBehavior.Cascade);  // User deletion cascades to Component
+            //// Ensure proper relationship for User -> Component
+            //modelBuilder.Entity<Component>()
+            //    .HasOne(c => c.User)
+            //    .WithMany(u => u.Components)
+            //    .HasForeignKey(c => c.UserID)
+            //    .OnDelete(DeleteBehavior.Cascade);  // User deletion cascades to Component
 
 
             //modelBuilder.Entity<Component>()
@@ -87,6 +87,5 @@ namespace Server.Context
             //    .HasForeignKey(c => c.CategoryID)
             //    .OnDelete(DeleteBehavior.Restrict); // No cascade delete when Category is deleted
         }
-
     }
 }

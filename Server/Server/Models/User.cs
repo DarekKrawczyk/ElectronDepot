@@ -12,7 +12,7 @@ namespace Server.Models
         #endregion
         #region Foreign Keys
         public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
-        public ICollection<Component> Components { get; set; } = new List<Component>();
+        public ICollection<OwnsComponent> OwnsComponents { get; set; } = new List<OwnsComponent>();
         public ICollection<Project> Projects { get; set; } = new List<Project>();
         #endregion
         #region Fields

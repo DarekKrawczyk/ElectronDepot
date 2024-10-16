@@ -12,8 +12,8 @@ using Server.Context;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241011214318_#21")]
-    partial class _21
+    [Migration("20241016170108_#1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,9 +59,6 @@ namespace Server.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("Manufacturer")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
@@ -70,19 +67,37 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserID")
-                        .HasColumnType("int");
-
                     b.HasKey("ComponentID");
 
                     b.HasIndex("CategoryID");
 
+                    b.ToTable("Components");
+                });
+
+            modelBuilder.Entity("Server.Models.OwnsComponent", b =>
+                {
+                    b.Property<int>("OwnsComponentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OwnsComponentID"));
+
+                    b.Property<int>("ComponentID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("OwnsComponentID");
+
+                    b.HasIndex("ComponentID");
+
                     b.HasIndex("UserID");
 
-                    b.ToTable("Components");
+                    b.ToTable("OwnsComponent");
                 });
 
             modelBuilder.Entity("Server.Models.Project", b =>
@@ -251,11 +266,24 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Models.User", "User")
-                        .WithMany("Components")
-                        .HasForeignKey("UserID");
-
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Server.Models.OwnsComponent", b =>
+                {
+                    b.HasOne("Server.Models.Component", "Component")
+                        .WithMany("OwnsComponents")
+                        .HasForeignKey("ComponentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Models.User", "User")
+                        .WithMany("OwnsComponents")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Component");
 
                     b.Navigation("User");
                 });
@@ -335,6 +363,8 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.Component", b =>
                 {
+                    b.Navigation("OwnsComponents");
+
                     b.Navigation("ProjectComponents");
 
                     b.Navigation("PurchaseItems");
@@ -357,7 +387,7 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.User", b =>
                 {
-                    b.Navigation("Components");
+                    b.Navigation("OwnsComponents");
 
                     b.Navigation("Projects");
 

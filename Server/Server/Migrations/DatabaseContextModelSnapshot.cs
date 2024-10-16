@@ -53,14 +53,8 @@ namespace Server.Migrations
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CategoryID1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
@@ -70,21 +64,37 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
+                    b.HasKey("ComponentID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.ToTable("Components");
+                });
+
+            modelBuilder.Entity("Server.Models.OwnsComponent", b =>
+                {
+                    b.Property<int>("OwnsComponentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OwnsComponentID"));
+
+                    b.Property<int>("ComponentID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
-                    b.HasKey("ComponentID");
+                    b.HasKey("OwnsComponentID");
 
-                    b.HasIndex("CategoryID");
-
-                    b.HasIndex("CategoryID1");
+                    b.HasIndex("ComponentID");
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Components");
+                    b.ToTable("OwnsComponent");
                 });
 
             modelBuilder.Entity("Server.Models.Project", b =>
@@ -248,22 +258,29 @@ namespace Server.Migrations
             modelBuilder.Entity("Server.Models.Component", b =>
                 {
                     b.HasOne("Server.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Components")
                         .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Server.Models.Category", null)
-                        .WithMany("Components")
-                        .HasForeignKey("CategoryID1");
-
-                    b.HasOne("Server.Models.User", "User")
-                        .WithMany("Components")
-                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Server.Models.OwnsComponent", b =>
+                {
+                    b.HasOne("Server.Models.Component", "Component")
+                        .WithMany("OwnsComponents")
+                        .HasForeignKey("ComponentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Models.User", "User")
+                        .WithMany("OwnsComponents")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Component");
 
                     b.Navigation("User");
                 });
@@ -343,6 +360,8 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.Component", b =>
                 {
+                    b.Navigation("OwnsComponents");
+
                     b.Navigation("ProjectComponents");
 
                     b.Navigation("PurchaseItems");
@@ -365,7 +384,7 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.User", b =>
                 {
-                    b.Navigation("Components");
+                    b.Navigation("OwnsComponents");
 
                     b.Navigation("Projects");
 

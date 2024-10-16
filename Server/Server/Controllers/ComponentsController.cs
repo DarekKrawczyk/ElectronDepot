@@ -106,7 +106,7 @@ namespace Server.Controllers
         /// <param name="id"></param>
         /// <param name="component"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("Delete/{id}")]
         public async Task<IActionResult> PutComponent(int id, Component component)
         {
             if (id != component.ComponentID)
