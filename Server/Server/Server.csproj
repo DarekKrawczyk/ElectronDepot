@@ -17,4 +17,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ElectroDepotClassLibrary\ElectroDepotClassLibrary.csproj" />
+  </ItemGroup>
+
 </Project>

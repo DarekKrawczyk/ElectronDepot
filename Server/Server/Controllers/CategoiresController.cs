@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ElectroDepotClassLibrary.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
+using Server.ExtensionMethods;
 using Server.Models;
 
 namespace Server.Controllers
@@ -23,17 +25,19 @@ namespace Server.Controllers
 
         #region Create
         /// <summary>
-        /// POST: ElectroDepot/Categories/Create
+        /// POST: ElectronDepot/Categories/Create
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<Category>> CreateCategory(Category category)
+        public async Task<ActionResult<CreateCategoryDTO>> CreateCategory(CreateCategoryDTO categoryDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            Category category = categoryDTO.ToCategory();
 
             Category? existingCategory = await _context.Categories.FirstOrDefaultAsync(u => u.Name == category.Name);
 
@@ -45,18 +49,19 @@ namespace Server.Controllers
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCategory), new { id = category.CategoryID }, category);
+            return CreatedAtAction(nameof(GetCategory), new { id = category.CategoryID }, category.ToDTO());
         }
         #endregion
         #region Read
         /// <summary>
-        /// GET: ElectroDepot/Categories/GetAll
+        /// GET: ElectronDepot/Categories/GetAll
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories()
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAllCategories()
         {
-            return await _context.Categories.ToListAsync();
+            IEnumerable<CategoryDTO> categories = await _context.Categories.Select(x=>x.ToDTO()).ToListAsync();
+            return Ok(categories);
         }
 
         /// <summary>
@@ -65,16 +70,16 @@ namespace Server.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<CategoryDTO>> GetCategory(int id)
         {
-            var supplier = await _context.Categories.FindAsync(id);
+            Category? category = await _context.Categories.FindAsync(id);
 
-            if (supplier == null)
+            if (category == null)
             {
                 return NotFound(new { title = "Not Found", code = "404", message = $"Category with ID:{id} doesn't exsit" });
             }
 
-            return Ok(supplier);
+            return Ok(category.ToDTO());
         }
         #endregion
         #region Update
@@ -82,15 +87,13 @@ namespace Server.Controllers
         /// PUT: ElectroDepot/Categories/Update/{id}
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="category"></param>
+        /// <param name="categoryDTO"></param>
         /// <returns></returns>
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, Category category)
+        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDTO categoryDTO)
         {
-            if (id != category.CategoryID)
-            {
-                return BadRequest();
-            }
+            Category category = categoryDTO.ToCategory();
+            category.CategoryID = id;
 
             if (!CategoryExists(id))
             {
@@ -120,7 +123,7 @@ namespace Server.Controllers
                 }
             }
 
-            return Ok(await _context.Categories.FindAsync(id));
+            return Ok(category.ToDTO());
         }
         #endregion
         #region Delete
