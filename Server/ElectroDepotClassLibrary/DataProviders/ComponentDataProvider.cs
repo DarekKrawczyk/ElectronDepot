@@ -5,14 +5,14 @@ using System.Text.Json;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
-    public class CategoryDataProvider
+    public class ComponentDataProvider
     {
         #region Fields
         private string _url = string.Empty;
         private HttpClient _httpClient;
         #endregion
         #region Ctor
-        public CategoryDataProvider(string url)
+        public ComponentDataProvider(string url)
         {
             _url = url;
             _httpClient = new HttpClient();
@@ -20,12 +20,12 @@ namespace ElectroDepotClassLibrary.DataProviders
         }
         #endregion
         #region API Calls
-        public async Task<bool> CreateCategory(CreateCategoryDTO category)
+        public async Task<bool> CreateComponent(CreateComponentDTO category)
         {
             var json = JsonSerializer.Serialize(category);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = CategoryEndpoints.Create();
+            string url = ComponentEndpoints.Create();
             var response = _httpClient.PostAsync(url, content).Result;
 
             if (response.IsSuccessStatusCode)
@@ -35,11 +35,11 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
             return false;
         }
-        public async Task<CategoryDTO> GetCategoryByName(string name)
+        public async Task<ComponentDTO> GetComponentByName(string name)
         {
             try
             {
-                string url = CategoryEndpoints.GetByName(name);
+                string url = ComponentEndpoints.GetByName(name);
                 var response = await _httpClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -48,9 +48,9 @@ namespace ElectroDepotClassLibrary.DataProviders
                     options.PropertyNameCaseInsensitive = true;
 
                     var json = await response.Content.ReadAsStringAsync();
-                    CategoryDTO? category = JsonSerializer.Deserialize<CategoryDTO>(json, options);
+                    ComponentDTO? component = JsonSerializer.Deserialize<ComponentDTO>(json, options);
 
-                    return category;
+                    return component;
                 }
                 else
                 {
@@ -62,11 +62,11 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<CategoryDTO> GetCategoryByID(int ID)
+        public async Task<ComponentDTO> GetComponentByID(int ID)
         {
             try
             {
-                string url = CategoryEndpoints.GetByID(ID);
+                string url = ComponentEndpoints.GetByID(ID);
                 var response = await _httpClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -75,9 +75,9 @@ namespace ElectroDepotClassLibrary.DataProviders
                     options.PropertyNameCaseInsensitive = true;
 
                     var json = await response.Content.ReadAsStringAsync();
-                    CategoryDTO? category = JsonSerializer.Deserialize<CategoryDTO>(json, options);
+                    ComponentDTO? component = JsonSerializer.Deserialize<ComponentDTO>(json, options);
 
-                    return category;
+                    return component;
                 }
                 else
                 {
@@ -89,11 +89,11 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<IEnumerable<CategoryDTO>> GetAllCategories()
+        public async Task<IEnumerable<ComponentDTO>> GetAllComponents()
         {
             try
             {
-                string url = CategoryEndpoints.GetAll();
+                string url = ComponentEndpoints.GetAll();
                 var response = await _httpClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -102,10 +102,8 @@ namespace ElectroDepotClassLibrary.DataProviders
                     options.PropertyNameCaseInsensitive = true;
 
                     var json = await response.Content.ReadAsStringAsync();
-                    IEnumerable<CategoryDTO> categories = JsonSerializer.Deserialize<IEnumerable<CategoryDTO>>(json, options);
-
-                    List<CategoryDTO> result = categories.ToList();
-                    return result;
+                    IEnumerable<ComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<ComponentDTO>>(json, options);
+                    return components;
                 }
                 else
                 {
@@ -117,21 +115,21 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<bool> UpdateCategory(CategoryDTO category)
+        public async Task<bool> UpdateComponent(ComponentDTO component)
         {
-            UpdateCategoryDTO updateDTO = category.ToUpdateCategoryDTO();
+            UpdateComponentDTO updateDTO = component.ToUpdateComponentDTO();
 
             var json = JsonSerializer.Serialize(updateDTO);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = CategoryEndpoints.Update(category.ID);
+            string url = ComponentEndpoints.Update(component.ID);
             var response = await _httpClient.PutAsync(url, content);
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<bool> DeleteCategory(CategoryDTO category)
+        public async Task<bool> DeleteComponent(ComponentDTO component)
         {
-            string url = CategoryEndpoints.Delete(category.ID);
+            string url = ComponentEndpoints.Delete(component.ID);
             var response = await _httpClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }

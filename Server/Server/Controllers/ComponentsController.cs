@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ElectroDepotClassLibrary.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
+using Server.ExtensionMethods;
 using Server.Models;
 
 namespace Server.Controllers
@@ -27,7 +29,7 @@ namespace Server.Controllers
         /// <param name="component"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<Component>> PostComponent(Component component)
+        public async Task<ActionResult<ComponentDTO>> CreateComponent(CreateComponentDTO component)
         {
             if (!ModelState.IsValid)
             {
@@ -41,10 +43,12 @@ namespace Server.Controllers
                 return Conflict(new { title = "Conflict", status = 409, message = "Component with this name already exists." });
             }
 
-            _context.Components.Add(component);
+            Component newComponent = component.ToCategory();
+
+            _context.Components.Add(newComponent);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetComponent), new { id = component.ComponentID}, component);
+            return CreatedAtAction(nameof(GetComponent), new { id = newComponent.ComponentID}, newComponent);
         }
         #endregion
         #region Read
@@ -53,9 +57,9 @@ namespace Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<Component>>> GetComponents()
+        public async Task<ActionResult<IEnumerable<ComponentDTO>>> GetComponents()
         {
-            return await _context.Components.ToListAsync();
+            return Ok(await _context.Components.Select(x=>x.ToDTO()).ToListAsync());
         }
 
         /// <summary>
@@ -101,12 +105,12 @@ namespace Server.Controllers
         #endregion
         #region Update
         /// <summary>
-        /// PUT: ElectronDepot/Components/{id}
+        /// PUT: ElectronDepot/Components/Update/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <param name="component"></param>
         /// <returns></returns>
-        [HttpPut("Delete/{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> PutComponent(int id, Component component)
         {
             if (id != component.ComponentID)
@@ -144,11 +148,11 @@ namespace Server.Controllers
         #endregion
         #region Delete
         /// <summary>
-        /// DELETE: ElectronDepot/Components/{id}
+        /// DELETE: ElectronDepot/Components/Delete/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteComponent(int id)
         {
             var component = await _context.Components.FindAsync(id);
