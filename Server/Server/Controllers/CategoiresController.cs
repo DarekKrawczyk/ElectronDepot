@@ -65,11 +65,11 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectroDepot/Categories/{id}
+        /// GET: ElectroDepot/Categories/GetCategoryByID/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("GetCategoryByID/{id}")]
         public async Task<ActionResult<CategoryDTO>> GetCategory(int id)
         {
             Category? category = await _context.Categories.FindAsync(id);
@@ -77,6 +77,30 @@ namespace Server.Controllers
             if (category == null)
             {
                 return NotFound(new { title = "Not Found", code = "404", message = $"Category with ID:{id} doesn't exsit" });
+            }
+
+            return Ok(category.ToDTO());
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/Categories/GetCategoryByName/{name}
+        /// Retrieves a user by their name.
+        /// </summary>
+        /// <param name="name">The name of the category to retrieve</param>
+        /// <returns>A category if found, otherwise a NotFound result</returns>
+        [HttpGet("GetCategoryByName/{name}")]
+        public async Task<ActionResult<CategoryDTO>> GetCategoryByName(string name)
+        {
+            Category? category = await _context.Categories.FirstOrDefaultAsync(u => u.Name == name);
+
+            if (category == null)
+            {
+                return NotFound(new
+                {
+                    title = "Not Found",
+                    code = "404",
+                    message = $"User with Name: {name} doesn't exist"
+                });
             }
 
             return Ok(category.ToDTO());
@@ -100,9 +124,29 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            if(_context.Categories.Any(x=>x.Name == category.Name))
+            Category? existingCat = await _context.Categories.FirstOrDefaultAsync(x=>x.Name == categoryDTO.Name);
+            
+            if(existingCat != null)
             {
-                return Conflict(new { title = "Conflict", status = 409, message = $"Category with name:'{category.Name}' already exists" });
+                // Teraz sprawdź czy to ten sam
+                if(existingCat.CategoryID != id)
+                {
+                    // ID są inne czyli ktoś chce ustawić taką nazwe jaka już istnieje w systemie
+                    return Conflict(new { title = "Conflict", status = 409, message = $"Category with name:'{category.Name}' already exists" });
+                }
+                else
+                {
+                    category.Description = categoryDTO.Description;
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception exception)
+                    {
+                        return BadRequest();
+                    }
+                    return Ok(category.ToDTO());
+                }
             }
 
             _context.Entry(category).State = EntityState.Modified;

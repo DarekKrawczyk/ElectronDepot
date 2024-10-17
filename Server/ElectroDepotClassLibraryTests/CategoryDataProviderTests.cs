@@ -14,7 +14,7 @@ namespace ElectroDepotClassLibraryTests
             Console = output;
         }
         [Fact]
-        public async Task GetAll_NotNull()
+        public async Task GetAll()
         {
             try
             {
@@ -29,7 +29,7 @@ namespace ElectroDepotClassLibraryTests
             }
         }
         [Fact]
-        public async Task Create_False()
+        public async Task Create()
         {
             try
             {
@@ -39,8 +39,7 @@ namespace ElectroDepotClassLibraryTests
 
                 bool wasCreated = await dbp.CreateCategory(category);
 
-                // False bo zwraca false gdy juz jest taki w bazie
-                Assert.False(wasCreated);
+                Assert.True(wasCreated);
                 Console.WriteLine($"Category '{category.Name}' was created");
             }
             catch (Exception ex)
@@ -49,7 +48,7 @@ namespace ElectroDepotClassLibraryTests
             }
         }
         [Fact]
-        public async Task Delete_True()
+        public async Task Delete()
         {
             try
             {
@@ -63,7 +62,7 @@ namespace ElectroDepotClassLibraryTests
 
                 CategoryDTO last = categories.Last();
 
-                await dbp.DaleteCategory(last);
+                await dbp.DeleteCategory(last);
 
                 categories = await dbp.GetAllCategories();
                 Assert.NotNull(categories);
@@ -72,6 +71,62 @@ namespace ElectroDepotClassLibraryTests
                 int countAfter = categories.Count();
 
                 Assert.True(countBefore == countAfter+1);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+        [Fact]
+        public async Task CreateUpdateDeleteFind()
+        {
+            try
+            {
+                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
+
+                // Create
+                CreateCategoryDTO category = new CreateCategoryDTO(Name: "CreateUpdateDeleteFind3_True", Description: "CreateUpdateDeleteFind1_True");
+                bool wasCreated = await dbp.CreateCategory(category);
+                Assert.True(wasCreated);
+
+                // Find
+                CategoryDTO foundCategory = await dbp.GetCategoryByName(category.Name);
+                Assert.NotNull(foundCategory);
+
+                // Update
+                CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
+                bool wasUpdated = await dbp.UpdateCategory(editedCategoryDTO);
+                Assert.True(wasUpdated);
+
+                // Delete
+                bool wasDeleted = await dbp.DeleteCategory(editedCategoryDTO);
+                Assert.True(wasDeleted);
+
+                // Find again
+                CategoryDTO foundAgain = await dbp.GetCategoryByName(editedCategoryDTO.Name);
+                Assert.Null(foundAgain);
+
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+        [Fact]
+        public async Task Update()
+        {
+            try
+            {
+                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
+
+                // Find
+                CategoryDTO foundCategory = await dbp.GetCategoryByID(1);
+                Assert.NotNull(foundCategory);
+
+                // Update
+                CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
+                bool wasUpdated = await dbp.UpdateCategory(editedCategoryDTO);
+                Assert.True(wasUpdated);
             }
             catch (Exception ex)
             {

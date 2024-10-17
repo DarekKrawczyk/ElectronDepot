@@ -40,6 +40,60 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
             return false;
         }
+        public async Task<CategoryDTO> GetCategoryByName(string name)
+        {
+            try
+            {
+                string url = CategoryEndpoints.GetByName(name);
+                var response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    CategoryDTO? category = JsonSerializer.Deserialize<CategoryDTO>(json, options);
+
+                    return category;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public async Task<CategoryDTO> GetCategoryByID(int ID)
+        {
+            try
+            {
+                string url = CategoryEndpoints.GetByID(ID);
+                var response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    CategoryDTO? category = JsonSerializer.Deserialize<CategoryDTO>(json, options);
+
+                    return category;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         public async Task<IEnumerable<CategoryDTO>> GetAllCategories()
         {
             try
@@ -70,7 +124,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         }
         public async Task<bool> UpdateCategory(CategoryDTO category)
         {
-            UpdateCategoryDTO updateDTO = new UpdateCategoryDTO(Name: category.Name, Description: category.Description);
+            UpdateCategoryDTO updateDTO = category.ToUpdateCategoryDTO();
 
             var json = JsonSerializer.Serialize(updateDTO);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
