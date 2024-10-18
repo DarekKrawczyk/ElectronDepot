@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using ElectroDepotClassLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
+using Server.ExtensionMethods;
 using Server.Models;
 
 namespace Server.Controllers
 {
     [Route("ElectronDepot/[controller]")]
     [ApiController]
+
     public class UsersController : ControllerBase
     {
         private readonly DatabaseContext _context;
@@ -28,33 +26,33 @@ namespace Server.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<User>> CreateUser(User user)
+        public async Task<ActionResult<UserDTO>> CreateUser(CreateUserDTO user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var existingUserByUsername = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == user.Username);
+            User? existingUserByUsername = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
 
             if (existingUserByUsername != null)
             {
                 return Conflict(new { title = "Conflict", status = 409, message = "A user with this username already exists." });
             }
 
-            var existingUserByEmail = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == user.Email);
+            User? existingUserByEmail = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
 
             if (existingUserByEmail != null)
             {
                 return Conflict(new { title = "Conflict", status = 409, message = "A user with this email already exists." });
             }
 
-            _context.Users.Add(user);
+            User userToCreate = user.ToUser();
+
+            _context.Users.Add(userToCreate);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserID }, user);
+            return CreatedAtAction(nameof(GetUser), new { id = userToCreate.ToDTO().ID }, userToCreate.ToDTO());
         }
 
         #endregion
@@ -64,9 +62,9 @@ namespace Server.Controllers
         /// </summary>
         /// <returns>All users in database</returns>
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
-            return Ok(await _context.Users.ToListAsync());
+            return Ok(await _context.Users.Select(x=>x.ToDTO()).ToListAsync());
         }
 
         /// <summary>
@@ -74,8 +72,8 @@ namespace Server.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>User with given ID</returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        [HttpGet("GetUserByID/{id}")]
+        public async Task<ActionResult<UserDTO>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -84,7 +82,33 @@ namespace Server.Controllers
                 return NotFound(new { title = "not found", status = 404 });
             }
 
-            return Ok(user);
+            return Ok(user.ToDTO());
+        }
+
+        [HttpGet("GetUserByEMail/{EMail}")]
+        public async Task<ActionResult<UserDTO>> GetUser(string EMail)
+        {
+            User? user = await _context.Users.FirstOrDefaultAsync(x=>x.Email == EMail);
+
+            if (user == null)
+            {
+                return NotFound(new { title = "not found", status = 404 });
+            }
+
+            return Ok(user.ToDTO());
+        }
+
+        [HttpGet("GetUserByUsername/{Username}")]
+        public async Task<ActionResult<UserDTO>> GetUserByName(string Username)
+        {
+            User? user = await _context.Users.FirstOrDefaultAsync(x => x.Username == Username);
+
+            if (user == null)
+            {
+                return NotFound(new { title = "not found", status = 404 });
+            }
+
+            return Ok(user.ToDTO());
         }
 
         /// <summary>
@@ -160,7 +184,7 @@ namespace Server.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            User? user = await _context.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();

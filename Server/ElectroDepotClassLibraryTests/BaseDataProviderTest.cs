@@ -1,9 +1,4 @@
 ﻿using ElectroDepotClassLibrary.DataProviders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests
@@ -13,12 +8,14 @@ namespace ElectroDepotClassLibraryTests
         public ITestOutputHelper Console { get; }
         public ComponentDataProvider ComponentDP { get; }
         public CategoryDataProvider CategoryDP { get; }
+        public UserDataProvider UserDP { get; }
 
         public BaseDataProviderTest(ITestOutputHelper output)
         {
             Console = output;
             ComponentDP = new ComponentDataProvider(Utility.ConnectionURL);
             CategoryDP = new CategoryDataProvider(Utility.ConnectionURL);
+            UserDP = new UserDataProvider(Utility.ConnectionURL);
         }
     }
 }

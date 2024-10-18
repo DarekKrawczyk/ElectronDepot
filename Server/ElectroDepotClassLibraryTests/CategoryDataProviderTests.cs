@@ -1,6 +1,4 @@
-﻿using ElectroDepotClassLibrary.DataProviders;
-using ElectroDepotClassLibrary.DTOs;
-using ElectroDepotClassLibrary.Endpoints;
+﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests

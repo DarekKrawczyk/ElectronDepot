@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
-    public class ComponentDataProvider
+    public class ComponentDataProvider : IComponentDataProvider
     {
         #region Fields
         private string _url = string.Empty;

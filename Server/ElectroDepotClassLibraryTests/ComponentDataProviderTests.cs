@@ -1,5 +1,4 @@
-﻿using ElectroDepotClassLibrary.DataProviders;
-using ElectroDepotClassLibrary.DTOs;
+﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests
