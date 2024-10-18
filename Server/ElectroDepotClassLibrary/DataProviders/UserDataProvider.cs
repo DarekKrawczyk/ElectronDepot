@@ -6,7 +6,7 @@ using System.Net.Http;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
-    public class UserDataProvider : BaseDataProvider
+    public class UserDataProvider : BaseDataProvider, IUserDataProvider
     {
         public UserDataProvider(string url) : base(url) { }
         #region API Calls
@@ -50,7 +50,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         public async Task<bool> UserWithUsernameExists(string username)
         {
             UserDTO? found = await GetUserByUsername(username);
-            if(found == null)
+            if (found == null)
             {
                 return false;
             }

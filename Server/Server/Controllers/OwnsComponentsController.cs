@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ElectroDepotClassLibrary.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
+using Server.ExtensionMethods;
 using Server.Models;
 
 namespace Server.Controllers
@@ -22,14 +24,13 @@ namespace Server.Controllers
         /// <param name="ownsComponent"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<OwnsComponent>> PostOwnsComponent(OwnsComponent ownsComponent)
+        public async Task<ActionResult<OwnsComponentDTO>> Create(CreateOwnsComponentDTO ownsComponent)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Czy jest taki 'User'
             User? existingUser = await _context.Users.FindAsync(ownsComponent.UserID);
 
             if (existingUser == null)
@@ -37,7 +38,6 @@ namespace Server.Controllers
                 return BadRequest(new { title = "User not found", status = 400, message = "User with this ID doesn't exist." });
             }
 
-            // Czy jest taki 'Component'
             Component? existingComponent = await _context.Components.FindAsync(ownsComponent.ComponentID);
 
             if (existingComponent == null)
@@ -45,17 +45,12 @@ namespace Server.Controllers
                 return BadRequest(new { title = "Component not found", status = 400, message = "Component with this ID doesn't exist." });
             }
 
-            // Czy jest taki 'Component' w 'OwnsComponent'
-            OwnsComponent? existingOwnsComponent = await _context.OwnsComponent.FirstOrDefaultAsync(x=>x.ComponentID == ownsComponent.ComponentID);
-            if (existingOwnsComponent != null)
-            {
-                return Conflict(new { title = "Component already exists", status = 400, message = "Component with this ID is already defined for that User in OwnsComponents." });
-            }
+            OwnsComponent createdOwnsComponent = ownsComponent.ToOwnComponent();
 
-            _context.OwnsComponent.Add(ownsComponent);
+            _context.OwnsComponent.Add(createdOwnsComponent);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetOwnsComponentByID), new { id = ownsComponent.OwnsComponentID }, ownsComponent);
+            return Ok(createdOwnsComponent.ToDTO());
         }
         #endregion
         #region Read
@@ -64,9 +59,9 @@ namespace Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<OwnsComponent>>> GetAllOwnsComponent()
+        public async Task<ActionResult<IEnumerable<OwnsComponentDTO>>> GetAllOwnsComponent()
         {
-            return await _context.OwnsComponent.ToListAsync();
+            return await _context.OwnsComponent.Select(x=>x.ToDTO()).ToListAsync();
         }
 
         /// <summary>

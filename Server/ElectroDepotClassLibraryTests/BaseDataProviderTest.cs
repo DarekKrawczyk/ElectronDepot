@@ -9,6 +9,7 @@ namespace ElectroDepotClassLibraryTests
         public ComponentDataProvider ComponentDP { get; }
         public CategoryDataProvider CategoryDP { get; }
         public UserDataProvider UserDP { get; }
+        public OwnsComponentDataProvider OwnsComponentDP{ get; }
 
         public BaseDataProviderTest(ITestOutputHelper output)
         {
@@ -16,6 +17,7 @@ namespace ElectroDepotClassLibraryTests
             ComponentDP = new ComponentDataProvider(Utility.ConnectionURL);
             CategoryDP = new CategoryDataProvider(Utility.ConnectionURL);
             UserDP = new UserDataProvider(Utility.ConnectionURL);
+            OwnsComponentDP = new OwnsComponentDataProvider(Utility.ConnectionURL);
         }
     }
 }
