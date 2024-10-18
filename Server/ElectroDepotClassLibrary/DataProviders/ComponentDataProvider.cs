@@ -127,6 +127,12 @@ namespace ElectroDepotClassLibrary.DataProviders
 
             return response.IsSuccessStatusCode;
         }
+        public async Task<bool> DeleteComponent(int ID)
+        {
+            string url = ComponentEndpoints.Delete(ID);
+            var response = await _httpClient.DeleteAsync(url);
+            return response.IsSuccessStatusCode;
+        }
         public async Task<bool> DeleteComponent(ComponentDTO component)
         {
             string url = ComponentEndpoints.Delete(component.ID);

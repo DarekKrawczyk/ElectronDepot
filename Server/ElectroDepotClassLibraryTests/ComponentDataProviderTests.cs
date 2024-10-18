@@ -4,24 +4,18 @@ using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests
 {
-    public class ComponentDataProviderTests
+    public class ComponentDataProviderTests : BaseDataProviderTest
     {
-        private readonly ITestOutputHelper Console;
-        private readonly ComponentDataProvider componentDP;
-        private readonly CategoryDataProvider categoryDP;
-
-        public ComponentDataProviderTests(ITestOutputHelper output)
+        public ComponentDataProviderTests(ITestOutputHelper output) : base(output)
         {
-            Console = output;
-            componentDP = new ComponentDataProvider(Utility.ConnectionURL);
-            categoryDP = new CategoryDataProvider(Utility.ConnectionURL);
         }
+
         [Fact]
         public async Task GetAll()
         {
             try
             {
-                IEnumerable<ComponentDTO> components = await componentDP.GetAllComponents();
+                IEnumerable<ComponentDTO> components = await ComponentDP.GetAllComponents();
                 Assert.NotNull(components);
                 foreach(ComponentDTO component in components)
                 {
@@ -39,20 +33,20 @@ namespace ElectroDepotClassLibraryTests
             try
             {
                 // Find category with 'Temperature gauge'
-                CategoryDTO category = await categoryDP.GetCategoryByName("Temperature gauge");
+                CategoryDTO category = await CategoryDP.GetCategoryByName("Temperature gauge");
 
                 if (category == null)
                 {
                     CreateCategoryDTO gauge = new CreateCategoryDTO(Name: "Temperature gauge", Description: "Measures temperature");
-                    bool created = await categoryDP.CreateCategory(gauge);
+                    bool created = await CategoryDP.CreateCategory(gauge);
                     Assert.True(created);
-                    category = await categoryDP.GetCategoryByName("Temperature gauge");
+                    category = await CategoryDP.GetCategoryByName("Temperature gauge");
                     Assert.NotNull(category);
                 }
 
                 CreateComponentDTO component = new CreateComponentDTO(CategoryID: category.ID, Name: "LM35", Manufacturer:"Texas Instruments", Description: "Analog temperature gauge");
 
-                bool wasCreated = await componentDP.CreateComponent(component);
+                bool wasCreated = await ComponentDP.CreateComponent(component);
                 Assert.True(wasCreated);
                 Console.WriteLine(component.ToString());
             }
@@ -66,7 +60,7 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                IEnumerable<ComponentDTO> components = await componentDP.GetAllComponents();
+                IEnumerable<ComponentDTO> components = await ComponentDP.GetAllComponents();
                 Assert.NotNull(components);
                 Assert.True(components.Count() > 0);
 
@@ -74,15 +68,19 @@ namespace ElectroDepotClassLibraryTests
 
                 ComponentDTO last = components.Last();
 
-                await componentDP.DeleteComponent(last);
+                await ComponentDP.DeleteComponent(last.ID);
 
-                components = await componentDP.GetAllComponents();
+                components = await ComponentDP.GetAllComponents();
                 Assert.NotNull(components);
                 Assert.True(components.Count() > 0);
 
                 int countAfter = components.Count();
 
                 Assert.True(countBefore == countAfter + 1);
+                foreach(ComponentDTO component in components)
+                {
+                    Console.WriteLine(component.ToString());
+                }
             }
             catch (Exception ex)
             {
@@ -90,34 +88,50 @@ namespace ElectroDepotClassLibraryTests
             }
         }
         [Fact]
-        public async Task CreateUpdateDeleteFind()
+        public async Task CreateWithCategory()
         {
             try
             {
-                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
+                CategoryDTO delFirst = await CategoryDP.GetCategoryByName("Silniczek");
+                // Delete category
+                if(delFirst != null)
+                {
+                    bool wasDefFirst = await CategoryDP.DeleteCategory(delFirst.ID);
+                    Assert.True(wasDefFirst);
+                }
 
-                // Create
-                CreateCategoryDTO category = new CreateCategoryDTO(Name: "CreateUpdateDeleteFind3_True", Description: "CreateUpdateDeleteFind1_True");
-                bool wasCreated = await dbp.CreateCategory(category);
+                // Create category
+                CreateCategoryDTO category = new CreateCategoryDTO(Name: "Silniczek", Description: "Fajnie kreci");
+                bool wasCreated = await CategoryDP.CreateCategory(category);
                 Assert.True(wasCreated);
 
                 // Find
-                CategoryDTO foundCategory = await dbp.GetCategoryByName(category.Name);
+                CategoryDTO foundCategory = await CategoryDP.GetCategoryByName(category.Name);
                 Assert.NotNull(foundCategory);
 
-                // Update
-                CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
-                bool wasUpdated = await dbp.UpdateCategory(editedCategoryDTO);
-                Assert.True(wasUpdated);
+                // Delete component if exists
+                ComponentDTO delCompFirst = await ComponentDP.GetComponentByName("Silniczek");
+                if(delCompFirst != null)
+                {
+                    bool wasdelCompFirst = await ComponentDP.DeleteComponent(delCompFirst);
+                    Assert.True(wasdelCompFirst);
+                }
 
-                // Delete
-                bool wasDeleted = await dbp.DeleteCategory(editedCategoryDTO);
-                Assert.True(wasDeleted);
+                // Create component with category
+                CreateComponentDTO component = new CreateComponentDTO(CategoryID: foundCategory.ID, Name: "Silniczek", Manufacturer: "Texus fujara", Description: "Ale kręci");
+                bool wasComponentCreated = await ComponentDP.CreateComponent(component);
+                Assert.True(wasComponentCreated);
 
-                // Find again
-                CategoryDTO foundAgain = await dbp.GetCategoryByName(editedCategoryDTO.Name);
-                Assert.Null(foundAgain);
+                // Find create component
+                ComponentDTO createdComponent = await ComponentDP.GetComponentByName(component.Name);
+                Assert.NotNull(createdComponent);
 
+                Console.WriteLine(createdComponent.ToString());
+                Console.WriteLine(foundCategory.ToString());
+
+                // Delete component
+                bool wasComponentDeleted = await ComponentDP.DeleteComponent(createdComponent.ID);
+                Assert.True(wasComponentDeleted);
             }
             catch (Exception ex)
             {
@@ -129,15 +143,13 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
-
                 // Find
-                CategoryDTO foundCategory = await dbp.GetCategoryByID(1);
-                Assert.NotNull(foundCategory);
+                ComponentDTO foundComponent = await ComponentDP.GetComponentByID(1);
+                Assert.NotNull(foundComponent);
 
                 // Update
-                CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
-                bool wasUpdated = await dbp.UpdateCategory(editedCategoryDTO);
+                ComponentDTO editedCategoryDTO = new ComponentDTO(ID: foundComponent.ID, CategoryID: foundComponent.CategoryID, Name: foundComponent.Name, Manufacturer: foundComponent.Manufacturer, Description: "Edited component");
+                bool wasUpdated = await ComponentDP.UpdateComponent(editedCategoryDTO);
                 Assert.True(wasUpdated);
             }
             catch (Exception ex)

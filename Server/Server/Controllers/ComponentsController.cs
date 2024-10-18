@@ -63,12 +63,12 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectronDepot/Components/GetByID/{id}
+        /// GET: ElectronDepot/Components/GetComponentByID/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("GetByID/{id}")]
-        public async Task<ActionResult<Component>> GetComponent(int id)
+        [HttpGet("GetComponentByID/{id}")]
+        public async Task<ActionResult<ComponentDTO>> GetComponent(int id)
         {
             var component = await _context.Components.FindAsync(id);
 
@@ -77,16 +77,16 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            return component;
+            return component.ToDTO();
         }
 
         /// <summary>
-        /// GET: ElectronDepot/Components/GetByName?name=someName
+        /// GET: ElectronDepot/Components/GetComponentByName?name=someName
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("GetByName")]
-        public async Task<ActionResult<Component>> GetComponentByName(string name)
+        [HttpGet("GetComponentByName/{name}")]
+        public async Task<ActionResult<ComponentDTO>> GetComponentByName(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -100,7 +100,7 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            return Ok(component);
+            return Ok(component.ToDTO());
         }
         #endregion
         #region Update
@@ -111,21 +111,18 @@ namespace Server.Controllers
         /// <param name="component"></param>
         /// <returns></returns>
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> PutComponent(int id, Component component)
+        public async Task<IActionResult> Update(int id, UpdateComponentDTO component)
         {
-            if (id != component.ComponentID)
+            Component? existingComponent = await _context.Components.FindAsync(id);
+
+            if (existingComponent == null)
             {
-                return BadRequest();
+                return NotFound(new { title = "Not Found", code = "404", message = $"Component with ID:{id} doesn't exsit" });
             }
 
-            Component? existingComponent = await _context.Components.FirstOrDefaultAsync(u => u.Name == component.Name);
-
-            if (existingComponent != null)
-            {
-                return Conflict(new { title = "Conflict", status = 409, message = "Component with this name already exists." });
-            }
-
-            _context.Entry(component).State = EntityState.Modified;
+            existingComponent.Name = component.Name;
+            existingComponent.Manufacturer = component.Manufacturer;
+            existingComponent.Description = component.Description;
 
             try
             {

@@ -5,21 +5,18 @@ using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests
 {
-    public class CategoryDataProviderTests
+    public class CategoryDataProviderTests : BaseDataProviderTest
     {
-        private readonly ITestOutputHelper Console;
-
-        public CategoryDataProviderTests(ITestOutputHelper output)
+        public CategoryDataProviderTests(ITestOutputHelper output) : base(output)
         {
-            Console = output;
         }
+
         [Fact]
         public async Task GetAll()
         {
             try
             {
-                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
-                IEnumerable<CategoryDTO> categories = await dbp.GetAllCategories();
+                IEnumerable<CategoryDTO> categories = await CategoryDP.GetAllCategories();
                 Assert.NotNull(categories);
                 Console.WriteLine($"Returned '{categories.Count()}' records");   
             }
@@ -33,11 +30,9 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
-
                 CreateCategoryDTO category = new CreateCategoryDTO(Name: "Wiertara", Description: "Fajnie wierci");
 
-                bool wasCreated = await dbp.CreateCategory(category);
+                bool wasCreated = await CategoryDP.CreateCategory(category);
 
                 Assert.True(wasCreated);
                 Console.WriteLine($"Category '{category.Name}' was created");
@@ -52,9 +47,7 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
-
-                IEnumerable<CategoryDTO> categories = await dbp.GetAllCategories();
+                IEnumerable<CategoryDTO> categories = await CategoryDP.GetAllCategories();
                 Assert.NotNull(categories);
                 Assert.True(categories.Count() > 0);
 
@@ -62,9 +55,9 @@ namespace ElectroDepotClassLibraryTests
 
                 CategoryDTO last = categories.Last();
 
-                await dbp.DeleteCategory(last);
+                await CategoryDP.DeleteCategory(last);
 
-                categories = await dbp.GetAllCategories();
+                categories = await CategoryDP.GetAllCategories();
                 Assert.NotNull(categories);
                 Assert.True(categories.Count() > 0);
 
@@ -82,28 +75,26 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
-
                 // Create
                 CreateCategoryDTO category = new CreateCategoryDTO(Name: "CreateUpdateDeleteFind3_True", Description: "CreateUpdateDeleteFind1_True");
-                bool wasCreated = await dbp.CreateCategory(category);
+                bool wasCreated = await CategoryDP.CreateCategory(category);
                 Assert.True(wasCreated);
 
                 // Find
-                CategoryDTO foundCategory = await dbp.GetCategoryByName(category.Name);
+                CategoryDTO foundCategory = await CategoryDP.GetCategoryByName(category.Name);
                 Assert.NotNull(foundCategory);
 
                 // Update
                 CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
-                bool wasUpdated = await dbp.UpdateCategory(editedCategoryDTO);
+                bool wasUpdated = await CategoryDP.UpdateCategory(editedCategoryDTO);
                 Assert.True(wasUpdated);
 
                 // Delete
-                bool wasDeleted = await dbp.DeleteCategory(editedCategoryDTO);
+                bool wasDeleted = await CategoryDP.DeleteCategory(editedCategoryDTO);
                 Assert.True(wasDeleted);
 
                 // Find again
-                CategoryDTO foundAgain = await dbp.GetCategoryByName(editedCategoryDTO.Name);
+                CategoryDTO foundAgain = await CategoryDP.GetCategoryByName(editedCategoryDTO.Name);
                 Assert.Null(foundAgain);
 
             }
@@ -117,16 +108,45 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                CategoryDataProvider dbp = new CategoryDataProvider(Utility.ConnectionURL);
-
                 // Find
-                CategoryDTO foundCategory = await dbp.GetCategoryByID(1);
+                CategoryDTO foundCategory = await CategoryDP.GetCategoryByID(1);
                 Assert.NotNull(foundCategory);
 
                 // Update
                 CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
-                bool wasUpdated = await dbp.UpdateCategory(editedCategoryDTO);
+                bool wasUpdated = await CategoryDP.UpdateCategory(editedCategoryDTO);
                 Assert.True(wasUpdated);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+        [Fact]
+        public async Task DeleteAll()
+        {
+            try
+            {
+                // Find
+                IEnumerable<CategoryDTO> allCategories = await CategoryDP.GetAllCategories();
+                Assert.NotNull(allCategories);
+
+                foreach(CategoryDTO category in allCategories)
+                {
+                    Console.WriteLine(category.ToString());
+                }
+
+                // Delete
+                int[] IDs = allCategories.Select(x => x.ID).ToArray();
+                foreach(int id in IDs)
+                {
+                    bool wasDeleted = await CategoryDP.DeleteCategory(id);
+                    Assert.True(wasDeleted);
+                }
+
+                // Now components table should be empty
+                IEnumerable<ComponentDTO> allComponents = await ComponentDP.GetAllComponents();
+                Assert.True(allComponents.Count() == 0);
             }
             catch (Exception ex)
             {
