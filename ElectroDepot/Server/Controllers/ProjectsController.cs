@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ElectroDepotClassLibrary.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
+using Server.ExtensionMethods;
 using Server.Models;
 
 namespace Server.Controllers
@@ -21,29 +23,60 @@ namespace Server.Controllers
             _context = context;
         }
         #region Create
-        // POST: api/Projects
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(Project project)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        [HttpPost("Create")]
+        public async Task<ActionResult<ProjectDTO>> CreateProject(CreateProjectDTO project)
         {
-            _context.Projects.Add(project);
+            Project newProject = project.ToProject();
+            newProject.CreatedAt = DateTime.Now;
+
+            _context.Projects.Add(newProject);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProject", new { id = project.ProjectID }, project);
+            return CreatedAtAction(nameof(GetProjectsOfUser), new { id = newProject.ProjectID }, newProject);
         }
 
         #endregion
         #region Read
-        // GET: api/Projects
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        /// <summary>
+        /// GET: ElectroDepot/Projects/GetAll
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IEnumerable<ProjectDTO>>> GetAllProjects()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.Projects.Select(x=>x.ToProjectDTO()).ToListAsync();
         }
 
-        // GET: api/Projects/5
+        /// <summary>
+        /// GET: ElectroDepot/Projects/GetAllOfUser/{ID}
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllOfUser/{ID}")]
+        public async Task<ActionResult<IEnumerable<ProjectDTO>>> GetProjectsOfUser(int ID)
+        {
+            User? user = await _context.Users.FindAsync(ID);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return await _context.Projects.Where(x=>x.UserID == ID).Select(x=>x.ToProjectDTO()).ToListAsync();
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/Projects/GetProjectByID/{ID}"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(int id)
+        public async Task<ActionResult<ProjectDTO>> GetProjectByID(int id)
         {
             var project = await _context.Projects.FindAsync(id);
 
@@ -52,7 +85,7 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            return project;
+            return project.ToProjectDTO();
         }
         #endregion
         #region Update
