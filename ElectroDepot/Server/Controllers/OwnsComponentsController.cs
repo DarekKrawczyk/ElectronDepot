@@ -7,7 +7,7 @@ using Server.Models;
 
 namespace Server.Controllers
 {
-    [Route("ElectronDepot/[controller]")]
+    [Route("ElectroDepot/[controller]")]
     [ApiController]
     public class OwnsComponentsController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace Server.Controllers
         }
         #region Create
         /// <summary>
-        /// POST: ElectronDepot/OwnsComponents/Create
+        /// POST: ElectroDepot/OwnsComponents/Create
         /// </summary>
         /// <param name="ownsComponent"></param>
         /// <returns></returns>
@@ -55,7 +55,7 @@ namespace Server.Controllers
         #endregion
         #region Read
         /// <summary>
-        /// GET: ElectronDepot/OwnsComponents
+        /// GET: ElectroDepot/OwnsComponents
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
@@ -65,7 +65,7 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectronDepot/OwnsComponents/GetByID/{id}
+        /// GET: ElectroDepot/OwnsComponents/GetByID/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -85,7 +85,7 @@ namespace Server.Controllers
         #endregion
         #region Update
         /// <summary>
-        /// PUT: ElectronDepot/OwnsComponents/Update/{id}
+        /// PUT: ElectroDepot/OwnsComponents/Update/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <param name="ownsComponent"></param>

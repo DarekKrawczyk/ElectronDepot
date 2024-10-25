@@ -7,7 +7,7 @@ using Server.Models;
 
 namespace Server.Controllers
 {
-    [Route("ElectronDepot/[controller]")]
+    [Route("ElectroDepot/[controller]")]
     [ApiController]
     public class ComponentsController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace Server.Controllers
         }
         #region Create
         /// <summary>
-        /// POST: ElectronDepot/Components/Create
+        /// POST: ElectroDepot/Components/Create
         /// </summary>
         /// <param name="component"></param>
         /// <returns></returns>
@@ -48,7 +48,7 @@ namespace Server.Controllers
         #endregion
         #region Read
         /// <summary>
-        /// GET: ElectronDepot/Components/GetAll
+        /// GET: ElectroDepot/Components/GetAll
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
@@ -58,7 +58,7 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectronDepot/Components/GetComponentByID/{id}
+        /// GET: ElectroDepot/Components/GetComponentByID/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -76,7 +76,7 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectronDepot/Components/GetComponentByName?name=someName
+        /// GET: ElectroDepot/Components/GetComponentByName?name=someName
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -100,7 +100,7 @@ namespace Server.Controllers
         #endregion
         #region Update
         /// <summary>
-        /// PUT: ElectronDepot/Components/Update/{id}
+        /// PUT: ElectroDepot/Components/Update/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <param name="component"></param>
@@ -140,7 +140,7 @@ namespace Server.Controllers
         #endregion
         #region Delete
         /// <summary>
-        /// DELETE: ElectronDepot/Components/Delete/{id}
+        /// DELETE: ElectroDepot/Components/Delete/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

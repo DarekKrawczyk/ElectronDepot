@@ -7,7 +7,7 @@ using Server.Models;
 
 namespace Server.Controllers
 {
-    [Route("ElectronDepot/[controller]")]
+    [Route("ElectroDepot/[controller]")]
     [ApiController]
 
     public class UsersController : ControllerBase
@@ -21,7 +21,7 @@ namespace Server.Controllers
 
         #region Create
         /// <summary>
-        /// POST: ElectronDepot/Users/Create
+        /// POST: ElectroDepot/Users/Create
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -58,7 +58,7 @@ namespace Server.Controllers
         #endregion
         #region Read
         /// <summary>
-        /// GET: ElectronDepot/Users
+        /// GET: ElectroDepot/Users
         /// </summary>
         /// <returns>All users in database</returns>
         [HttpGet("GetAll")]
@@ -68,7 +68,7 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectronDepot/Users/{id}
+        /// GET: ElectroDepot/Users/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns>User with given ID</returns>
@@ -112,7 +112,7 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectronDepot/Users/{userId}/GetAllComponents
+        /// GET: ElectroDepot/Users/{userId}/GetAllComponents
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>All components with their quantity for User with given ID</returns>
@@ -141,7 +141,7 @@ namespace Server.Controllers
         #endregion
         #region Update
         /// <summary>
-        /// PUT: ElectronDepot/Users/Create/{id}
+        /// PUT: ElectroDepot/Users/Create/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <param name="user"></param>
@@ -177,7 +177,7 @@ namespace Server.Controllers
         #endregion
         #region Delete
         /// <summary>
-        /// DELETE: ElectronDepod/Users/{id}
+        /// DELETE: ElectroDepod/Users/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

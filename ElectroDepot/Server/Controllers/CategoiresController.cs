@@ -7,7 +7,7 @@ using Server.Models;
 
 namespace Server.Controllers
 {
-    [Route("ElectronDepot/[controller]")]
+    [Route("ElectroDepot/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace Server.Controllers
 
         #region Create
         /// <summary>
-        /// POST: ElectronDepot/Categories/Create
+        /// POST: ElectroDepot/Categories/Create
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
@@ -49,7 +49,7 @@ namespace Server.Controllers
         #endregion
         #region Read
         /// <summary>
-        /// GET: ElectronDepot/Categories/GetAll
+        /// GET: ElectroDepot/Categories/GetAll
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]

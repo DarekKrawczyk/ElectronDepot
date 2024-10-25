@@ -81,7 +81,7 @@ namespace Server.Controllers
         #endregion
         #region Delete
         /// <summary>
-        /// DELETE: ElectronDepot/PurchaseItems/Delete/{id}
+        /// DELETE: ElectroDepot/PurchaseItems/Delete/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

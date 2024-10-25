@@ -43,7 +43,7 @@ Default json representation
 ## Create
 Request
 ``` json
-POST: ElectronDepot/Users/Create
+POST: ElectroDepot/Users/Create
 Body:
 {
   "default": User.Class
@@ -77,7 +77,7 @@ Body:
 ### Get all users
 Request
 ```
-GET: ElectronDepot/Users
+GET: ElectroDepot/Users
 Body: {}
 ```
 Response
@@ -92,7 +92,7 @@ Response
 ### Get user by ID
 Request
 ``` json
-GET: ElectronDepot/Users/{id}
+GET: ElectroDepot/Users/{id}
 Body: {}
 ```
 Response - success
@@ -118,7 +118,7 @@ Body:
 ### Delete
 Request
 ``` json
-DELETE: ElectronDepot/Users/Delete/{id}
+DELETE: ElectroDepot/Users/Delete/{id}
 Body: {}
 ```
 Response - success

@@ -10,7 +10,7 @@ using Server.Models;
 
 namespace Server.Controllers
 {
-    [Route("ElectronDepot/[controller]")]
+    [Route("ElectroDepot/[controller]")]
     [ApiController]
     public class SuppliersController : ControllerBase
     {
