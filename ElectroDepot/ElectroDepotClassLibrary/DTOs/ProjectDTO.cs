@@ -18,4 +18,12 @@
         string Name,
         string Description
     );
+
+    public static class ProjectDTOExtensionMethods
+    {
+        public static UpdateProjectDTO ToUpdateProjectDTO(this ProjectDTO projectDTO)
+        {
+            return new UpdateProjectDTO(Name: projectDTO.Name, Description: projectDTO.Description);
+        }
+    }
 }

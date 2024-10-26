@@ -1,6 +1,6 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 
-namespace ElectroDepotClassLibrary.DataProviders
+namespace ElectroDepotClassLibrary.DataProviders.Interfaces
 {
     public interface IUserDataProvider
     {

@@ -1,4 +1,5 @@
-﻿using ElectroDepotClassLibrary.DTOs;
+﻿using ElectroDepotClassLibrary.DataProviders.Interfaces;
+using ElectroDepotClassLibrary.DTOs;
 using ElectroDepotClassLibrary.Endpoints;
 using System.Text;
 using System.Text.Json;

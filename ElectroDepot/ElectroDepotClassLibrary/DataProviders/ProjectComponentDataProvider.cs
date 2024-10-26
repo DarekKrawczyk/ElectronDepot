@@ -5,27 +5,27 @@ using System.Text;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
-    public class ProjectDataProvider : BaseDataProvider
+    public class ProjectComponentDataProvider : BaseDataProvider
     {
-        public ProjectDataProvider(string url) : base(url)
+        public ProjectComponentDataProvider(string url) : base(url)
         {
         }
         #region API Calls
-        public async Task<bool> CreateProject(CreateProjectDTO project)
+        public async Task<bool> CreateProjectComponent(CreateProjectComponentDTO projectComponentDTO)
         {
-            var json = JsonSerializer.Serialize(project);
+            var json = JsonSerializer.Serialize(projectComponentDTO);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = ProjectEndpoints.Create();
+            string url = ProjectComponentEndpoints.Create();
             var response = await HTTPClient.PostAsync(url, content);
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<IEnumerable<ProjectDTO>> GetAllProjects()
+        public async Task<IEnumerable<ProjectComponentDTO>> GetAllProjectComponents()
         {
             try
             {
-                string url = ProjectEndpoints.GetAll();
+                string url = ProjectComponentEndpoints.GetAll();
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -34,7 +34,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     options.PropertyNameCaseInsensitive = true;
 
                     var json = await response.Content.ReadAsStringAsync();
-                    IEnumerable<ProjectDTO> projects = JsonSerializer.Deserialize<IEnumerable<ProjectDTO>>(json, options);
+                    IEnumerable<ProjectComponentDTO> projects = JsonSerializer.Deserialize<IEnumerable<ProjectComponentDTO>>(json, options);
 
                     return projects;
                 }
@@ -48,11 +48,11 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<IEnumerable<ProjectDTO>> GetAllProjectOfUser(UserDTO user)
+        public async Task<IEnumerable<ProjectComponentDTO>> GetAllProjectComponentsOfProject(ProjectDTO projectDTO)
         {
             try
             {
-                string url = ProjectEndpoints.GetAllOfUser(user.ID);
+                string url = ProjectComponentEndpoints.GetAllByProject(projectDTO.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -61,7 +61,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     options.PropertyNameCaseInsensitive = true;
 
                     var json = await response.Content.ReadAsStringAsync();
-                    IEnumerable<ProjectDTO> projectsOfUser = JsonSerializer.Deserialize<IEnumerable<ProjectDTO>>(json, options);
+                    IEnumerable<ProjectComponentDTO> projectsOfUser = JsonSerializer.Deserialize<IEnumerable<ProjectComponentDTO>>(json, options);
 
                     return projectsOfUser;
                 }
@@ -75,14 +75,14 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<bool> UpdateProject(ProjectDTO project)
+        public async Task<bool> UpdateProjectComponent(ProjectComponentDTO projectComponentDTO)
         {
-            var json = JsonSerializer.Serialize(project.ToUpdateProjectDTO());
+            var json = JsonSerializer.Serialize(projectComponentDTO.ToUpdateProjectComponentDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = ProjectEndpoints.Update(project.ID);
+            string url = ProjectComponentEndpoints.Update(projectComponentDTO.ID);
             var response = await HTTPClient.PutAsync(url, content);
-            
+
             return response.IsSuccessStatusCode;
         }
         public async Task<bool> DeleteProject(ProjectDTO projectDTO)

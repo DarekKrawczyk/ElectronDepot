@@ -71,7 +71,7 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectroDepot/Projects/GetProjectByID/{ID}"
+        /// GET: ElectroDepot/Projects/GetProjectComponentByID/{ID}"
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -89,17 +89,23 @@ namespace Server.Controllers
         }
         #endregion
         #region Update
-        // PUT: api/Projects/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject(int id, Project project)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> UpdateProject(int id, UpdateProjectDTO projectDTO)
         {
-            if (id != project.ProjectID)
+            Project? project = await _context.Projects.FindAsync(id);
+            if(project == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(project).State = EntityState.Modified;
+            project.Name = projectDTO.Name;
+            project.Description = projectDTO.Description;
 
             try
             {
@@ -117,13 +123,12 @@ namespace Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
         #endregion
         #region Delete
 
-        // DELETE: api/Projects/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             var project = await _context.Projects.FindAsync(id);
@@ -135,7 +140,7 @@ namespace Server.Controllers
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
         #endregion
         private bool ProjectExists(int id)
