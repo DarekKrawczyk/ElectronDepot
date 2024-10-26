@@ -85,9 +85,9 @@ namespace ElectroDepotClassLibrary.DataProviders
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<bool> DeleteProject(ProjectDTO projectDTO)
+        public async Task<bool> DeleteProjectComponent(ProjectComponentDTO projectComponentDTO)
         {
-            string url = ProjectEndpoints.Delete(projectDTO.ID);
+            string url = ProjectComponentEndpoints.Delete(projectComponentDTO.ID);
             var response = await HTTPClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }

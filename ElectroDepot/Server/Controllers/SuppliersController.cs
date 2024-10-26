@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ElectroDepotClassLibrary.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Kerberos;
 using Server.Context;
+using Server.ExtensionMethods;
 using Server.Models;
 
 namespace Server.Controllers
@@ -28,25 +31,21 @@ namespace Server.Controllers
         /// <param name="supplier"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<Supplier>> PostSupplier(Supplier supplier)
+        public async Task<ActionResult<SupplierDTO>> CreateSupplier(CreateSupplierDTO supplierDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var existingSupplier = await _context.Suppliers
-                .FirstOrDefaultAsync(u => u.Name == supplier.Name);
+            Supplier? existingSupplier = await _context.Suppliers.FirstOrDefaultAsync(u => u.Name == supplierDTO.Name);
 
             if (existingSupplier != null)
             {
                 return Conflict(new { title = "Conflict", status = 409, message = "Supplier with this name already exists" });
             }
 
-            _context.Suppliers.Add(supplier);
+            Supplier newSupplier = supplierDTO.ToSupplier();
+
+            _context.Suppliers.Add(newSupplier);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSupplier", new { id = supplier.SupplierID }, supplier);
+            return CreatedAtAction(nameof(GetSupplierByID), new { id = newSupplier.SupplierID }, supplierDTO);
         }
         #endregion
         #region Read
@@ -55,27 +54,46 @@ namespace Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
+        public async Task<ActionResult<IEnumerable<SupplierDTO>>> GetAllSuppliers()
         {
-            return await _context.Suppliers.ToListAsync();
+            return Ok(await _context.Suppliers.Select(x=>x.ToSupplierDTO()).ToListAsync());
         }
 
         /// <summary>
-        /// GET: ElectroDepot/Suppliers/{id}
+        /// GET: ElectroDepot/Suppliers/GetByID/{ID}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Supplier>> GetSupplier(int id)
+        [HttpGet("GetByID/{id}")]
+        public async Task<ActionResult<SupplierDTO>> GetSupplierByID(int id)
         {
-            var supplier = await _context.Suppliers.FindAsync(id);
+            Supplier? supplier = await _context.Suppliers.FindAsync(id);
 
             if (supplier == null)
             {
                 return NotFound();
             }
 
-            return supplier;
+            return Ok(supplier.ToSupplierDTO());
+        }
+
+        [HttpGet("GetByName/{name}")]
+        public async Task<ActionResult<SupplierDTO>> GetByName(string name)
+        {
+            Supplier? category = await _context.Suppliers.FirstOrDefaultAsync(u => u.Name == name);
+
+            if (category == null)
+            {
+                return NotFound(new
+                    {
+                        title = "Not Found",
+                        code = "404",
+                        message = $"User with Name: {name} doesn't exist"
+                    }
+                );
+            }
+
+            return Ok(category.ToSupplierDTO());
         }
         #endregion
         #region Update

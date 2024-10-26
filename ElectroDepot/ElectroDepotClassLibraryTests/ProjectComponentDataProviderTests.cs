@@ -15,12 +15,45 @@ namespace ElectroDepotClassLibraryTests
             try
             {
                 // Find Project and Component
-                CreateUserDTO user = new CreateUserDTO(Username: "Darek", Email: "Darek@gmail.com", Password: "Pieczarka");
+                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                Assert.NotNull(projects);
+                ProjectDTO? project = projects.FirstOrDefault();
+                Assert.NotNull(project);
 
-                bool wasCreated = await UserDP.CreateUser(user);
+                IEnumerable<ComponentDTO> components = await ComponentDP.GetAllComponents();
+                Assert.NotNull(components);
+                ComponentDTO? component = components.FirstOrDefault();
+                Assert.NotNull(component);
+
+                CreateProjectComponentDTO projectComponent = new CreateProjectComponentDTO(ComponentID: component.ID, ProjectID: project.ID, 20);
+                bool wasCreated = await ProjectComponentDP.CreateProjectComponent(projectComponent);
                 Assert.True(wasCreated);
 
-                Console.WriteLine($"User created: {user.ToString()}");
+                Console.WriteLine($"Project component created: {projectComponent.ToString()}");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+
+        [Fact]
+        public async Task GetAllFromProject()
+        {
+            try
+            {
+                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                Assert.NotNull(projects);
+                ProjectDTO? project = projects.FirstOrDefault();
+                Assert.NotNull(project);
+
+                IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponentsOfProject(project);
+                Assert.NotNull(projectComponents);
+
+                foreach (ProjectComponentDTO projectComponent in projectComponents)
+                {
+                    Console.WriteLine($"{projectComponent.ToString()}");
+                }
             }
             catch (Exception ex)
             {
@@ -33,11 +66,12 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                IEnumerable<UserDTO> users = await UserDP.GetAllUsers();
-                Assert.NotNull(users);
-                foreach (UserDTO user in users)
+                IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
+                Assert.NotNull(projectComponents);
+
+                foreach (ProjectComponentDTO projectComponent in projectComponents)
                 {
-                    Console.WriteLine($"{user.ToString()}");
+                    Console.WriteLine($"{projectComponent.ToString()}");
                 }
             }
             catch (Exception ex)
@@ -47,38 +81,20 @@ namespace ElectroDepotClassLibraryTests
         }
 
         [Fact]
-        public async Task GetByUsername()
+        public async Task Update()
         {
             try
             {
-                UserDTO? user = await UserDP.GetUserByUsername("Darek");
-                Assert.NotNull(user);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+                IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
+                Assert.NotNull(projectComponents);
 
-        [Fact]
-        public async Task GetByID()
-        {
-            try
-            {
-                IEnumerable<UserDTO> allUsers = await UserDP.GetAllUsers();
-                Assert.NotNull(allUsers);
-                Assert.NotEmpty(allUsers);
+                ProjectComponentDTO? projectComp = projectComponents.FirstOrDefault();
+                Assert.NotNull(projectComp);
 
-                foreach (UserDTO singleuser in allUsers)
-                {
-                    Console.WriteLine(singleuser.ToString());
-                }
-
-                int ID = allUsers.FirstOrDefault().ID;
-
-                UserDTO? user = await UserDP.GetUserByID(ID);
-                Assert.NotNull(user);
-                Console.WriteLine(user.ToString());
+                ProjectComponentDTO projectCompUpdated = new ProjectComponentDTO(ID: projectComp.ID, ComponentID: projectComp.ComponentID, ProjectID: projectComp.ProjectID, Quantity: 300); ;
+                
+                bool wasUpdated = await ProjectComponentDP.UpdateProjectComponent(projectCompUpdated);
+                Assert.True(wasUpdated);
             }
             catch (Exception ex)
             {
@@ -91,18 +107,13 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                IEnumerable<UserDTO> allUsers = await UserDP.GetAllUsers();
-                Assert.NotNull(allUsers);
-                Assert.NotEmpty(allUsers);
+                IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
+                Assert.NotNull(projectComponents);
+                Assert.NotEmpty(projectComponents);
+                ProjectComponentDTO? projectComp = projectComponents.FirstOrDefault();
+                Assert.NotNull(projectComp);
 
-                foreach (UserDTO singleuser in allUsers)
-                {
-                    Console.WriteLine(singleuser.ToString());
-                }
-
-                UserDTO firstUser = allUsers.FirstOrDefault();
-
-                bool wasDeleted = await UserDP.DeleteUser(firstUser);
+                bool wasDeleted = await ProjectComponentDP.DeleteProjectComponent(projectComp);
                 Assert.True(wasDeleted);
             }
             catch (Exception ex)
