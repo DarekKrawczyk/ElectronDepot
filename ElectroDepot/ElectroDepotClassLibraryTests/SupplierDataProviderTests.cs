@@ -8,7 +8,22 @@ namespace ElectroDepotClassLibraryTests
         public SupplierDataProviderTests(ITestOutputHelper output) : base(output)
         {
         }
+        [Fact]
+        public async Task Create()
+        {
+            try
+            {
+                CreateSupplierDTO newSupplier = new CreateSupplierDTO(Name: "Botland", Website: @"https://botland.com.pl/");
+                bool wasCreated = await SupplierDP.CreateSupplier(newSupplier);
+                Assert.True(wasCreated);
 
+                Console.WriteLine(newSupplier.ToString());
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
         [Fact]
         public async Task GetAll()
         {
@@ -71,15 +86,24 @@ namespace ElectroDepotClassLibraryTests
             }
         }
         [Fact]
-        public async Task Create()
+        public async Task Update()
         {
             try
             {
-                CreateSupplierDTO newSupplier = new CreateSupplierDTO(Name: "Botland", Website: @"https://botland.com.pl/");
-                bool wasCreated = await SupplierDP.CreateSupplier(newSupplier);
-                Assert.True(wasCreated);
+                // Find
+                IEnumerable<SupplierDTO> allSuppliers = await SupplierDP.GetAllSuppliers();
+                Assert.NotNull(allSuppliers);
+                Assert.NotEmpty(allSuppliers);
+                SupplierDTO? supplierToBeEdited = allSuppliers.FirstOrDefault();
+                Assert.NotNull(supplierToBeEdited);
 
-                Console.WriteLine(newSupplier.ToString());
+                Console.WriteLine(supplierToBeEdited.ToString());
+
+                // Update
+                SupplierDTO supplier = new SupplierDTO(ID: supplierToBeEdited.ID, Name: "Botlandzik", Website: supplierToBeEdited.Website);
+                bool wasUpdated = await SupplierDP.UpdateSupplier(supplier);
+                Assert.True(wasUpdated);
+                Console.WriteLine(supplier.ToString());
             }
             catch (Exception ex)
             {
@@ -91,42 +115,16 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                IEnumerable<CategoryDTO> categories = await CategoryDP.GetAllCategories();
-                Assert.NotNull(categories);
-                Assert.True(categories.Count() > 0);
+                // Find any supplier
+                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                Assert.NotNull(suppliers);
+                Assert.NotEmpty(suppliers);
+                SupplierDTO? lastSupplier = suppliers.LastOrDefault();
+                Assert.NotNull(lastSupplier);
 
-                int countBefore = categories.Count();
-
-                CategoryDTO last = categories.Last();
-
-                await CategoryDP.DeleteCategory(last);
-
-                categories = await CategoryDP.GetAllCategories();
-                Assert.NotNull(categories);
-                Assert.True(categories.Count() > 0);
-
-                int countAfter = categories.Count();
-
-                Assert.True(countBefore == countAfter + 1);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
-        [Fact]
-        public async Task Update()
-        {
-            try
-            {
-                // Find
-                CategoryDTO foundCategory = await CategoryDP.GetCategoryByID(1);
-                Assert.NotNull(foundCategory);
-
-                // Update
-                CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
-                bool wasUpdated = await CategoryDP.UpdateCategory(editedCategoryDTO);
-                Assert.True(wasUpdated);
+                // Delete
+                bool wasDeleted = await SupplierDP.DeleteSupplier(lastSupplier);
+                Assert.True(wasDeleted);
             }
             catch (Exception ex)
             {

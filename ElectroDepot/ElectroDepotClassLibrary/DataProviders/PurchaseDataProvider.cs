@@ -5,23 +5,23 @@ using System.Text;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
-    public class SupplierDataProvider : BaseDataProvider
+    public class PurchaseDataProvider : BaseDataProvider
     {
-        public SupplierDataProvider(string url) : base(url)
+        public PurchaseDataProvider(string url) : base(url)
         {
         }
         #region API Calls
         /// <summary>
-        /// Create new supplier in database.
+        /// Creates new 'Purchase' in database.
         /// </summary>
-        /// <param name="supplierDTO"></param>
+        /// <param name="createPurchaseDTO"></param>
         /// <returns></returns>
-        public async Task<bool> CreateSupplier(CreateSupplierDTO supplierDTO)
+        public async Task<bool> CreatePurchase(CreatePurchaseDTO createPurchaseDTO)
         {
-            var json = JsonSerializer.Serialize(supplierDTO);
+            var json = JsonSerializer.Serialize(createPurchaseDTO);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = SupplierEndpoints.Create();
+            string url = PurchaseEndpoints.Create();
             var response = HTTPClient.PostAsync(url, content).Result;
 
             if (response.IsSuccessStatusCode)
@@ -32,14 +32,14 @@ namespace ElectroDepotClassLibrary.DataProviders
             return false;
         }
         /// <summary>
-        /// Get all suppliers from database.
+        /// Gets all 'Purchase's from database.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<SupplierDTO>> GetAllSuppliers()
+        public async Task<IEnumerable<PurchaseDTO>> GetAllPurchases()
         {
             try
             {
-                string url = SupplierEndpoints.GetAll();
+                string url = PurchaseEndpoints.GetAll();
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -48,8 +48,8 @@ namespace ElectroDepotClassLibrary.DataProviders
                     options.PropertyNameCaseInsensitive = true;
 
                     var json = await response.Content.ReadAsStringAsync();
-                    IEnumerable<SupplierDTO> categories = JsonSerializer.Deserialize<IEnumerable<SupplierDTO>>(json, options);
-                    return categories;
+                    IEnumerable<PurchaseDTO> purchases = JsonSerializer.Deserialize<IEnumerable<PurchaseDTO>>(json, options);
+                    return purchases;
                 }
                 else
                 {
@@ -62,15 +62,15 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
         /// <summary>
-        /// Gets supplier with such ID from database.
+        /// Gets all 'Purchases' of given 'User'
         /// </summary>
-        /// <param name="ID"></param>
+        /// <param name="userDTO"></param>
         /// <returns></returns>
-        public async Task<SupplierDTO> GetSupplierByID(int ID)
+        public async Task<IEnumerable<PurchaseDTO>> GetAllPurchasesFromUser(UserDTO userDTO)
         {
             try
             {
-                string url = SupplierEndpoints.GetByID(ID);
+                string url = PurchaseEndpoints.GetAllByUserID(userDTO.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -79,9 +79,8 @@ namespace ElectroDepotClassLibrary.DataProviders
                     options.PropertyNameCaseInsensitive = true;
 
                     var json = await response.Content.ReadAsStringAsync();
-                    SupplierDTO? supplier = JsonSerializer.Deserialize<SupplierDTO>(json, options);
-
-                    return supplier;
+                    IEnumerable<PurchaseDTO> purchases = JsonSerializer.Deserialize<IEnumerable<PurchaseDTO>>(json, options);
+                    return purchases;
                 }
                 else
                 {
@@ -94,62 +93,68 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
         /// <summary>
-        /// Gets supplier with such ID from database.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public async Task<SupplierDTO> GetSupplierByName(string name)
-        {
-            try
-            {
-                string url = SupplierEndpoints.GetByName(name);
-                var response = await HTTPClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    JsonSerializerOptions options = new JsonSerializerOptions();
-                    options.PropertyNameCaseInsensitive = true;
-
-                    var json = await response.Content.ReadAsStringAsync();
-                    SupplierDTO? supplier = JsonSerializer.Deserialize<SupplierDTO>(json, options);
-
-                    return supplier;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-        /// <summary>
-        /// Updates supplier in database.
-        /// </summary>
-        /// <param name="category"></param>
-        /// <returns></returns>
-        public async Task<bool> UpdateSupplier(SupplierDTO supplierDTO)
-        {
-            UpdateSupplierDTO updateDTO = supplierDTO.ToUpdateSupplierDTO();
-
-            var json = JsonSerializer.Serialize(updateDTO);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            string url = SupplierEndpoints.Update(supplierDTO.ID);
-            var response = await HTTPClient.PutAsync(url, content);
-
-            return response.IsSuccessStatusCode;
-        }
-        /// <summary>
-        /// Deletes supplier from database.
+        /// Gets all 'Purchases' of given 'Supplier'
         /// </summary>
         /// <param name="supplierDTO"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteSupplier(SupplierDTO supplierDTO)
+        public async Task<IEnumerable<PurchaseDTO>> GetAllPurchasesFromSupplier(SupplierDTO supplierDTO)
         {
-            string url = SupplierEndpoints.Delete(supplierDTO.ID);
+            try
+            {
+                string url = PurchaseEndpoints.GetAllBySupplierID(supplierDTO.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    IEnumerable<PurchaseDTO> purchases = JsonSerializer.Deserialize<IEnumerable<PurchaseDTO>>(json, options);
+                    return purchases;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// Updated 'Purchase' in database
+        /// </summary>
+        /// <param name="purchaseDTO"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdatePurchase(PurchaseDTO purchaseDTO)
+        {
+            try
+            {
+                UpdatePurchaseDTO updateDTO = purchaseDTO.ToUpdatePurchaseDTO();
+
+                var json = JsonSerializer.Serialize(updateDTO);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                string url = PurchaseEndpoints.Update(purchaseDTO.ID);
+                var response = await HTTPClient.PutAsync(url, content);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch(Exception exception)
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Deletes 'Purchase' from database.
+        /// </summary>
+        /// <param name="purchaseDTO"></param>
+        /// <returns></returns>
+        public async Task<bool> DeletePuchase(PurchaseDTO purchaseDTO)
+        {
+            string url = PurchaseEndpoints.Delete(purchaseDTO.ID);
             var response = await HTTPClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }

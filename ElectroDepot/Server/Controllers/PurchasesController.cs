@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using ElectroDepotClassLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
+using Server.ExtensionMethods;
 using Server.Models;
 
 namespace Server.Controllers
@@ -23,34 +20,31 @@ namespace Server.Controllers
 
         #region Create
         /// <summary>
-        /// POST: ElectroDepot/Purchases
+        /// POST: ElectroDepot/Purchases/Create
         /// </summary>
-        /// <param name="purchase"></param>
+        /// <param name="createPurchaseDTO"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<Purchase>> PostPurchase(Purchase purchase)
+        public async Task<ActionResult<Purchase>> CreatePurchase(CreatePurchaseDTO createPurchaseDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var userExists = await _context.Users.FindAsync(purchase.UserID);
+            User? userExists = await _context.Users.FindAsync(createPurchaseDTO.UserID);
             if (userExists == null)
             {
-                return NotFound(new { title = "User not found", status = 404, message = $"User with given id: '{purchase.UserID}' doesn't exist" });
+                return NotFound(new { title = "User not found", status = 404, message = $"User with given id: '{createPurchaseDTO.UserID}' doesn't exist" });
             }
 
-            var supplierExists = await _context.Suppliers.FindAsync(purchase.SupplierID);
+            Supplier? supplierExists = await _context.Suppliers.FindAsync(createPurchaseDTO.SupplierID);
             if (supplierExists == null)
             {
-                return NotFound(new { title = "Supplier not found", status = 404, message = $"Supplier with given id: '{purchase.SupplierID}' doesn't exist" });
+                return NotFound(new { title = "Supplier not found", status = 404, message = $"Supplier with given id: '{createPurchaseDTO.SupplierID}' doesn't exist" });
             }
+
+            Purchase purchase = createPurchaseDTO.ToPurchase();
 
             _context.Purchases.Add(purchase);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPurchase), new { id = purchase.PurchaseID }, purchase);
+            return Ok(purchase.ToPurchaseDTO());
         }
         #endregion
         #region Read
@@ -59,33 +53,25 @@ namespace Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<Purchase>>> GetPurchases()
+        public async Task<ActionResult<IEnumerable<PurchaseDTO>>> GetAllPurchases()
         {
-            return Ok(await _context.Purchases.ToListAsync());
+            return Ok(await _context.Purchases.Select(x => x.ToPurchaseDTO()).ToListAsync());
         }
 
         /// <summary>
-        /// GET: ElectroDepot/Purchases/{id}
+        /// 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Purchase>> GetPurchase(int id)
+        [HttpGet("GetByID/{id}")]
+        public async Task<ActionResult<PurchaseDTO>> GetPurchaseByID(int id)
         {
             Purchase? purchase = await _context.Purchases.FindAsync(id);
 
             if (purchase == null)
             {
-                return NotFound(new { title ="Not found", code = "404" });
+                return NotFound(new { title = "Not found", code = "404" });
             }
-
-            /*
-            User? user = await _context.Users.FindAsync(purchase.UserID);
-            Supplier? supplier = await _context.Suppliers.FindAsync(purchase.SupplierID);
-
-            purchase.User = user;
-            purchase.Supplier = supplier;
-            */
 
             return Ok(purchase);
         }
@@ -95,7 +81,7 @@ namespace Server.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("GetAll/{id}")]
+        [HttpGet("GetPurchaseItem/{id}")]
         public async Task<ActionResult<IEnumerable<PurchaseItem>>> GetPurchaseItem(int id)
         {
             Purchase? foundPurchase = await _context.Purchases.FindAsync(id);
@@ -109,19 +95,66 @@ namespace Server.Controllers
 
             return foundPurchaseItems;
         }
-        #endregion
-        #region Update
-        // PUT: api/Purchases/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPurchase(int id, Purchase purchase)
+
+        /// <summary>
+        /// GET: ElectroDepot/Purchases/GetAllByUserID/{ID}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllByUserID/{id}")]
+        public async Task<ActionResult<IEnumerable<PurchaseDTO>>> GetAllByUserID(int id)
         {
-            if (id != purchase.PurchaseID)
+            User? foundUser = await _context.Users.FindAsync(id);
+
+            if (foundUser == null)
             {
-                return BadRequest();
+                return NotFound(new { title = "Not Found", code = "404", message = $"User with ID:{id} doesn't exsit" });
             }
 
-            _context.Entry(purchase).State = EntityState.Modified;
+            IEnumerable<PurchaseDTO> purchasesOfUser = await _context.Purchases.Where(x => x.UserID == id).Select(x => x.ToPurchaseDTO()).ToListAsync();
+
+            return Ok(purchasesOfUser);
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/Purchases/GetAllBySupplierID/{ID}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllBySupplierID/{id}")]
+        public async Task<ActionResult<IEnumerable<PurchaseDTO>>> GetAllBySupplierID(int id)
+        {
+            Supplier? foundSupplier = await _context.Suppliers.FindAsync(id);
+
+            if (foundSupplier == null)
+            {
+                return NotFound(new { title = "Not Found", code = "404", message = $"Supplier with ID:{id} doesn't exsit" });
+            }
+
+            IEnumerable<PurchaseDTO> purchasesOfUser = await _context.Purchases.Where(x => x.SupplierID == id).Select(x => x.ToPurchaseDTO()).ToListAsync();
+
+            return Ok(purchasesOfUser);
+        }
+        #endregion
+        #region Update
+        /// <summary>
+        /// POST: ElectroDepot/Purchases/Update/{ID}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatePurchaseDTO"></param>
+        /// <returns></returns>
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> UpdatePurchase(int id, UpdatePurchaseDTO updatePurchaseDTO)
+        {
+            Purchase? purchase = await _context.Purchases.FindAsync(id);
+
+            if(purchase == null)
+            {
+                NotFound();
+            }
+
+            purchase.TotalPrice = updatePurchaseDTO.TotalPrice;
+            purchase.PurchasedDate = updatePurchaseDTO.PurchaseDate;
 
             try
             {
@@ -139,15 +172,19 @@ namespace Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
         #endregion
         #region Delete
-        // DELETE: api/Purchases/5
-        [HttpDelete("{id}")]
+        /// <summary>
+        /// DELETE: ElectroDepot/Purchases/Delete/{ID}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeletePurchase(int id)
         {
-            var purchase = await _context.Purchases.FindAsync(id);
+            Purchase? purchase = await _context.Purchases.FindAsync(id);
             if (purchase == null)
             {
                 return NotFound(new { title = "Not Found", code = "404" });
@@ -156,7 +193,7 @@ namespace Server.Controllers
             _context.Purchases.Remove(purchase);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
         #endregion
         private bool PurchaseExists(int id)

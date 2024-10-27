@@ -77,6 +77,11 @@ namespace Server.Controllers
             return Ok(supplier.ToSupplierDTO());
         }
 
+        /// <summary>
+        /// GET: ElectroDepot/Suppliers/GetByName/{name}
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet("GetByName/{name}")]
         public async Task<ActionResult<SupplierDTO>> GetByName(string name)
         {
@@ -98,27 +103,25 @@ namespace Server.Controllers
         #endregion
         #region Update
         /// <summary>
-        /// PUT: ElectroDepot/Suppliers/Update/5
+        /// PUT: ElectroDepot/Suppliers/Update/{ID}
         /// </summary>
         /// <param name="id"></param>
         /// <param name="supplier"></param>
         /// <returns></returns>
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> PutSupplier(int id, Supplier supplier)
+        public async Task<IActionResult> UpdateSupplier(int id, UpdateSupplierDTO supplierDTO)
         {
-            if (id != supplier.SupplierID)
-            {
-                return BadRequest();
-            }
-
-            var existingSupplier = await _context.Suppliers.FirstOrDefaultAsync(u => u.Name == supplier.Name);
+            Supplier? existingSupplier = await _context.Suppliers.FirstOrDefaultAsync(u => u.Name == supplierDTO.Name);
 
             if (existingSupplier != null)
             {
                 return Conflict(new { title = "Conflict", status = 409, message = "Supplier with this name already exists" });
             }
 
-            _context.Entry(supplier).State = EntityState.Modified;
+            existingSupplier = await _context.Suppliers.FindAsync(id);
+
+            existingSupplier.Name = supplierDTO.Name;
+            existingSupplier.Website = supplierDTO.Website;
 
             try
             {
@@ -136,7 +139,7 @@ namespace Server.Controllers
                 }
             }
 
-            return Ok(await _context.Suppliers.FindAsync(id));
+            return Ok(existingSupplier.ToSupplierDTO());
         }
         #endregion
         #region Delete
@@ -148,7 +151,7 @@ namespace Server.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteSupplier(int id)
         {
-            var supplier = await _context.Suppliers.FindAsync(id);
+            Supplier? supplier = await _context.Suppliers.FindAsync(id);
             if (supplier == null)
             {
                 return NotFound();
@@ -157,7 +160,7 @@ namespace Server.Controllers
             _context.Suppliers.Remove(supplier);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
         #endregion
         private bool SupplierExists(int id)
