@@ -16,4 +16,12 @@
         int ComponentID,
         int Quantity
     );
+
+    public static class OwnsComponentsDTOExtensionMethods
+    {
+        public static UpdateOwnsComponentDTO ToUpdateOwnsComponentsDTO(this OwnsComponentDTO ownsComponentDTO)
+        {
+            return new UpdateOwnsComponentDTO(Quantity: ownsComponentDTO.Quantity);
+        }
+    }
 }

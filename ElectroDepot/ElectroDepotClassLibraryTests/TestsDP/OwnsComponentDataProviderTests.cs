@@ -13,14 +13,86 @@ namespace ElectroDepotClassLibraryTests.Tests
         public OwnsComponentDataProviderTests(ITestOutputHelper output) : base(output)
         {
         }
+        [Fact]
         public async Task Create()
         {
             try
             {
-                CreateOwnsComponentDTO ownsComponentDTO = new CreateOwnsComponentDTO(1, 1, 1);
+                IEnumerable<UserDTO> allUsers = await UserDP.GetAllUsers();
+                Assert.NotNull(allUsers);
+                Assert.NotEmpty(allUsers);
+                UserDTO foundUser = allUsers.FirstOrDefault();
+                Assert.NotNull(foundUser);
 
-                bool wasCreated = await OwnsComponentDP.CreateOwnComponentRelation(ownsComponentDTO);
+                IEnumerable<ComponentDTO> allComponents = await ComponentDP.GetAllComponents();
+                Assert.NotNull(allComponents);
+                Assert.NotEmpty(allComponents);
+                ComponentDTO foundComponent = allComponents.FirstOrDefault();
+                Assert.NotNull(foundComponent);
+
+                CreateOwnsComponentDTO ownsComponentDTO = new CreateOwnsComponentDTO(UserID: foundUser.ID, ComponentID: foundComponent.ID, 20);
+                bool wasCreated = await OwnsComponentDP.CreateOwnComponent(ownsComponentDTO);
                 Assert.True(wasCreated);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+        [Fact]
+        public async Task GetAll()
+        {
+            try
+            {
+                IEnumerable<OwnsComponentDTO> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
+                Assert.NotNull(allOwnsComponents);
+
+                foreach(OwnsComponentDTO ownsComponent in allOwnsComponents)
+                {
+                    Console.WriteLine(ownsComponent.ToString());
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+        [Fact]
+        public async Task Update()
+        {
+            try
+            {
+                IEnumerable<OwnsComponentDTO> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
+                Assert.NotNull(allOwnsComponents);
+                Assert.NotEmpty(allOwnsComponents);
+                OwnsComponentDTO ownsComponent = allOwnsComponents.FirstOrDefault();
+                Assert.NotNull(ownsComponent);
+
+                int newQuantity = 3000;
+
+                OwnsComponentDTO updateOwnsComponent = new OwnsComponentDTO(ID: ownsComponent.ID, UserID: ownsComponent.UserID, ComponentID: ownsComponent.ComponentID, Quantity: newQuantity);
+                bool wasUpdated = await OwnsComponentDP.UpdateOwnsComponent(ownsComponent);
+                Assert.True(wasUpdated);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+        [Fact]
+        public async Task Delete()
+        {
+            try
+            {
+                IEnumerable<OwnsComponentDTO> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
+                Assert.NotNull(allOwnsComponents);
+                Assert.NotEmpty(allOwnsComponents);
+                OwnsComponentDTO ownsComponent = allOwnsComponents.FirstOrDefault();
+                Assert.NotNull(ownsComponent);
+
+                bool wasDeleted = await OwnsComponentDP.DeleteComponent(ownsComponent);
+                Assert.True(wasDeleted);
             }
             catch (Exception ex)
             {

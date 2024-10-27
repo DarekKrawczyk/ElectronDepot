@@ -127,8 +127,6 @@ namespace ElectroDepotClassLibrary.DataProviders
             string url = UserEndpoints.Update(user.ID);
             var response = await HTTPClient.PutAsync(url, content);
 
-            throw new Exception("TODO: Problem with updating used because can cast from UserDTO to UpdateUserDTO, maybo just create method to change" +
-                "password and email?");
             return response.IsSuccessStatusCode;
         }
         public async Task<IEnumerable<UserDTO>> GetAllUsers()

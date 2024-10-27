@@ -58,7 +58,7 @@ namespace Server.Controllers
         #endregion
         #region Read
         /// <summary>
-        /// GET: ElectroDepot/Users
+        /// GET: ElectroDepot/Users/GetAll
         /// </summary>
         /// <returns>All users in database</returns>
         [HttpGet("GetAll")]
@@ -68,7 +68,7 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectroDepot/Users/{id}
+        /// GET: ElectroDepot/Users/GetUserByID/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns>User with given ID</returns>
@@ -85,6 +85,11 @@ namespace Server.Controllers
             return Ok(user.ToDTO());
         }
 
+        /// <summary>
+        /// GET: ElectroDepot/Users/GetUserByEMail/{id}
+        /// </summary>
+        /// <param name="EMail"></param>
+        /// <returns></returns>
         [HttpGet("GetUserByEMail/{EMail}")]
         public async Task<ActionResult<UserDTO>> GetUser(string EMail)
         {
@@ -98,6 +103,11 @@ namespace Server.Controllers
             return Ok(user.ToDTO());
         }
 
+        /// <summary>
+        /// GET: ElectroDepot/Users/GetUserByUsername/{id}
+        /// </summary>
+        /// <param name="Username"></param>
+        /// <returns></returns>
         [HttpGet("GetUserByUsername/{Username}")]
         public async Task<ActionResult<UserDTO>> GetUserByName(string Username)
         {
@@ -110,51 +120,27 @@ namespace Server.Controllers
 
             return Ok(user.ToDTO());
         }
-
-        /// <summary>
-        /// GET: ElectroDepot/Users/{userId}/GetAllComponents
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>All components with their quantity for User with given ID</returns>
-        [HttpGet("{userId}/GetAllComponents")]
-        public async Task<IActionResult> GetComponentsWithQuantityForUser(int userId)
-        {
-            var componentsWithQuantity = await (from ownsComponent in _context.OwnsComponent
-                                               join component in _context.Components on ownsComponent.ComponentID equals component.ComponentID
-                                               where ownsComponent.UserID == userId
-                                               select new
-                                               {
-                                                   ComponentID = component.ComponentID,
-                                                   ComponentName = component.Name,
-                                                   Manufacturer = component.Manufacturer,
-                                                   Description = component.Description,
-                                                   Quantity = ownsComponent.Quantity
-                                               }).ToListAsync();
-
-            if (componentsWithQuantity == null || !componentsWithQuantity.Any())
-            {
-                return NotFound(new { title = "No components found", status = 404, message = "No components found for the given user." });
-            }
-
-            return Ok(componentsWithQuantity);
-        }
         #endregion
         #region Update
         /// <summary>
         /// PUT: ElectroDepot/Users/Create/{id}
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="user"></param>
+        /// <param name="updateUserDTO"></param>
         /// <returns></returns>
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> UpdateUser(int id, UpdateUserDTO updateUserDTO)
         {
-            if (id != user.UserID)
+            User userToBeEdited = await _context.Users.FindAsync(id);
+
+            if(userToBeEdited == null)
             {
-                return BadRequest();
+                NotFound();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            userToBeEdited.Username = updateUserDTO.Username;
+            userToBeEdited.Email = updateUserDTO.Email;
+            userToBeEdited.Password = updateUserDTO.Password;
 
             try
             {
@@ -172,12 +158,12 @@ namespace Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
         #endregion
         #region Delete
         /// <summary>
-        /// DELETE: ElectroDepod/Users/{id}
+        /// DELETE: ElectroDepod/Users/Delete/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -193,7 +179,7 @@ namespace Server.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
         #endregion
         private bool UserExists(int id)

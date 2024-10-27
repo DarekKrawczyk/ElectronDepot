@@ -23,7 +23,7 @@ namespace Server.Controllers
         /// </summary>
         /// <param name="ownsComponent"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<ActionResult<OwnsComponentDTO>> Create(CreateOwnsComponentDTO ownsComponent)
         {
             if (!ModelState.IsValid)
@@ -55,7 +55,7 @@ namespace Server.Controllers
         #endregion
         #region Read
         /// <summary>
-        /// GET: ElectroDepot/OwnsComponents
+        /// GET: ElectroDepot/OwnsComponents/GetAll
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
@@ -70,7 +70,7 @@ namespace Server.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetByID/{id}")]
-        public async Task<ActionResult<OwnsComponent>> GetOwnsComponentByID(int id)
+        public async Task<ActionResult<OwnsComponentDTO>> GetOwnComponentByID(int id)
         {
             var ownsComponent = await _context.OwnsComponent.FindAsync(id);
 
@@ -79,7 +79,7 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            return ownsComponent;
+            return ownsComponent.ToDTO();
         }
 
         #endregion
@@ -88,23 +88,18 @@ namespace Server.Controllers
         /// PUT: ElectroDepot/OwnsComponents/Update/{id}
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="ownsComponent"></param>
+        /// <param name="updateOwnsComponentDTO"></param>
         /// <returns></returns>
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> PutOwnsComponent(int id, OwnsComponent ownsComponent)
+        public async Task<IActionResult> UpdateOwnsComponent(int id, UpdateOwnsComponentDTO updateOwnsComponentDTO)
         {
-            if (id != ownsComponent.OwnsComponentID)
-            {
-                return BadRequest();
-            }
-
             OwnsComponent? existingOwnsComponent = await _context.OwnsComponent.FindAsync(id);
             if (existingOwnsComponent == null)
             {
                 return BadRequest(new { title = "OwnsComponent not found", status = 400, message = "OwnsComponent with this ID doesn't exist." });
             }
 
-            existingOwnsComponent.Quantity = ownsComponent.Quantity;
+            existingOwnsComponent.Quantity = updateOwnsComponentDTO.Quantity;
 
             try
             {
@@ -126,8 +121,12 @@ namespace Server.Controllers
         }
         #endregion
         #region Delete
-        // DELETE: api/OwnsComponents/5
-        [HttpDelete("{id}")]
+        /// <summary>
+        /// DELETE: ElectroDepot/OwnsComponents/Delete/{id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteOwnsComponent(int id)
         {
             var ownsComponent = await _context.OwnsComponent.FindAsync(id);
