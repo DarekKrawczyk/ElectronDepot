@@ -1,7 +1,7 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
-namespace ElectroDepotClassLibraryTests
+namespace ElectroDepotClassLibraryTests.Tests
 {
     public class SupplierDataProviderTests : BaseDataProviderTest
     {
@@ -31,7 +31,7 @@ namespace ElectroDepotClassLibraryTests
             {
                 IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
-                foreach(SupplierDTO supplier in suppliers)
+                foreach (SupplierDTO supplier in suppliers)
                 {
                     Console.WriteLine(supplier.ToString());
                 }

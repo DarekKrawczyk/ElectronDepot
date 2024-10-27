@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ElectroDepotClassLibrary.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
+using Server.ExtensionMethods;
 using Server.Models;
 
 namespace Server.Controllers
@@ -19,35 +21,32 @@ namespace Server.Controllers
         /// <summary>
         /// POST: ElectroDepot/PurchaseItems/Create
         /// </summary>
-        /// <param name="purchaseItem"></param>
+        /// <param name="createPurchaseItemDTO"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<PurchaseItem>> PostPurchaseItem(PurchaseItem purchaseItem)
+        public async Task<ActionResult<PurchaseItem>> CreatePurchaseItem(CreatePurchaseItemDTO createPurchaseItemDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Purchase? purchase = await _context.Purchases.FindAsync(purchaseItem.PurchaseID);
+            // Check if 'Purchase' and 'Component' exists
+            Purchase? purchase = await _context.Purchases.FindAsync(createPurchaseItemDTO.PurchaseID);
 
             if (purchase == null)
             {
-                return NotFound(new { title = "Not Found", status = 404, message = $"Purchase with ID:{purchaseItem.PurchaseID} doesn't exist" });
+                return NotFound(new { title = "Not Found", status = 404, message = $"Purchase with ID:{createPurchaseItemDTO.PurchaseID} doesn't exist" });
             }
 
-            // Component
-            //Purchase? purchase = await _context.Purchases.FindAsync(purchaseItem.PurchaseID);
+            Component? component = await _context.Components.FindAsync(createPurchaseItemDTO.ComponentID);
 
-            //if (existingUserByEmail != null)
-            //{
-            //    return Conflict(new { title = "Conflict", status = 409, message = "A user with this email already exists." });
-            //}
+            if (purchase == null)
+            {
+                return NotFound(new { title = "Not Found", status = 404, message = $"Component with ID:{createPurchaseItemDTO.ComponentID} doesn't exist" });
+            }
 
-            _context.PurchaseItems.Add(purchaseItem);
+            PurchaseItem newPurchaseItem = createPurchaseItemDTO.ToPurchase();
+
+            _context.PurchaseItems.Add(newPurchaseItem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPurchaseItem), new { id = purchaseItem.PurchaseItemID }, purchaseItem);
+            return Ok(newPurchaseItem.ToPurchaseItemDTO());
         }
         #endregion
         #region Read
@@ -56,18 +55,18 @@ namespace Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<PurchaseItem>>> GetPurchaseItems()
+        public async Task<ActionResult<IEnumerable<PurchaseItemDTO>>> GetAllPurchaseItems()
         {
-            return Ok(await _context.PurchaseItems.ToListAsync());
+            return Ok(await _context.PurchaseItems.Select(x=>x.ToPurchaseItemDTO()).ToListAsync());
         }
 
         /// <summary>
-        /// GET: ElectroDepot/PurchaseItems/{id}
+        /// GET: ElectroDepot/PurchaseItems/GetByID/{id}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<PurchaseItem>>> GetPurchaseItem(int id)
+        [HttpGet("GetByID/{id}")]
+        public async Task<ActionResult<IEnumerable<PurchaseItem>>> GetPurchaseItemByID(int id)
         {
             PurchaseItem? foundPurchase = await _context.PurchaseItems.FindAsync(id);
 
@@ -77,6 +76,45 @@ namespace Server.Controllers
             }
 
             return Ok(foundPurchase);
+        }
+        #endregion
+        #region Update
+        /// <summary>
+        /// POST: ElectroDepot/PurchaseItems/Update/{ID}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatePurchaseItemDTO"></param>
+        /// <returns></returns>
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> UpdatePurchase(int id, UpdatePurchaseItemDTO updatePurchaseItemDTO)
+        {
+            PurchaseItem? purchaseItem = await _context.PurchaseItems.FindAsync(id);
+
+            if (purchaseItem == null)
+            {
+                NotFound();
+            }
+
+            purchaseItem.Quantity = updatePurchaseItemDTO.Quantity;
+            purchaseItem.PricePerUnit = updatePurchaseItemDTO.PricePerUnit;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PurchaseItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok();
         }
         #endregion
         #region Delete

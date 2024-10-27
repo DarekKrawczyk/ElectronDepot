@@ -14,6 +14,7 @@ namespace ElectroDepotClassLibraryTests
         public ProjectComponentDataProvider ProjectComponentDP { get; }
         public SupplierDataProvider SupplierDP { get; }
         public PurchaseDataProvider PurchaseDP { get; }
+        public PurchaseItemDataProvider PurchaseItemDP { get; }
 
         public BaseDataProviderTest(ITestOutputHelper output)
         {
@@ -26,6 +27,7 @@ namespace ElectroDepotClassLibraryTests
             ProjectComponentDP = new ProjectComponentDataProvider(Utility.ConnectionURL);
             SupplierDP = new SupplierDataProvider(Utility.ConnectionURL);
             PurchaseDP = new PurchaseDataProvider(Utility.ConnectionURL);
+            PurchaseItemDP = new PurchaseItemDataProvider(Utility.ConnectionURL);
         }
     }
 }

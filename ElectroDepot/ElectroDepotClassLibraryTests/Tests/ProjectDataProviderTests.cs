@@ -1,7 +1,7 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
-namespace ElectroDepotClassLibraryTests
+namespace ElectroDepotClassLibraryTests.Tests
 {
     public class ProjectDataProviderTests : BaseDataProviderTest
     {

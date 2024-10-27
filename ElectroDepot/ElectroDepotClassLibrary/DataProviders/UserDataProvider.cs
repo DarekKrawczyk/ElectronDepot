@@ -2,7 +2,6 @@
 using ElectroDepotClassLibrary.Endpoints;
 using System.Text.Json;
 using System.Text;
-using System.Net.Http;
 using ElectroDepotClassLibrary.DataProviders.Interfaces;
 
 namespace ElectroDepotClassLibrary.DataProviders

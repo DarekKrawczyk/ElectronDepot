@@ -1,7 +1,7 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
-namespace ElectroDepotClassLibraryTests
+namespace ElectroDepotClassLibraryTests.Tests
 {
     public class PurchaseDataProviderTests : BaseDataProviderTest
     {
@@ -71,7 +71,7 @@ namespace ElectroDepotClassLibraryTests
                 IEnumerable<PurchaseDTO> purchaeses = await PurchaseDP.GetAllPurchasesFromUser(user);
                 Assert.NotNull(purchaeses);
 
-                foreach(PurchaseDTO purchase in purchaeses)
+                foreach (PurchaseDTO purchase in purchaeses)
                 {
                     Console.WriteLine(purchase.ToString());
                 }
@@ -123,7 +123,7 @@ namespace ElectroDepotClassLibraryTests
                 Console.WriteLine(purchaseToBeEdited.ToString());
 
                 // Update
-                PurchaseDTO purchase = new PurchaseDTO(ID: purchaseToBeEdited.ID, UserID:purchaseToBeEdited.UserID, SupplierID: purchaseToBeEdited.SupplierID, PurchaseDate: purchaseToBeEdited.PurchaseDate, TotalPrice: 201);
+                PurchaseDTO purchase = new PurchaseDTO(ID: purchaseToBeEdited.ID, UserID: purchaseToBeEdited.UserID, SupplierID: purchaseToBeEdited.SupplierID, PurchaseDate: purchaseToBeEdited.PurchaseDate, TotalPrice: 201);
                 bool wasUpdated = await PurchaseDP.UpdatePurchase(purchase);
                 Assert.True(wasUpdated);
                 Console.WriteLine(purchase.ToString());

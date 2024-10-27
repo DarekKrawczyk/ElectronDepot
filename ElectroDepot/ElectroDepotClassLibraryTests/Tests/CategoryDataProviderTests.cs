@@ -1,7 +1,7 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
-namespace ElectroDepotClassLibraryTests
+namespace ElectroDepotClassLibraryTests.Tests
 {
     public class CategoryDataProviderTests : BaseDataProviderTest
     {
@@ -16,7 +16,7 @@ namespace ElectroDepotClassLibraryTests
             {
                 IEnumerable<CategoryDTO> categories = await CategoryDP.GetAllCategories();
                 Assert.NotNull(categories);
-                Console.WriteLine($"Returned '{categories.Count()}' records");   
+                Console.WriteLine($"Returned '{categories.Count()}' records");
             }
             catch (Exception ex)
             {
@@ -61,7 +61,7 @@ namespace ElectroDepotClassLibraryTests
 
                 int countAfter = categories.Count();
 
-                Assert.True(countBefore == countAfter+1);
+                Assert.True(countBefore == countAfter + 1);
             }
             catch (Exception ex)
             {
@@ -129,14 +129,14 @@ namespace ElectroDepotClassLibraryTests
                 IEnumerable<CategoryDTO> allCategories = await CategoryDP.GetAllCategories();
                 Assert.NotNull(allCategories);
 
-                foreach(CategoryDTO category in allCategories)
+                foreach (CategoryDTO category in allCategories)
                 {
                     Console.WriteLine(category.ToString());
                 }
 
                 // Delete
                 int[] IDs = allCategories.Select(x => x.ID).ToArray();
-                foreach(int id in IDs)
+                foreach (int id in IDs)
                 {
                     bool wasDeleted = await CategoryDP.DeleteCategory(id);
                     Assert.True(wasDeleted);

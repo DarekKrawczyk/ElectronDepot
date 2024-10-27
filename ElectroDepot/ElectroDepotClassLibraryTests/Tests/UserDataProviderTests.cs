@@ -1,7 +1,7 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
-namespace ElectroDepotClassLibraryTests
+namespace ElectroDepotClassLibraryTests.Tests
 {
     public class UserDataProviderTests : BaseDataProviderTest
     {
@@ -68,7 +68,7 @@ namespace ElectroDepotClassLibraryTests
                 Assert.NotNull(allUsers);
                 Assert.NotEmpty(allUsers);
 
-                foreach(UserDTO singleuser in allUsers)
+                foreach (UserDTO singleuser in allUsers)
                 {
                     Console.WriteLine(singleuser.ToString());
                 }

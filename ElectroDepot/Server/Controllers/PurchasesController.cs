@@ -81,7 +81,7 @@ namespace Server.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("GetPurchaseItem/{id}")]
+        [HttpGet("GetPurchaseItemByID/{id}")]
         public async Task<ActionResult<IEnumerable<PurchaseItem>>> GetPurchaseItem(int id)
         {
             Purchase? foundPurchase = await _context.Purchases.FindAsync(id);

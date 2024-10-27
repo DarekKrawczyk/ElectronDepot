@@ -1,7 +1,7 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
-namespace ElectroDepotClassLibraryTests
+namespace ElectroDepotClassLibraryTests.Tests
 {
     public class ComponentDataProviderTests : BaseDataProviderTest
     {
@@ -16,7 +16,7 @@ namespace ElectroDepotClassLibraryTests
             {
                 IEnumerable<ComponentDTO> components = await ComponentDP.GetAllComponents();
                 Assert.NotNull(components);
-                foreach(ComponentDTO component in components)
+                foreach (ComponentDTO component in components)
                 {
                     Console.WriteLine($"{component.ToString()}");
                 }
@@ -43,7 +43,7 @@ namespace ElectroDepotClassLibraryTests
                     Assert.NotNull(category);
                 }
 
-                CreateComponentDTO component = new CreateComponentDTO(CategoryID: category.ID, Name: "LM35", Manufacturer:"Texas Instruments", Description: "Analog temperature gauge");
+                CreateComponentDTO component = new CreateComponentDTO(CategoryID: category.ID, Name: "LM35", Manufacturer: "Texas Instruments", Description: "Analog temperature gauge");
 
                 bool wasCreated = await ComponentDP.CreateComponent(component);
                 Assert.True(wasCreated);
@@ -76,7 +76,7 @@ namespace ElectroDepotClassLibraryTests
                 int countAfter = components.Count();
 
                 Assert.True(countBefore == countAfter + 1);
-                foreach(ComponentDTO component in components)
+                foreach (ComponentDTO component in components)
                 {
                     Console.WriteLine(component.ToString());
                 }
@@ -93,7 +93,7 @@ namespace ElectroDepotClassLibraryTests
             {
                 CategoryDTO delFirst = await CategoryDP.GetCategoryByName("Silniczek");
                 // Delete category
-                if(delFirst != null)
+                if (delFirst != null)
                 {
                     bool wasDefFirst = await CategoryDP.DeleteCategory(delFirst.ID);
                     Assert.True(wasDefFirst);
@@ -110,7 +110,7 @@ namespace ElectroDepotClassLibraryTests
 
                 // Delete component if exists
                 ComponentDTO delCompFirst = await ComponentDP.GetComponentByName("Silniczek");
-                if(delCompFirst != null)
+                if (delCompFirst != null)
                 {
                     bool wasdelCompFirst = await ComponentDP.DeleteComponent(delCompFirst);
                     Assert.True(wasdelCompFirst);

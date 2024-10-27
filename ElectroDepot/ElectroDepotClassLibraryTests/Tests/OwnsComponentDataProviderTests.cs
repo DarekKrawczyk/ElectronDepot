@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit.Abstractions;
 
-namespace ElectroDepotClassLibraryTests
+namespace ElectroDepotClassLibraryTests.Tests
 {
     public class OwnsComponentDataProviderTests : BaseDataProviderTest
     {
@@ -17,7 +17,7 @@ namespace ElectroDepotClassLibraryTests
         {
             try
             {
-                CreateOwnsComponentDTO ownsComponentDTO = new CreateOwnsComponentDTO(1,1,1);               
+                CreateOwnsComponentDTO ownsComponentDTO = new CreateOwnsComponentDTO(1, 1, 1);
 
                 bool wasCreated = await OwnsComponentDP.CreateOwnComponentRelation(ownsComponentDTO);
                 Assert.True(wasCreated);

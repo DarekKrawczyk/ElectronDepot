@@ -1,7 +1,7 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using Xunit.Abstractions;
 
-namespace ElectroDepotClassLibraryTests
+namespace ElectroDepotClassLibraryTests.Tests
 {
     public class ProjectComponentDataProviderTests : BaseDataProviderTest
     {
@@ -92,7 +92,7 @@ namespace ElectroDepotClassLibraryTests
                 Assert.NotNull(projectComp);
 
                 ProjectComponentDTO projectCompUpdated = new ProjectComponentDTO(ID: projectComp.ID, ComponentID: projectComp.ComponentID, ProjectID: projectComp.ProjectID, Quantity: 300); ;
-                
+
                 bool wasUpdated = await ProjectComponentDP.UpdateProjectComponent(projectCompUpdated);
                 Assert.True(wasUpdated);
             }
