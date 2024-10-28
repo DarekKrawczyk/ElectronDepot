@@ -50,7 +50,7 @@ namespace Server.Controllers
             _context.OwnsComponent.Add(createdOwnsComponent);
             await _context.SaveChangesAsync();
 
-            return Ok(createdOwnsComponent.ToDTO());
+            return Ok(createdOwnsComponent.ToOwnsComponentDTO());
         }
         #endregion
         #region Read
@@ -61,7 +61,7 @@ namespace Server.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<OwnsComponentDTO>>> GetAllOwnsComponent()
         {
-            return await _context.OwnsComponent.Select(x=>x.ToDTO()).ToListAsync();
+            return await _context.OwnsComponent.Select(x=>x.ToOwnsComponentDTO()).ToListAsync();
         }
 
         /// <summary>
@@ -79,9 +79,37 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            return ownsComponent.ToDTO();
+            return ownsComponent.ToOwnsComponentDTO();
         }
 
+        /// <summary>
+        /// Get amount of 'Component' with such ID for given 'User'
+        /// GET: ElectroDepot/OwnsComponents/GetOwnComponentFromUser/{UserID}/Component/{ComponentID}
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="ComponentID"></param>
+        /// <returns></returns>
+        [HttpGet("GetOwnComponentFromUser/{UserID}/Component/{ComponentID}")]
+        public async Task<ActionResult<OwnsComponentDTO>> GetOwnComponentFromUser(int UserID, int ComponentID)
+        {
+            User? user= await _context.Users.FindAsync(UserID);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            Component? component = await _context.Components.FindAsync(ComponentID);
+
+            if (component == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<OwnsComponentDTO> foundComponents = await _context.OwnsComponent.Where(x=>x.UserID == UserID && x.ComponentID == ComponentID).Select(y=>y.ToOwnsComponentDTO()).ToListAsync();
+
+            return Ok(foundComponents);
+        }
         #endregion
         #region Update
         /// <summary>

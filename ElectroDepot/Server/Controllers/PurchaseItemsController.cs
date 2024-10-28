@@ -77,6 +77,93 @@ namespace Server.Controllers
 
             return Ok(foundPurchase);
         }
+
+        /// <summary>
+        /// GET: ElectroDepot/PurchaseItems/GetComponentsFromPurchase/{PurchaseID}
+        /// </summary>
+        /// <param name="PurchaseID"></param>
+        /// <returns></returns>
+        [HttpGet("GetComponentsFromPurchase/{PurchaseID}")]
+        public async Task<ActionResult<IEnumerable<ComponentDTO>>> GetComponentsFromPurchase(int PurchaseID)
+        {
+            Purchase? foundPurchase = await _context.Purchases.FindAsync(PurchaseID);
+
+            if (foundPurchase == null)
+            {
+                return NotFound($"Purchase with ID:'{PurchaseID}' doesn't exsit");
+            }
+
+            try
+            {
+                IEnumerable<ComponentDTO> componentsFromPurchase = await (from purchase in _context.Purchases
+                                                                          join purchaseItem in _context.PurchaseItems
+                                                                          on purchase.PurchaseID equals purchaseItem.PurchaseID
+                                                                          join component in _context.Components
+                                                                          on purchaseItem.ComponentID equals component.ComponentID
+                                                                          where purchase.PurchaseID == PurchaseID
+                                                                          select new ComponentDTO(
+                                                                              component.ComponentID,
+                                                                              component.CategoryID,
+                                                                              component.Name,
+                                                                              component.Manufacturer,
+                                                                              component.Description)
+                                                                         ).ToListAsync();
+
+                return Ok(componentsFromPurchase);
+            }
+            catch(Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/PurchaseItems/GetPurchaseItemsFromPurchase/{PurchaseID}/Component/{ComponentID}
+        /// </summary>
+        /// <param name="PurchaseID"></param>
+        /// <param name="ComponentID"></param>
+        /// <returns></returns>
+        [HttpGet("GetPurchaseItemsFromPurchase/{PurchaseID}/Component/{ComponentID}")]
+        public async Task<ActionResult<IEnumerable<PurchaseItemDTO>>> GetPurchaseItemsFromPurchase(int PurchaseID, int ComponentID)
+        {
+            Purchase? foundPurchase = await _context.Purchases.FindAsync(PurchaseID);
+
+            if (foundPurchase == null)
+            {
+                return NotFound($"Purchase with ID:'{PurchaseID}' doesn't exsit");
+            }
+
+            Component? foundComponent = await _context.Components.FindAsync(ComponentID);
+
+            if (foundComponent == null)
+            {
+                return NotFound($"Component with ID:'{ComponentID}' doesn't exsit");
+            }
+
+            try
+            {
+                IEnumerable<PurchaseItemDTO> purchaseItems = await (from purchase in _context.Purchases
+                                                                    join purchaseItem in _context.PurchaseItems
+                                                                    on purchase.PurchaseID equals purchaseItem.PurchaseID
+                                                                    join component in _context.Components
+                                                                    on purchaseItem.ComponentID equals component.ComponentID
+                                                                    where purchaseItem.PurchaseID == PurchaseID
+                                                                    && purchaseItem.ComponentID == ComponentID
+                                                                    select new PurchaseItemDTO(
+                                                                        purchaseItem.PurchaseItemID,
+                                                                        purchaseItem.PurchaseID,
+                                                                        purchaseItem.ComponentID,
+                                                                        purchaseItem.Quantity,
+                                                                        purchaseItem.PricePerUnit)
+                                                                    ).ToListAsync();
+
+                return Ok(purchaseItems);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
         #endregion
         #region Update
         /// <summary>

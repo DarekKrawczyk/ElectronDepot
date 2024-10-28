@@ -71,6 +71,30 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Assert.Fail(ex.Message);
             }
         }
+
+        [Fact]
+        public async Task GetAllComponentsFromProject()
+        {
+            try
+            {
+                // Find any Project
+                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                ProjectDTO? project = projects.FirstOrDefault();
+                Assert.NotNull(project);
+
+                IEnumerable<ComponentDTO> componentsOfProject = await ProjectDP.GetAllComponentsFromProject(project);
+                Assert.NotNull(componentsOfProject);
+                foreach (ComponentDTO components in componentsOfProject)
+                {
+                    Console.WriteLine($"{components.ToString()}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+
         [Fact]
         public async Task Update()
         {

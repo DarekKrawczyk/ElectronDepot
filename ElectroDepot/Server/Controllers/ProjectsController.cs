@@ -71,7 +71,7 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// GET: ElectroDepot/Projects/GetProjectComponentByID/{ID}"
+        /// GET: ElectroDepot/Projects/GetProjectComponentByID/{ID}
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -86,6 +86,41 @@ namespace Server.Controllers
             }
 
             return project.ToProjectDTO();
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/Projects/GetAllComponentsFromProject/{ID}
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllComponentsFromProject/{ID}")]
+        public async Task<ActionResult<IEnumerable<ComponentDTO>>> GetAllComponentsFromProject(int ID)
+        {
+            try
+            {
+                Project? project = await _context.Projects.FindAsync(ID);
+
+                if (project == null)
+                {
+                    return NotFound();
+                }
+                IEnumerable<ComponentDTO> componentsFromProject = await (from projectComponents in _context.ProjectComponents
+                                                                         join components in _context.Components
+                                                                         on projectComponents.ComponentID equals components.ComponentID
+                                                                         where projectComponents.ProjectID == ID
+                                                                         select new ComponentDTO(
+                                                                             components.ComponentID,
+                                                                             components.CategoryID,
+                                                                             components.Name,
+                                                                             components.Manufacturer,
+                                                                             components.Description)
+                                                                       ).ToListAsync();
+                return Ok(componentsFromProject);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest();
+            }
         }
         #endregion
         #region Update

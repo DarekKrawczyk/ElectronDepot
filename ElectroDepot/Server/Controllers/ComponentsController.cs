@@ -97,6 +97,43 @@ namespace Server.Controllers
 
             return Ok(component.ToDTO());
         }
+
+        /// <summary>
+        /// GET: ElectroDepot/Components/GetUserComponents/{ID}
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        [HttpGet("GetUserComponents/{ID}")]
+        public async Task<ActionResult<IEnumerable<ComponentDTO>>> GetUserComponents(int ID)
+        {
+            User? user = await _context.Users.FindAsync(ID);
+            
+            if(user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            try
+            {
+                IEnumerable<ComponentDTO> usersComponents = await (from ownsComponent in _context.OwnsComponent
+                                                                   join component in _context.Components
+                                                                   on ownsComponent.ComponentID equals component.ComponentID
+                                                                   where ownsComponent.UserID == user.UserID
+                                                                   select new ComponentDTO(
+                                                                       component.ComponentID,
+                                                                       component.CategoryID,
+                                                                       component.Name,
+                                                                       component.Manufacturer,
+                                                                       component.Description)
+                                                                   ).ToListAsync();
+                return Ok(usersComponents);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Error ocurred");
+            }
+
+        }
         #endregion
         #region Update
         /// <summary>

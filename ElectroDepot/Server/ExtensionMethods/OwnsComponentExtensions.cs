@@ -5,7 +5,7 @@ namespace Server.ExtensionMethods
 {
     public static class OwnsComponentExtensions
     {
-        public static OwnsComponentDTO ToDTO(this OwnsComponent component)
+        public static OwnsComponentDTO ToOwnsComponentDTO(this OwnsComponent component)
         {
             return new OwnsComponentDTO(
                 ID: component.ComponentID, 

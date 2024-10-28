@@ -1,5 +1,6 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language.Components;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
 using Server.ExtensionMethods;
@@ -61,6 +62,45 @@ namespace Server.Controllers
             }
 
             return await _context.ProjectComponents.Where(x => x.ProjectID == ID).Select(x => x.ToProjectComponentDTO()).ToListAsync();
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/ProjectComponents/GetProjectComponentForProject/{ProjectID}/Component/{ComponentID}
+        /// </summary>
+        /// <param name="ProjectID"></param>
+        /// <param name="ComponentID"></param>
+        /// <returns></returns>
+        [HttpGet("GetProjectComponentForProject/{ProjectID}/Component/{ComponentID}")]
+        public async Task<ActionResult<IEnumerable<ProjectComponentDTO>>> GetProjectComponentForProject(int ProjectID, int ComponentID)
+        {
+            Project? project = await _context.Projects.FindAsync(ProjectID);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            Component? component = await _context.Components.FindAsync(ComponentID);
+
+            if (component == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                IEnumerable<ProjectComponentDTO> foundProjectComponent = await _context.ProjectComponents.Where(x => x.ProjectID == ProjectID && x.ComponentID == ComponentID).Select(x => x.ToProjectComponentDTO()).ToListAsync();
+                ProjectComponentDTO projectComponentDTO = foundProjectComponent.FirstOrDefault();
+                if(projectComponentDTO != null)
+                {
+                    return Ok(projectComponentDTO);
+                }
+                return NotFound();
+            }
+            catch(Exception exception)
+            {
+                return NotFound();
+            }
         }
 
         /// <summary>
