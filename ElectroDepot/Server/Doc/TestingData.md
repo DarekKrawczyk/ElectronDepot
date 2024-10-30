@@ -171,120 +171,184 @@
 | 7      | 1            | 21            | 1     |
 | 8      | 1            | 7            | 1     |
 | 9      | 1            | 1            | 2     |
-| 10     | 2            | 1            | 2     |
+| 10     | 2            | 75            | 2     |
+| 11     | 2            | 47           | 2     |
+| 12     | 2            | 13           | 2     |
+| 13     | 2            | 0           | 2     |
+| 14     | 2            | 22           | 2     |
+| 15     | 3            | 83           | 2     |
+| 16     | 3            | 59           | 2     |
+| 17     | 3            | 46           | 2     |
+| 18     | 3            | 24           | 2     |
+| 19     | 4            | 82           | 2     |
+| 20     | 4            | 67           | 2     |
+| 21     | 4            | 9           | 2     |
+| 22     | 5            | 74          | 2     |
+| 23     | 5            | 21          | 2     |
+| 24     | 5            | 4          | 2     |
+| 25     | 5            | 3          | 2     |
+| 26     | 6            | 79          | 2     |
+| 27     | 6            | 69          | 2     |
+| 28     | 6            | 62          | 2     |
+| 29     | 6            | 60          | 2     |
+| 30     | 6            | 3          | 2     |
+| 31     | 7            | 81          | 2     |
+| 32     | 7            | 43          | 2     |
+| 33     | 7            | 40          | 2     |
+| 34     | 7            | 19         | 2     |
+| 35     | 8            | 83        | 2     |
+| 36     | 8            | 55        | 2     |
+| 37     | 8            | 56        | 1     |
+| 38     | 9            | 75        | 1     |
+| 39     | 9            | 23        | 1     |
+| 40     | 9            | 64        | 1     |
+| 41     | 10            | 70        | 1     |
+| 42     | 10            | 71        | 1     |
+| 43     | 10            | 80        | 1     |
+| 44     | 11            | 80        | 1     |
+| 45     | 11            | 56        | 1     |
+| 46     | 11            | 36        | 1     |
+| 47     | 11            | 67        | 1     |
+| 48     | 12           | 81        | 1     |
+| 49     | 12           | 47        | 1     |
+| 50     | 13           | 78        | 1     |
+| 51     | 13           | 45        | 1     |
+| 52     | 13           | 46        | 1     |
 
-            // Zaktualizowana i rozszerzona lista zakupów
-            var purchases = new List<Purchase>
-            {
-                new Purchase { UserID = users[0].UserID, SupplierID = suppliers[0].SupplierID, PurchasedDate = DateTime.Now.AddDays(-15), TotalPrice = 150.50 },
-                new Purchase { UserID = users[1].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = DateTime.Now.AddDays(-14), TotalPrice = 320.75 },
-                new Purchase { UserID = users[2].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = DateTime.Now.AddDays(-13), TotalPrice = 210.40 },
-                new Purchase { UserID = users[3].UserID, SupplierID = suppliers[3].SupplierID, PurchasedDate = DateTime.Now.AddDays(-12), TotalPrice = 275.60 },
-                new Purchase { UserID = users[4].UserID, SupplierID = suppliers[0].SupplierID, PurchasedDate = DateTime.Now.AddDays(-11), TotalPrice = 140.00 },
-                new Purchase { UserID = users[5].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = DateTime.Now.AddDays(-10), TotalPrice = 330.00 },
-                new Purchase { UserID = users[6].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = DateTime.Now.AddDays(-9), TotalPrice = 190.75 },
-                new Purchase { UserID = users[7].UserID, SupplierID = suppliers[3].SupplierID, PurchasedDate = DateTime.Now.AddDays(-8), TotalPrice = 285.20 },
-                new Purchase { UserID = users[8].UserID, SupplierID = suppliers[0].SupplierID, PurchasedDate = DateTime.Now.AddDays(-7), TotalPrice = 165.80 },
-                new Purchase { UserID = users[9].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = DateTime.Now.AddDays(-6), TotalPrice = 210.50 }
-            };
+---
+# Purchases
+| Index | UserID | SupplierID | PurchasedDate           | TotalPrice |
+|-------|--------|------------|-------------------------|------------|
+| 0     | 0      | 0          | 2024-10-14 00:00:00     | 150.50     |
+| 1     | 1      | 1          | 2024-10-15 00:00:00     | 320.75     |
+| 2     | 1      | 3          | 2024-10-15 00:00:00     | 320.75     |
+| 3     | 2      | 2          | 2024-10-16 00:00:00     | 210.40     |
+| 4     | 3      | 3          | 2024-10-17 00:00:00     | 275.60     |
+| 5     | 4      | 2          | 2024-10-18 00:00:00     | 140.00     |
+| 6     | 4      | 3          | 2024-10-18 00:00:00     | 140.00     |
+| 7     | 5      | 1          | 2024-10-19 00:00:00     | 330.00     |
+| 8     | 6      | 2          | 2024-10-20 00:00:00     | 190.75     |
+| 9     | 6      | 2          | 2024-10-20 00:00:00     | 190.75     |
+| 10    | 7      | 3          | 2024-10-21 00:00:00     | 285.20     |
+| 11    | 8      | 0          | 2024-10-22 00:00:00     | 165.80     |
+| 12    | 8      | 1          | 2024-10-22 00:00:00     | 165.80     |
+| 13    | 8      | 2          | 2024-10-22 00:00:00     | 165.80     |
+| 14    | 9      | 1          | 2024-10-23 00:00:00     | 210.50     |
+| 15    | 9      | 2          | 2024-10-23 00:00:00     | 210.50     |
+
+---
+# PurchaseItems
+| Index | PurchaseID | ComponentID | Quantity | PricePerUnit |
+|-------|------------|-------------|----------|--------------|
+| 0     | 0          | 77          | 1        | 8.50       |
+| 1     | 0          | 2           | 1        | 7.50       |
+| 2     | 0          | 5           | 2        | 4.50       |
+| 3     | 0          | 38          | 1        | 2.50       |
+| 4     | 0          | 82          | 2        | 27.50       |
+| 5     | 0          | 67          | 2        | 7.50       |
+| 6     | 0          | 9           | 2        | 5.50       |
+| 7     | 1          | 80          | 1        | 12.75       |
+| 8     | 1          | 50          | 1        | 8.75       |
+| 9     | 1          | 41          | 1        | 0.75       |
+| 10    | 1          | 21          | 1        | 8.75       |
+| 11    | 1          | 7           | 2        | 6.75       |
+| 12    | 1          | 1           | 2        | 2.75       |
+| 13    | 1          | 74          | 2        | 5.75       |
+| 14    | 1          | 21          | 2        | 1.75       |
+| 15    | 1          | 4           | 2        | 9.75       |
+| 16    | 1          | 3           | 2        | 7.75       |
+| 17    | 2          | 75          | 2        | 8.40       |
+| 18    | 2          | 47          | 2        | 4.40       |
+| 19    | 2          | 13          | 2        | 4.40       |
+| 20    | 2          | 0           | 2        | 2.40       |
+| 21    | 2          | 22          | 2        | 6.40       |
+| 22    | 2          | 79          | 2        | 8.40       |
+| 23    | 2          | 69          | 2        | 14.40       |
+| 24    | 2          | 62          | 2        | 16.40       |
+| 25    | 2          | 60          | 2        | 2.40       |
+| 26    | 2          | 3           | 2        | 9.40       |
+| 27    | 3          | 83          | 2        | 8.60       |
+| 28    | 3          | 59          | 2        | 3.60       |
+| 29    | 3          | 46          | 2        | 6.60       |
+| 30    | 3          | 24          | 2        | 1.60       |
+| 31    | 3          | 81          | 2        | 13.60       |
+| 32    | 3          | 43          | 2        | 2.60       |
+| 33    | 3          | 40          | 2        | 10.60       |
+| 34    | 3          | 19          | 2        | 9.60       |
+| 35    | 4          | 83          | 2        | 7.00       |
+| 36    | 4          | 55          | 2        | 16.00       |
+| 37    | 4          | 56          | 1        | 12.00       |
+| 38    | 5          | 75          | 1        | 9.00       |
+| 39    | 5          | 23          | 1        | 7.00       |
+| 40    | 5          | 64          | 1        | 2.00       |
+| 41    | 6          | 70          | 1        | 1.75       |
+| 42    | 6          | 71          | 1        | 3.75       |
+| 43    | 6          | 80          | 1        | 34.75       |
+| 44    | 7          | 80          | 1        | 7.20       |
+| 45    | 7          | 56          | 1        | 5.20       |
+| 46    | 7          | 36          | 1        | 9.20       |
+| 47    | 7          | 67          | 1        | 7.20       |
+| 48    | 8          | 81          | 1        | 14.80       |
+| 49    | 8          | 47          | 1        | 4.80       |
+| 50    | 9          | 78          | 1        | 7.50       |
+| 51    | 9          | 45          | 1        | 5.50       |
+| 52    | 9          | 46          | 1        | 14.50       |
 
 
-            var purchaseItems = new List<PurchaseItem>
-            {
-                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 4, PricePerUnit = 15.50 },
-                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 2, PricePerUnit = 20.50 },
-
-                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[1].ComponentID, Quantity = 3, PricePerUnit = 55.75 },
-                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[3].ComponentID, Quantity = 2, PricePerUnit = 40.00 },
-
-                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 5, PricePerUnit = 20.40 },
-                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[4].ComponentID, Quantity = 3, PricePerUnit = 45.00 },
-
-                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 2, PricePerUnit = 25.00 },
-                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[5].ComponentID, Quantity = 2, PricePerUnit = 65.80 },
-
-                new PurchaseItem { PurchaseID = purchases[4].PurchaseID, ComponentID = components[3].ComponentID, Quantity = 4, PricePerUnit = 35.00 },
-                new PurchaseItem { PurchaseID = purchases[4].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 2, PricePerUnit = 20.00 },
-
-                new PurchaseItem { PurchaseID = purchases[5].PurchaseID, ComponentID = components[1].ComponentID, Quantity = 2, PricePerUnit = 60.00 },
-                new PurchaseItem { PurchaseID = purchases[5].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 3, PricePerUnit = 30.00 },
-
-                new PurchaseItem { PurchaseID = purchases[6].PurchaseID, ComponentID = components[4].ComponentID, Quantity = 2, PricePerUnit = 75.00 },
-                new PurchaseItem { PurchaseID = purchases[6].PurchaseID, ComponentID = components[5].ComponentID, Quantity = 4, PricePerUnit = 28.75 },
-
-                new PurchaseItem { PurchaseID = purchases[7].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 3, PricePerUnit = 45.00 },
-                new PurchaseItem { PurchaseID = purchases[7].PurchaseID, ComponentID = components[3].ComponentID, Quantity = 1, PricePerUnit = 55.20 },
-
-                new PurchaseItem { PurchaseID = purchases[8].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 2, PricePerUnit = 65.90 },
-                new PurchaseItem { PurchaseID = purchases[8].PurchaseID, ComponentID = components[1].ComponentID, Quantity = 3, PricePerUnit = 25.00 },
-
-                new PurchaseItem { PurchaseID = purchases[9].PurchaseID, ComponentID = components[5].ComponentID, Quantity = 4, PricePerUnit = 52.50 },
-                new PurchaseItem { PurchaseID = purchases[9].PurchaseID, ComponentID = components[4].ComponentID, Quantity = 2, PricePerUnit = 40.25 }
-            };
-
-
-            var projectComponents = new List<ProjectComponent>
-            {
-                new ProjectComponent { ProjectID = projects[0].ProjectID, ComponentID = components[0].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[0].ProjectID, ComponentID = components[2].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[1].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[3].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[2].ComponentID, Quantity = 3 },
-                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
-
-                new ProjectComponent { ProjectID = projects[3].ProjectID, ComponentID = components[0].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[3].ProjectID, ComponentID = components[4].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[4].ProjectID, ComponentID = components[1].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[4].ProjectID, ComponentID = components[3].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[5].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[5].ProjectID, ComponentID = components[0].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[1].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[4].ComponentID, Quantity = 2 },
-
-                new ProjectComponent { ProjectID = projects[7].ProjectID, ComponentID = components[3].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[7].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
-
-                new ProjectComponent { ProjectID = projects[8].ProjectID, ComponentID = components[2].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[8].ProjectID, ComponentID = components[4].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[9].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[9].ProjectID, ComponentID = components[0].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[10].ProjectID, ComponentID = components[3].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[10].ProjectID, ComponentID = components[4].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[11].ProjectID, ComponentID = components[1].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[11].ProjectID, ComponentID = components[5].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[12].ProjectID, ComponentID = components[0].ComponentID, Quantity = 3 },
-                new ProjectComponent { ProjectID = projects[12].ProjectID, ComponentID = components[2].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[13].ProjectID, ComponentID = components[3].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[13].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 }
-            };
-            context.ProjectComponents.AddRange(projectComponents);
-            await context.SaveChangesAsync();
-
-            var ownsComponents = new List<OwnsComponent>
-            {
-                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[0].ComponentID, Quantity = 2 },
-                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[3].ComponentID, Quantity = 2 },
-                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[5].ComponentID, Quantity = 3 },
-
-                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[1].ComponentID, Quantity = 1 },
-                new OwnsComponent { UserID = users[4].UserID, ComponentID = components[4].ComponentID, Quantity = 2 },
-
-                new OwnsComponent { UserID = users[5].UserID, ComponentID = components[2].ComponentID, Quantity = 3 },
-                new OwnsComponent { UserID = users[6].UserID, ComponentID = components[0].ComponentID, Quantity = 2 },
-
-                new OwnsComponent { UserID = users[7].UserID, ComponentID = components[5].ComponentID, Quantity = 1 },
-                new OwnsComponent { UserID = users[8].UserID, ComponentID = components[4].ComponentID, Quantity = 2 },
-
-                new OwnsComponent { UserID = users[9].UserID, ComponentID = components[3].ComponentID, Quantity = 1 }
-            };
-            context.OwnsComponent.AddRange(ownsComponents);
-            await context.SaveChangesAsync();
+---
+# OwnsComponents
+| Index | UserID | ComponentID | Quantity |
+|-------|--------|-------------|----------|
+| 0     | 0      | 77           | 1        |
+| 1     | 0      | 2           | 1        |
+| 2     | 0      | 5           | 2        |
+| 3     | 0      | 38           | 1        |
+| 4     | 0      | 82           | 2        |
+| 5     | 0      | 67           | 2        |
+| 6     | 0      | 9           | 2        |
+| 7     | 1      | 80           | 1        |
+| 8     | 1      | 50           | 1        |
+| 9     | 1      | 41           | 1        |
+| 10     | 1      | 21           | 1        |
+| 11     | 1      | 7           | 2        |
+| 12     | 1      | 1           | 2        |
+| 13     | 1      | 74           | 2        |
+| 14     | 1      | 21          | 2        |
+| 15     | 1      | 4           | 2        |
+| 16     | 1      | 3           | 2        |
+| 17     | 2      | 75           | 2        |
+| 18     | 2      | 47           | 2        |
+| 19     | 2      | 13           | 2        |
+| 20     | 2      | 0           | 2        |
+| 21     | 2      | 22           | 2        |
+| 22     | 2      | 79           | 2        |
+| 23     | 2      | 69           | 2        |
+| 24     | 2      | 62           | 2        |
+| 25     | 2      | 60           | 2        |
+| 26     | 2      | 3           | 2        |
+| 27     | 3      | 83           | 2        |
+| 28     | 3      | 59           | 2        |
+| 29     | 3      | 46           | 2        |
+| 30     | 3      | 24           | 2        |
+| 31     | 3      | 81           | 2        |
+| 32     | 3      | 43           | 2        |
+| 33     | 3      | 40           | 2        |
+| 34     | 3      | 19           | 2        |
+| 35     | 4      | 83           | 2        |
+| 36     | 4      | 55           | 2        |
+| 37     | 4      | 56           | 1        |
+| 38     | 5      | 75           | 1        |
+| 39     | 5      | 23           | 1        |
+| 40     | 5      | 64           | 1        |
+| 41     | 6      | 70           | 1        |
+| 42     | 6      | 71           | 1        |
+| 43     | 6      | 80           | 1        |
+| 44     | 7      | 80           | 1        |
+| 45     | 7      | 56           | 1        |
+| 46     | 7      | 36           | 1        |
+| 47     | 7      | 67           | 1        |
+| 48     | 8      | 81           | 1        |
+| 49     | 8      | 47           | 1        |
+| 50     | 9      | 78           | 1        |
+| 51     | 9      | 45           | 1        |
+| 52     | 9      | 46           | 1        |

@@ -199,58 +199,84 @@ public static class TestingDataSeeder
             context.Components.AddRange(components);
             await context.SaveChangesAsync();
 
-            // Zaktualizowana i rozszerzona lista zakupów
-            var purchases = new List<Purchase>
+            List<Purchase> purchases = new List<Purchase>
             {
-                new Purchase { UserID = users[0].UserID, SupplierID = suppliers[0].SupplierID, PurchasedDate = DateTime.Now.AddDays(-15), TotalPrice = 150.50 },
-                new Purchase { UserID = users[1].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = DateTime.Now.AddDays(-14), TotalPrice = 320.75 },
-                new Purchase { UserID = users[2].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = DateTime.Now.AddDays(-13), TotalPrice = 210.40 },
-                new Purchase { UserID = users[3].UserID, SupplierID = suppliers[3].SupplierID, PurchasedDate = DateTime.Now.AddDays(-12), TotalPrice = 275.60 },
-                new Purchase { UserID = users[4].UserID, SupplierID = suppliers[0].SupplierID, PurchasedDate = DateTime.Now.AddDays(-11), TotalPrice = 140.00 },
-                new Purchase { UserID = users[5].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = DateTime.Now.AddDays(-10), TotalPrice = 330.00 },
-                new Purchase { UserID = users[6].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = DateTime.Now.AddDays(-9), TotalPrice = 190.75 },
-                new Purchase { UserID = users[7].UserID, SupplierID = suppliers[3].SupplierID, PurchasedDate = DateTime.Now.AddDays(-8), TotalPrice = 285.20 },
-                new Purchase { UserID = users[8].UserID, SupplierID = suppliers[0].SupplierID, PurchasedDate = DateTime.Now.AddDays(-7), TotalPrice = 165.80 },
-                new Purchase { UserID = users[9].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = DateTime.Now.AddDays(-6), TotalPrice = 210.50 }
+                new Purchase { UserID = users[0].UserID, SupplierID = suppliers[0].SupplierID, PurchasedDate = new DateTime(2024, 10, 14, 0, 0, 0), TotalPrice = 150.50 },
+                new Purchase { UserID = users[1].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = new DateTime(2024, 10, 15, 0, 0, 0), TotalPrice = 320.75 },
+                new Purchase { UserID = users[1].UserID, SupplierID = suppliers[3].SupplierID, PurchasedDate = new DateTime(2024, 10, 15, 0, 0, 0), TotalPrice = 320.75 },
+                new Purchase { UserID = users[2].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = new DateTime(2024, 10, 16, 0, 0, 0), TotalPrice = 210.40 },
+                new Purchase { UserID = users[3].UserID, SupplierID = suppliers[3].SupplierID, PurchasedDate = new DateTime(2024, 10, 17, 0, 0, 0), TotalPrice = 275.60 },
+                new Purchase { UserID = users[4].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = new DateTime(2024, 10, 18, 0, 0, 0), TotalPrice = 140.00 },
+                new Purchase { UserID = users[4].UserID, SupplierID = suppliers[3].SupplierID, PurchasedDate = new DateTime(2024, 10, 18, 0, 0, 0), TotalPrice = 140.00 },
+                new Purchase { UserID = users[5].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = new DateTime(2024, 10, 19, 0, 0, 0), TotalPrice = 330.00 },
+                new Purchase { UserID = users[6].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = new DateTime(2024, 10, 20, 0, 0, 0), TotalPrice = 190.75 },
+                new Purchase { UserID = users[6].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = new DateTime(2024, 10, 20, 0, 0, 0), TotalPrice = 190.75 },
+                new Purchase { UserID = users[7].UserID, SupplierID = suppliers[3].SupplierID, PurchasedDate = new DateTime(2024, 10, 21, 0, 0, 0), TotalPrice = 285.20 },
+                new Purchase { UserID = users[8].UserID, SupplierID = suppliers[0].SupplierID, PurchasedDate = new DateTime(2024, 10, 22, 0, 0, 0), TotalPrice = 165.80 },
+                new Purchase { UserID = users[8].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = new DateTime(2024, 10, 22, 0, 0, 0), TotalPrice = 165.80 },
+                new Purchase { UserID = users[8].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = new DateTime(2024, 10, 22, 0, 0, 0), TotalPrice = 165.80 },
+                new Purchase { UserID = users[9].UserID, SupplierID = suppliers[1].SupplierID, PurchasedDate = new DateTime(2024, 10, 23, 0, 0, 0), TotalPrice = 210.50 },
+                new Purchase { UserID = users[9].UserID, SupplierID = suppliers[2].SupplierID, PurchasedDate = new DateTime(2024, 10, 23, 0, 0, 0), TotalPrice = 210.50 }
             };
-
-
             context.Purchases.AddRange(purchases);
             await context.SaveChangesAsync();
 
-            var purchaseItems = new List<PurchaseItem>
+            List<PurchaseItem> purchaseItems = new List<PurchaseItem>
             {
-                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 4, PricePerUnit = 15.50 },
-                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 2, PricePerUnit = 20.50 },
-
-                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[1].ComponentID, Quantity = 3, PricePerUnit = 55.75 },
-                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[3].ComponentID, Quantity = 2, PricePerUnit = 40.00 },
-
-                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 5, PricePerUnit = 20.40 },
-                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[4].ComponentID, Quantity = 3, PricePerUnit = 45.00 },
-
-                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 2, PricePerUnit = 25.00 },
-                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[5].ComponentID, Quantity = 2, PricePerUnit = 65.80 },
-
-                new PurchaseItem { PurchaseID = purchases[4].PurchaseID, ComponentID = components[3].ComponentID, Quantity = 4, PricePerUnit = 35.00 },
-                new PurchaseItem { PurchaseID = purchases[4].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 2, PricePerUnit = 20.00 },
-
-                new PurchaseItem { PurchaseID = purchases[5].PurchaseID, ComponentID = components[1].ComponentID, Quantity = 2, PricePerUnit = 60.00 },
-                new PurchaseItem { PurchaseID = purchases[5].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 3, PricePerUnit = 30.00 },
-
-                new PurchaseItem { PurchaseID = purchases[6].PurchaseID, ComponentID = components[4].ComponentID, Quantity = 2, PricePerUnit = 75.00 },
-                new PurchaseItem { PurchaseID = purchases[6].PurchaseID, ComponentID = components[5].ComponentID, Quantity = 4, PricePerUnit = 28.75 },
-
-                new PurchaseItem { PurchaseID = purchases[7].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 3, PricePerUnit = 45.00 },
-                new PurchaseItem { PurchaseID = purchases[7].PurchaseID, ComponentID = components[3].ComponentID, Quantity = 1, PricePerUnit = 55.20 },
-
-                new PurchaseItem { PurchaseID = purchases[8].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 2, PricePerUnit = 65.90 },
-                new PurchaseItem { PurchaseID = purchases[8].PurchaseID, ComponentID = components[1].ComponentID, Quantity = 3, PricePerUnit = 25.00 },
-
-                new PurchaseItem { PurchaseID = purchases[9].PurchaseID, ComponentID = components[5].ComponentID, Quantity = 4, PricePerUnit = 52.50 },
-                new PurchaseItem { PurchaseID = purchases[9].PurchaseID, ComponentID = components[4].ComponentID, Quantity = 2, PricePerUnit = 40.25 }
+                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[77].ComponentID, Quantity = 1, PricePerUnit = 8.50 },
+                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[2].ComponentID, Quantity = 1, PricePerUnit = 7.50 },
+                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[5].ComponentID, Quantity = 2, PricePerUnit = 4.50 },
+                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[38].ComponentID, Quantity = 1, PricePerUnit = 2.50 },
+                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[82].ComponentID, Quantity = 2, PricePerUnit = 27.50 },
+                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[67].ComponentID, Quantity = 2, PricePerUnit = 7.50 },
+                new PurchaseItem { PurchaseID = purchases[0].PurchaseID, ComponentID = components[9].ComponentID, Quantity = 2, PricePerUnit = 5.50 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[80].ComponentID, Quantity = 1, PricePerUnit = 12.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[50].ComponentID, Quantity = 1, PricePerUnit = 8.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[41].ComponentID, Quantity = 1, PricePerUnit = 0.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[21].ComponentID, Quantity = 1, PricePerUnit = 8.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[7].ComponentID, Quantity = 2, PricePerUnit = 6.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[1].ComponentID, Quantity = 2, PricePerUnit = 2.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[74].ComponentID, Quantity = 2, PricePerUnit = 5.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[21].ComponentID, Quantity = 2, PricePerUnit = 1.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[4].ComponentID, Quantity = 2, PricePerUnit = 9.75 },
+                new PurchaseItem { PurchaseID = purchases[1].PurchaseID, ComponentID = components[3].ComponentID, Quantity = 2, PricePerUnit = 7.75 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[75].ComponentID, Quantity = 2, PricePerUnit = 8.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[47].ComponentID, Quantity = 2, PricePerUnit = 4.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[13].ComponentID, Quantity = 2, PricePerUnit = 4.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[0].ComponentID, Quantity = 2, PricePerUnit = 2.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[22].ComponentID, Quantity = 2, PricePerUnit = 6.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[79].ComponentID, Quantity = 2, PricePerUnit = 8.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[69].ComponentID, Quantity = 2, PricePerUnit = 14.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[62].ComponentID, Quantity = 2, PricePerUnit = 16.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[60].ComponentID, Quantity = 2, PricePerUnit = 2.40 },
+                new PurchaseItem { PurchaseID = purchases[2].PurchaseID, ComponentID = components[3].ComponentID, Quantity = 2, PricePerUnit = 9.40 },
+                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[83].ComponentID, Quantity = 2, PricePerUnit = 8.60 },
+                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[59].ComponentID, Quantity = 2, PricePerUnit = 3.60 },
+                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[46].ComponentID, Quantity = 2, PricePerUnit = 6.60 },
+                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[24].ComponentID, Quantity = 2, PricePerUnit = 1.60 },
+                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[81].ComponentID, Quantity = 2, PricePerUnit = 13.60 },
+                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[43].ComponentID, Quantity = 2, PricePerUnit = 2.60 },
+                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[40].ComponentID, Quantity = 2, PricePerUnit = 10.60 },
+                new PurchaseItem { PurchaseID = purchases[3].PurchaseID, ComponentID = components[19].ComponentID, Quantity = 2, PricePerUnit = 9.60 },
+                new PurchaseItem { PurchaseID = purchases[4].PurchaseID, ComponentID = components[83].ComponentID, Quantity = 2, PricePerUnit = 7.00 },
+                new PurchaseItem { PurchaseID = purchases[4].PurchaseID, ComponentID = components[55].ComponentID, Quantity = 2, PricePerUnit = 16.00 },
+                new PurchaseItem { PurchaseID = purchases[4].PurchaseID, ComponentID = components[56].ComponentID, Quantity = 1, PricePerUnit = 12.00 },
+                new PurchaseItem { PurchaseID = purchases[5].PurchaseID, ComponentID = components[75].ComponentID, Quantity = 1, PricePerUnit = 9.00 },
+                new PurchaseItem { PurchaseID = purchases[5].PurchaseID, ComponentID = components[23].ComponentID, Quantity = 1, PricePerUnit = 7.00 },
+                new PurchaseItem { PurchaseID = purchases[5].PurchaseID, ComponentID = components[64].ComponentID, Quantity = 1, PricePerUnit = 2.00 },
+                new PurchaseItem { PurchaseID = purchases[6].PurchaseID, ComponentID = components[70].ComponentID, Quantity = 1, PricePerUnit = 1.75 },
+                new PurchaseItem { PurchaseID = purchases[6].PurchaseID, ComponentID = components[71].ComponentID, Quantity = 1, PricePerUnit = 3.75 },
+                new PurchaseItem { PurchaseID = purchases[6].PurchaseID, ComponentID = components[80].ComponentID, Quantity = 1, PricePerUnit = 34.75 },
+                new PurchaseItem { PurchaseID = purchases[7].PurchaseID, ComponentID = components[80].ComponentID, Quantity = 1, PricePerUnit = 7.20 },
+                new PurchaseItem { PurchaseID = purchases[7].PurchaseID, ComponentID = components[56].ComponentID, Quantity = 1, PricePerUnit = 5.20 },
+                new PurchaseItem { PurchaseID = purchases[7].PurchaseID, ComponentID = components[36].ComponentID, Quantity = 1, PricePerUnit = 9.20 },
+                new PurchaseItem { PurchaseID = purchases[7].PurchaseID, ComponentID = components[67].ComponentID, Quantity = 1, PricePerUnit = 7.20 },
+                new PurchaseItem { PurchaseID = purchases[8].PurchaseID, ComponentID = components[81].ComponentID, Quantity = 1, PricePerUnit = 14.80 },
+                new PurchaseItem { PurchaseID = purchases[8].PurchaseID, ComponentID = components[47].ComponentID, Quantity = 1, PricePerUnit = 4.80 },
+                new PurchaseItem { PurchaseID = purchases[9].PurchaseID, ComponentID = components[78].ComponentID, Quantity = 1, PricePerUnit = 7.50 },
+                new PurchaseItem { PurchaseID = purchases[9].PurchaseID, ComponentID = components[45].ComponentID, Quantity = 1, PricePerUnit = 5.50 },
+                new PurchaseItem { PurchaseID = purchases[9].PurchaseID, ComponentID = components[46].ComponentID, Quantity = 1, PricePerUnit = 14.50 }
             };
-
             context.PurchaseItems.AddRange(purchaseItems);
             await context.SaveChangesAsync();
 
@@ -274,68 +300,120 @@ public static class TestingDataSeeder
             context.Projects.AddRange(projects);
             await context.SaveChangesAsync();
 
-            var projectComponents = new List<ProjectComponent>
+            List<ProjectComponent> projectComponents = new List<ProjectComponent>
             {
-                new ProjectComponent { ProjectID = projects[0].ProjectID, ComponentID = components[0].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[0].ProjectID, ComponentID = components[77].ComponentID, Quantity = 1 },
                 new ProjectComponent { ProjectID = projects[0].ProjectID, ComponentID = components[2].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[1].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[3].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[2].ComponentID, Quantity = 3 },
-                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
-
-                new ProjectComponent { ProjectID = projects[3].ProjectID, ComponentID = components[0].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[3].ProjectID, ComponentID = components[4].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[4].ProjectID, ComponentID = components[1].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[4].ProjectID, ComponentID = components[3].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[5].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[5].ProjectID, ComponentID = components[0].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[1].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[4].ComponentID, Quantity = 2 },
-
-                new ProjectComponent { ProjectID = projects[7].ProjectID, ComponentID = components[3].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[7].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
-
-                new ProjectComponent { ProjectID = projects[8].ProjectID, ComponentID = components[2].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[8].ProjectID, ComponentID = components[4].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[9].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[9].ProjectID, ComponentID = components[0].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[10].ProjectID, ComponentID = components[3].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[10].ProjectID, ComponentID = components[4].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[11].ProjectID, ComponentID = components[1].ComponentID, Quantity = 2 },
-                new ProjectComponent { ProjectID = projects[11].ProjectID, ComponentID = components[5].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[12].ProjectID, ComponentID = components[0].ComponentID, Quantity = 3 },
-                new ProjectComponent { ProjectID = projects[12].ProjectID, ComponentID = components[2].ComponentID, Quantity = 1 },
-
-                new ProjectComponent { ProjectID = projects[13].ProjectID, ComponentID = components[3].ComponentID, Quantity = 1 },
-                new ProjectComponent { ProjectID = projects[13].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 }
+                new ProjectComponent { ProjectID = projects[0].ProjectID, ComponentID = components[5].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[0].ProjectID, ComponentID = components[38].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[80].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[50].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[41].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[21].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[7].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[1].ProjectID, ComponentID = components[1].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[75].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[47].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[13].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[0].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[2].ProjectID, ComponentID = components[22].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[3].ProjectID, ComponentID = components[83].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[3].ProjectID, ComponentID = components[59].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[3].ProjectID, ComponentID = components[46].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[3].ProjectID, ComponentID = components[24].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[4].ProjectID, ComponentID = components[82].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[4].ProjectID, ComponentID = components[67].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[4].ProjectID, ComponentID = components[9].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[5].ProjectID, ComponentID = components[74].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[5].ProjectID, ComponentID = components[21].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[5].ProjectID, ComponentID = components[4].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[5].ProjectID, ComponentID = components[3].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[79].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[69].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[62].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[60].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[6].ProjectID, ComponentID = components[3].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[7].ProjectID, ComponentID = components[81].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[7].ProjectID, ComponentID = components[43].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[7].ProjectID, ComponentID = components[40].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[7].ProjectID, ComponentID = components[19].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[8].ProjectID, ComponentID = components[83].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[8].ProjectID, ComponentID = components[55].ComponentID, Quantity = 2 },
+                new ProjectComponent { ProjectID = projects[8].ProjectID, ComponentID = components[56].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[9].ProjectID, ComponentID = components[75].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[9].ProjectID, ComponentID = components[23].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[9].ProjectID, ComponentID = components[64].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[10].ProjectID, ComponentID = components[70].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[10].ProjectID, ComponentID = components[71].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[10].ProjectID, ComponentID = components[80].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[11].ProjectID, ComponentID = components[80].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[11].ProjectID, ComponentID = components[56].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[11].ProjectID, ComponentID = components[36].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[11].ProjectID, ComponentID = components[67].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[12].ProjectID, ComponentID = components[81].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[12].ProjectID, ComponentID = components[47].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[13].ProjectID, ComponentID = components[78].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[13].ProjectID, ComponentID = components[45].ComponentID, Quantity = 1 },
+                new ProjectComponent { ProjectID = projects[13].ProjectID, ComponentID = components[46].ComponentID, Quantity = 1 }
             };
             context.ProjectComponents.AddRange(projectComponents);
             await context.SaveChangesAsync();
 
-            var ownsComponents = new List<OwnsComponent>
+            List<OwnsComponent> ownsComponents = new List<OwnsComponent>
             {
-                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[0].ComponentID, Quantity = 2 },
-                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[3].ComponentID, Quantity = 2 },
-                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[5].ComponentID, Quantity = 3 },
-
-                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[1].ComponentID, Quantity = 1 },
-                new OwnsComponent { UserID = users[4].UserID, ComponentID = components[4].ComponentID, Quantity = 2 },
-
-                new OwnsComponent { UserID = users[5].UserID, ComponentID = components[2].ComponentID, Quantity = 3 },
-                new OwnsComponent { UserID = users[6].UserID, ComponentID = components[0].ComponentID, Quantity = 2 },
-
-                new OwnsComponent { UserID = users[7].UserID, ComponentID = components[5].ComponentID, Quantity = 1 },
-                new OwnsComponent { UserID = users[8].UserID, ComponentID = components[4].ComponentID, Quantity = 2 },
-
-                new OwnsComponent { UserID = users[9].UserID, ComponentID = components[3].ComponentID, Quantity = 1 }
+                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[77].ComponentID, Quantity = 1 }, 
+                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[2].ComponentID, Quantity = 1 },   
+                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[5].ComponentID, Quantity = 2 },   
+                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[38].ComponentID, Quantity = 1 },  
+                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[82].ComponentID, Quantity = 2 },
+                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[67].ComponentID, Quantity = 2 },   
+                new OwnsComponent { UserID = users[0].UserID, ComponentID = components[9].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[80].ComponentID, Quantity = 1 },   
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[50].ComponentID, Quantity = 1 },   
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[41].ComponentID, Quantity = 1 },   
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[21].ComponentID, Quantity = 1 },   
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[7].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[1].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[74].ComponentID, Quantity = 2 },   
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[21].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[4].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[1].UserID, ComponentID = components[3].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[75].ComponentID, Quantity = 2 },   
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[47].ComponentID, Quantity = 2 },   
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[13].ComponentID, Quantity = 2 },   
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[0].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[22].ComponentID, Quantity = 2 },  
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[79].ComponentID, Quantity = 2 },  
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[69].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[62].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[60].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[2].UserID, ComponentID = components[3].ComponentID, Quantity = 2 },      
+                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[83].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[59].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[46].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[24].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[81].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[43].ComponentID, Quantity = 2 },    
+                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[40].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[3].UserID, ComponentID = components[19].ComponentID, Quantity = 2 },   
+                new OwnsComponent { UserID = users[4].UserID, ComponentID = components[83].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[4].UserID, ComponentID = components[55].ComponentID, Quantity = 2 },     
+                new OwnsComponent { UserID = users[4].UserID, ComponentID = components[56].ComponentID, Quantity = 1 },   
+                new OwnsComponent { UserID = users[5].UserID, ComponentID = components[75].ComponentID, Quantity = 1 },     
+                new OwnsComponent { UserID = users[5].UserID, ComponentID = components[23].ComponentID, Quantity = 1 },   
+                new OwnsComponent { UserID = users[5].UserID, ComponentID = components[64].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[6].UserID, ComponentID = components[70].ComponentID, Quantity = 1 },     
+                new OwnsComponent { UserID = users[6].UserID, ComponentID = components[71].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[6].UserID, ComponentID = components[80].ComponentID, Quantity = 1 },   
+                new OwnsComponent { UserID = users[7].UserID, ComponentID = components[80].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[7].UserID, ComponentID = components[56].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[7].UserID, ComponentID = components[36].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[7].UserID, ComponentID = components[67].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[8].UserID, ComponentID = components[81].ComponentID, Quantity = 1 },     
+                new OwnsComponent { UserID = users[8].UserID, ComponentID = components[47].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[9].UserID, ComponentID = components[78].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[9].UserID, ComponentID = components[45].ComponentID, Quantity = 1 },    
+                new OwnsComponent { UserID = users[9].UserID, ComponentID = components[46].ComponentID, Quantity = 1 }
             };
             context.OwnsComponent.AddRange(ownsComponents);
             await context.SaveChangesAsync();
