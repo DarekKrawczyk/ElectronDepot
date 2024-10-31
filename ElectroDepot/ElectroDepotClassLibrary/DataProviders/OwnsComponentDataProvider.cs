@@ -48,6 +48,60 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
+        public async Task<IEnumerable<OwnsComponentDTO>> GetAllOwnsComponentsFromUser(UserDTO userDTO)
+        {
+            try
+            {
+                string url = OwnsComponentEndpoints.GetAllOwnComponentFromUser(userDTO.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    IEnumerable<OwnsComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<OwnsComponentDTO>>(json, options);
+                    return components;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<OwnsComponentDTO> GetOwnComponentsFromUser(UserDTO userDTO, ComponentDTO compDTO)
+        {
+            try
+            {
+                string url = OwnsComponentEndpoints.GetOwnComponentFromUser(userDTO.ID, compDTO.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    OwnsComponentDTO component = JsonSerializer.Deserialize<OwnsComponentDTO>(json, options);
+                    return component;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<bool> UpdateOwnsComponent(OwnsComponentDTO ownsComponentDTO)
         {
             UpdateOwnsComponentDTO updateDTO = ownsComponentDTO.ToUpdateOwnsComponentsDTO();

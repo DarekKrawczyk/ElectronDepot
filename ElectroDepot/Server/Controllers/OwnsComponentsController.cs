@@ -110,6 +110,26 @@ namespace Server.Controllers
 
             return Ok(foundComponents);
         }
+
+        /// <summary>
+        /// GET: ElectroDepot/OwnsComponents/GetAllOwnComponentFromUser/{UserID}
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllOwnComponentFromUser/{UserID}")]
+        public async Task<ActionResult<IEnumerable<OwnsComponentDTO>>> GetAllOwnComponentFromUser(int UserID)
+        {
+            User? user = await _context.Users.FindAsync(UserID);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<OwnsComponentDTO> foundComponents = await _context.OwnsComponent.Where(x => x.UserID == UserID).Select(y => y.ToOwnsComponentDTO()).ToListAsync();
+
+            return Ok(foundComponents);
+        }
         #endregion
         #region Update
         /// <summary>

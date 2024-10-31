@@ -119,12 +119,12 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<bool> UpdateUser(UserDTO user)
+        public async Task<bool> UpdateUser(int UserID, UpdateUserDTO user)
         {
             var json = JsonSerializer.Serialize(user);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = UserEndpoints.Update(user.ID);
+            string url = UserEndpoints.Update(UserID);
             var response = await HTTPClient.PutAsync(url, content);
 
             return response.IsSuccessStatusCode;

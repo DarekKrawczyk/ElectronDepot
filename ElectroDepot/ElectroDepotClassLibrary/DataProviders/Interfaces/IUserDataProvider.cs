@@ -11,7 +11,7 @@ namespace ElectroDepotClassLibrary.DataProviders.Interfaces
         Task<UserDTO> GetUserByEMail(string EMail);
         Task<UserDTO> GetUserByID(int ID);
         Task<UserDTO> GetUserByUsername(string name);
-        Task<bool> UpdateUser(UserDTO user);
+        Task<bool> UpdateUser(int UserID, UpdateUserDTO user);
         Task<bool> UserWithEMailExists(string EMail);
         Task<bool> UserWithUsernameExists(string username);
     }
