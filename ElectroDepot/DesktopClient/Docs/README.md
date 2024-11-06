@@ -1,0 +1,1 @@
+﻿# Jaka jest specyfikacja UI
