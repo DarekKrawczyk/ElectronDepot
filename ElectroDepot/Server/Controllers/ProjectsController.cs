@@ -49,7 +49,7 @@ namespace Server.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<ProjectDTO>>> GetAllProjects()
         {
-            return await _context.Projects.Select(x=>x.ToProjectDTO()).ToListAsync();
+            return await _context.Projects.Select(x => x.ToProjectDTO()).ToListAsync();
         }
 
         /// <summary>
@@ -67,18 +67,18 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            return await _context.Projects.Where(x=>x.UserID == ID).Select(x=>x.ToProjectDTO()).ToListAsync();
+            return await _context.Projects.Where(x => x.UserID == ID).Select(x => x.ToProjectDTO()).ToListAsync();
         }
 
         /// <summary>
-        /// GET: ElectroDepot/Projects/GetProjectComponentByID/{ID}
+        /// GET: ElectroDepot/Projects/GetByID/{ID}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="ID"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProjectDTO>> GetProjectByID(int id)
+        [HttpGet("GetByID/{ID}")]
+        public async Task<ActionResult<ProjectDTO>> GetProjectByID(int ID)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.FindAsync(ID);
 
             if (project == null)
             {
@@ -86,6 +86,60 @@ namespace Server.Controllers
             }
 
             return project.ToProjectDTO();
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/Projects/GetPriceByID/{ID}
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        [HttpGet("GetPriceByID/{ID}")]
+        public async Task<ActionResult<double>> GetProjectPriceByID(int ID)
+        {
+            Project? project = await _context.Projects.FindAsync(ID);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                IEnumerable<Component> componentsOfProject = await (from projects in _context.Projects
+                                                                    join projectComponents in _context.ProjectComponents
+                                                                    on projects.ProjectID equals projectComponents.ProjectID
+                                                                    join components in _context.Components
+                                                                    on projectComponents.ComponentID equals components.ComponentID
+                                                                    where projects.ProjectID == ID
+                                                                    select new Component()
+                                                                    {
+                                                                        ComponentID = components.ComponentID,
+                                                                        CategoryID = components.CategoryID,
+                                                                        Name = components.Name,
+                                                                        Manufacturer = components.Manufacturer,
+                                                                        Description = components.Description
+                                                                    }).ToListAsync();
+
+                List<int> componentsIDs = componentsOfProject.Select(x => x.ComponentID).ToList();
+
+                IEnumerable<PurchaseItem> projectPurchaseItemss = await (from purchaseItem in _context.PurchaseItems
+                                                                         where componentsIDs.Contains(purchaseItem.ComponentID)
+                                                                         select new PurchaseItem()
+                                                                         {
+                                                                             PurchaseItemID = purchaseItem.PurchaseItemID,
+                                                                             ComponentID = purchaseItem.ComponentID,
+                                                                             PurchaseID = purchaseItem.PurchaseID,
+                                                                             Quantity = purchaseItem.Quantity,
+                                                                             PricePerUnit = purchaseItem.PricePerUnit
+                                                                         }).ToListAsync();
+
+                double result = projectPurchaseItemss.Sum(x => x.Quantity * x.PricePerUnit);
+                return Ok(result);  
+            }
+            catch(Exception exception)
+            {
+                return BadRequest();
+            }
         }
 
         /// <summary>
@@ -134,7 +188,7 @@ namespace Server.Controllers
         public async Task<IActionResult> UpdateProject(int id, UpdateProjectDTO projectDTO)
         {
             Project? project = await _context.Projects.FindAsync(id);
-            if(project == null)
+            if (project == null)
             {
                 return NotFound();
             }

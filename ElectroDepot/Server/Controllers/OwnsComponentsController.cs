@@ -107,8 +107,13 @@ namespace Server.Controllers
             }
 
             IEnumerable<OwnsComponentDTO> foundComponents = await _context.OwnsComponent.Where(x=>x.UserID == UserID && x.ComponentID == ComponentID).Select(y=>y.ToOwnsComponentDTO()).ToListAsync();
+            OwnsComponentDTO foundComponent = foundComponents.FirstOrDefault();
+            if(foundComponent == null)
+            {
+                return NotFound();
+            }
 
-            return Ok(foundComponents);
+            return Ok(foundComponent);
         }
 
         /// <summary>

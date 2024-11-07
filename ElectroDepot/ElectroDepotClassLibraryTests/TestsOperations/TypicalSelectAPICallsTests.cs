@@ -12,7 +12,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
         }
         #region Users
         [Fact]
-        private async Task Get_all_users()
+        private async Task Get_All_Users()
         {
             try
             {
@@ -47,8 +47,8 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
             }
         }
 
-        [Fact]
-        public async Task User_modify_password()
+        //[Fact]
+        public async Task User_Modify_Password()
         {
             try
             {
@@ -70,7 +70,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
         }
 
         [Fact]
-        public async Task Get_all_components_from_user()
+        public async Task Get_All_Components_From_User()
         {
             try
             {
@@ -94,10 +94,11 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
         }
 
         [Fact]
-        public async Task Get_all_projects_from_user()
+        public async Task Get_All_Projects_From_User()
         {
             try
             {
+
                 int[] ProjectsIDsOfJacekJaworek = new int[] { 0, 4 };
 
                 UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
@@ -118,7 +119,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
         }
 
         [Fact]
-        public async Task Get_component_amount_from_user()
+        public async Task Get_Component_Amount_From_User()
         {
             try
             {
@@ -160,6 +161,142 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
 
                 Console.WriteLine($"Found: Owner:'{user.ID - Utility.UserIDBias}', ComponentID:'{componentOfComponentAndUser.ComponentID - Utility.ComponentIDBias}', Quantity:'{componentOfComponentAndUser.Quantity}'");
 
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_All_Components_From_Project()
+        {
+            try
+            {
+                int[] ComponentsIDsFromProject0 = new int[] { 77, 2, 5, 38 };
+
+                int projectID = Utility.ProjectIDBias;
+
+                ProjectDTO project = await ProjectDP.GetProjectByID(projectID); 
+                Assert.NotNull(project);
+
+                IEnumerable<ComponentDTO> ComponentsOfProject = await ProjectDP.GetAllComponentsFromProject(project);
+                Assert.NotNull(ComponentsOfProject);
+                Assert.NotEmpty(ComponentsOfProject);
+
+                int[] ids = ComponentsOfProject.Select(x => Math.Abs(Utility.ComponentIDBias - x.ID)).ToArray();
+
+                bool isSame = ComponentsIDsFromProject0.SequenceEqual(ids);
+                Assert.True(isSame);
+
+                foreach (ComponentDTO ownedComponent in ComponentsOfProject)
+                {
+                    Console.WriteLine(ownedComponent.ToString());
+                }
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_All_Purchases_From_User()
+        {
+            try
+            {
+                // DATA DEF
+                string username = "agnieszka.nakowicz";
+                int[] purchaseIDS = new int[] { 1, 2 };
+                //
+
+                UserDTO user = await UserDP.GetUserByUsername(username);
+                Assert.NotNull(user);
+
+                IEnumerable<PurchaseDTO> purchases = await PurchaseDP.GetAllPurchasesFromUser(user);
+                Assert.NotNull(purchases);
+                Assert.NotEmpty(purchases);
+
+                int[] purIDS = purchases.Select(x=> Math.Abs(Utility.PurchaseIDBias - x.ID)).ToArray();
+                bool isSame = purIDS.SequenceEqual(purchaseIDS);
+                Assert.True(isSame);
+
+                foreach (PurchaseDTO purchase in purchases)
+                {
+                    Console.WriteLine(purchase.ToString());
+                }
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_Project_Price()
+        {
+            try
+            {
+                // DATA DEF
+                int projectID = Utility.ProjectIDBias;
+                //
+
+                ProjectDTO project = await ProjectDP.GetProjectByID(projectID);
+                Assert.NotNull(project);
+
+                double projectPrice = await ProjectDP.GetProjectPrice(project);
+                Assert.True(projectPrice != -1.0);
+                Assert.True(projectPrice == 27.5);
+
+                Console.WriteLine($"Price for '{project.Name}' project is '{projectPrice}'[pln]");
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_All_Components_From_Purchase()
+        {
+            try
+            {
+                // DATA DEF
+                int projectID = Utility.ProjectIDBias;
+                //
+
+                ProjectDTO project = await ProjectDP.GetProjectByID(projectID);
+                Assert.NotNull(project);
+
+                double projectPrice = await ProjectDP.GetProjectPrice(project);
+                Assert.True(projectPrice != -1.0);
+                Assert.True(projectPrice == 27.5);
+
+                Console.WriteLine($"Price for '{project.Name}' project is '{projectPrice}'[pln]");
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_All_PurchaseItems_From_Purchase()
+        {
+            try
+            {
+                // DATA DEF
+                //int purchaseID = Utility.PurchaseIDBias;
+                ////
+
+                //ProjectDTO project = await PurchaseDP.GetAllPurchases();
+                //Assert.NotNull(project);
+
+                //double projectPrice = await ProjectDP.GetProjectPrice(project);
+                //Assert.True(projectPrice != -1.0);
+                //Assert.True(projectPrice == 27.5);
+
+                //Console.WriteLine($"Price for '{project.Name}' project is '{projectPrice}'[pln]");
             }
             catch (Exception exception)
             {

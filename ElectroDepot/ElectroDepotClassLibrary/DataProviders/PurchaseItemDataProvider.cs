@@ -48,6 +48,63 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
+
+        public async Task<IEnumerable<ComponentDTO>> GetAllComponentsFromPurchase(PurchaseDTO purchase)
+        {
+            try
+            {
+                string url = PurchaseItemEndpoints.GetAllComponentsFromPurchase(purchase.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    IEnumerable<ComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<ComponentDTO>>(json, options);
+
+                    return components;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<PurchaseItemDTO>> GetAllPurchaseItemsFromPurchase(PurchaseDTO purchase)
+        {
+            try
+            {
+                string url = PurchaseItemEndpoints.GetAllComponentsFromPurchase(purchase.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    IEnumerable<PurchaseItemDTO> components = JsonSerializer.Deserialize<IEnumerable<PurchaseItemDTO>>(json, options);
+
+                    return components;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<PurchaseItemDTO> GetPurchaseItemByID(int ID)
         {
             try
