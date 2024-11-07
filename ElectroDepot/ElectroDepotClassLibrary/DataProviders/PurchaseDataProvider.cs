@@ -31,6 +31,34 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
             return false;
         }
+
+        public async Task<PurchaseDTO> GetPurchaseByID(int ID)
+        {
+            try
+            {
+                string url = PurchaseEndpoints.GetByID(ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    PurchaseDTO? purchase = JsonSerializer.Deserialize<PurchaseDTO>(json, options);
+                    return purchase;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Gets all 'Purchase's from database.
         /// </summary>

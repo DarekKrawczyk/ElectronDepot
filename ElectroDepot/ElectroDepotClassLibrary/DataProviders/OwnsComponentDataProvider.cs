@@ -48,6 +48,34 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
+
+        public async Task<IEnumerable<OwnsComponentDTO>> GetAllFreeToUseComponentsFromUser(UserDTO user)
+        {
+            try
+            {
+                string url = OwnsComponentEndpoints.GetAllFreeToUseFromUser(user.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    IEnumerable<OwnsComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<OwnsComponentDTO>>(json, options);
+                    return components;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<OwnsComponentDTO>> GetAllOwnsComponentsFromUser(UserDTO userDTO)
         {
             try

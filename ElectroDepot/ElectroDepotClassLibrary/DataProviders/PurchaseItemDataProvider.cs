@@ -81,7 +81,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         {
             try
             {
-                string url = PurchaseItemEndpoints.GetAllComponentsFromPurchase(purchase.ID);
+                string url = PurchaseItemEndpoints.GetAllPurchaseItemsFromPurchase(purchase.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)

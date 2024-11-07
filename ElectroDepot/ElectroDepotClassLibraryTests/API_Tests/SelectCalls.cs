@@ -4,10 +4,10 @@ using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.TestsOperations
 {
-    public class TypicalSelectAPICallsTests : BaseDataProviderTest
+    public class SelectCalls : BaseDataProviderTest
     {
 
-        public TypicalSelectAPICallsTests(ITestOutputHelper output) : base(output)
+        public SelectCalls(ITestOutputHelper output) : base(output)
         {
         }
         #region Users
@@ -42,28 +42,6 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 }
             }
             catch(Exception exception)
-            {
-                Assert.Fail(exception.Message);
-            }
-        }
-
-        //[Fact]
-        public async Task User_Modify_Password()
-        {
-            try
-            {
-                UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
-                Assert.NotNull(user);
-
-                UpdateUserDTO userModified = new UpdateUserDTO(user.Username, user.Email, "NewPasswordUpdated123");
-                bool wasUpdated = await UserDP.UpdateUser(user.ID, userModified);
-                Assert.True(wasUpdated);
-
-                UpdateUserDTO userReModified = new UpdateUserDTO(user.Username, user.Email, "FindMeIfYouCan123");
-                bool wasReUpdated = await UserDP.UpdateUser(user.ID, userReModified);
-                Assert.True(wasUpdated);
-            }
-            catch (Exception exception)
             {
                 Assert.Fail(exception.Message);
             }
@@ -261,9 +239,8 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
         {
             try
             {
-                // DATA DEF
+                // Data definition
                 int projectID = Utility.ProjectIDBias;
-                //
 
                 ProjectDTO project = await ProjectDP.GetProjectByID(projectID);
                 Assert.NotNull(project);
@@ -285,18 +262,87 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
         {
             try
             {
-                // DATA DEF
-                //int purchaseID = Utility.PurchaseIDBias;
-                ////
+                // Data definition
+                int purchaseID = Utility.PurchaseIDBias;
+                int[] IDsArray = new int[] { 77, 2, 5, 38, 82, 67, 9 };
+                int[] quantities = new int[] { 1, 1, 2, 1, 2, 2, 2 };
 
-                //ProjectDTO project = await PurchaseDP.GetAllPurchases();
-                //Assert.NotNull(project);
+                PurchaseDTO purchase = await PurchaseDP.GetPurchaseByID(purchaseID);
+                Assert.NotNull(purchase);
 
-                //double projectPrice = await ProjectDP.GetProjectPrice(project);
-                //Assert.True(projectPrice != -1.0);
-                //Assert.True(projectPrice == 27.5);
+                IEnumerable<PurchaseItemDTO> purchaseItems = await PurchaseItemDP.GetAllPurchaseItemsFromPurchase(purchase);
+                Assert.NotNull(purchaseItems);
+                Assert.NotEmpty(purchaseItems);
 
-                //Console.WriteLine($"Price for '{project.Name}' project is '{projectPrice}'[pln]");
+                int[] idsFromDB = purchaseItems.Select(x => Math.Abs(Utility.ComponentIDBias - x.ComponentID)).ToArray();
+                int[] quantitiesFromDB = purchaseItems.Select(x => x.Quantity).ToArray();
+
+                bool areIDsOk = idsFromDB.SequenceEqual(IDsArray);
+                bool areQuantitiesOk = quantitiesFromDB.SequenceEqual(quantities);
+
+                Assert.True(areIDsOk);
+                Assert.True(areQuantitiesOk);
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_Free_To_Use_OwnsComponents()
+        {
+            try
+            {
+                // Data definition
+                int userID = Utility.UserIDBias;
+                
+                UserDTO user = await UserDP.GetUserByID(userID);
+                Assert.NotNull(user);
+
+                IEnumerable<OwnsComponentDTO> freeToUseComponents = await OwnsComponentDP.GetAllFreeToUseComponentsFromUser(user);
+                Assert.NotNull(freeToUseComponents);
+
+                //int[] idsFromDB = purchaseItems.Select(x => Math.Abs(Utility.ComponentIDBias - x.ComponentID)).ToArray();
+                //int[] quantitiesFromDB = purchaseItems.Select(x => x.Quantity).ToArray();
+
+                //bool areIDsOk = idsFromDB.SequenceEqual(IDsArray);
+                //bool areQuantitiesOk = quantitiesFromDB.SequenceEqual(quantities);
+
+                //Assert.True(areIDsOk);
+                //Assert.True(areQuantitiesOk);
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_All_OwnsComponents_From_User()
+        {
+            try
+            {
+                // Data definition
+                int userID = Utility.UserIDBias;
+                int[] IDsArray = new int[] { 77, 2, 5, 38, 82, 67, 9 };
+                int[] quantities = new int[] { 1, 1, 2, 1, 2, 2, 2 };
+                
+                UserDTO user = await UserDP.GetUserByID(userID);
+                Assert.NotNull(user);
+
+                IEnumerable<OwnsComponentDTO> ownedComponents = await OwnsComponentDP.GetAllOwnsComponentsFromUser(user);
+                Assert.NotNull(ownedComponents);
+                Assert.NotEmpty(ownedComponents);
+
+                int[] idsFromDB = ownedComponents.Select(x => Math.Abs(Utility.ComponentIDBias - x.ComponentID)).ToArray();
+                int[] quantitiesFromDB = ownedComponents.Select(x => x.Quantity).ToArray();
+
+                bool areIDsOk = idsFromDB.SequenceEqual(IDsArray);
+                bool areQuantitiesOk = quantitiesFromDB.SequenceEqual(quantities);
+
+                Assert.True(areIDsOk);
+                Assert.True(areQuantitiesOk);
             }
             catch (Exception exception)
             {
