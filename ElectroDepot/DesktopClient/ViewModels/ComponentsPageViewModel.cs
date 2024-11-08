@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DesktopClient.ViewModels
 {
-    internal class MonitoringViewModel : ViewModelBase
+    internal class ComponentsPageViewModel : ViewModelBase
     {
     }
 }

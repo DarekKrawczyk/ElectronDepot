@@ -3,13 +3,37 @@
              x:Class="DesktopClient.App"
              xmlns:local="using:DesktopClient"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+  <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-  
-    <Application.Styles>
-        <FluentTheme />
-    </Application.Styles>
+  <Application.DataTemplates>
+    <local:ViewLocator/>
+  </Application.DataTemplates>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://DesktopClient/Templates/MenuButton.xaml"/>
+  </Application.Styles>
+
+  <Application.Resources>
+    <FontFamily x:Key="Roboto">avares://DesktopClient/Assets#Roboto</FontFamily>
+
+    <!-- Primary Purple -->
+    <SolidColorBrush x:Key="UIDeepPurple" Color="#6A4C9C" />
+
+    <!-- Accent Purple -->
+    <SolidColorBrush x:Key="UIAccentPurple" Color="#9B7BC0" />
+
+    <!-- Dark Gray -->
+    <SolidColorBrush x:Key="UIDarkGray" Color="#333333" />
+
+    <!-- Medium Gray -->
+    <SolidColorBrush x:Key="UIMediumGray" Color="#808080" />
+
+    <!-- Light Gray -->
+    <SolidColorBrush x:Key="UILightGray" Color="#D3D3D3" />
+
+    <!-- Off White -->
+    <SolidColorBrush x:Key="UIOffWhite" Color="#F4F4F4" />
+  </Application.Resources>
+
 </Application>

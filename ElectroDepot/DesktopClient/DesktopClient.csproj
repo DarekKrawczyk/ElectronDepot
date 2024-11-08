@@ -12,6 +12,17 @@
     <Folder Include="Docs\Images\" />
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Components_icon.png" />
+    <None Remove="Assets\Home_icon.png" />
+    <None Remove="Assets\Logout_icon.png" />
+    <None Remove="Assets\Monitoring_icon.png" />
+    <None Remove="Assets\Projects_icon.png" />
+    <None Remove="Assets\Purchases_icon.png" />
+    <None Remove="Assets\Roboto.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,5 +33,20 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ComponentsPageView.axaml.cs">
+      <DependentUpon>ComponentsPageView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MonitoringPageView.axaml.cs">
+      <DependentUpon>MonitoringPageView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ProjectsPageView.axaml.cs">
+      <DependentUpon>ProjectsPageView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PurchasesPageView.axaml.cs">
+      <DependentUpon>PurchasesPageView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
