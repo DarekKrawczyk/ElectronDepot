@@ -1,6 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
 using ElectroDepotClassLibrary.Endpoints;
-using System.Net.Http;
 using System.Text.Json;
 using System.Text;
 
@@ -8,9 +7,7 @@ namespace ElectroDepotClassLibrary.DataProviders
 {
     public class OwnsComponentDataProvider : BaseDataProvider
     {
-        public OwnsComponentDataProvider(string url) : base(url)
-        {
-        }
+        public OwnsComponentDataProvider(string url) : base(url) { }
         #region API Calls
         public async Task<bool> CreateOwnComponent(CreateOwnsComponentDTO ownsComponentDTO)
         {
@@ -48,6 +45,61 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
+
+        public async Task<IEnumerable<OwnsComponentDTO>> GetAllUsedComponentsFromUser(UserDTO user)
+        {
+            try
+            {
+                string url = OwnsComponentEndpoints.GetAllUsedFromUser(user.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    IEnumerable<OwnsComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<OwnsComponentDTO>>(json, options);
+                    return components;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<OwnsComponentDTO>> GetAllFreeToUseComponentsFromUser(UserDTO user)
+        {
+            try
+            {
+                string url = OwnsComponentEndpoints.GetAllFreeToUseFromUser(user.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    IEnumerable<OwnsComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<OwnsComponentDTO>>(json, options);
+                    return components;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<IEnumerable<OwnsComponentDTO>> GetAllOwnsComponentsFromUser(UserDTO userDTO)
         {
             try

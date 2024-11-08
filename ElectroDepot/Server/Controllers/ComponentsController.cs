@@ -99,6 +99,42 @@ namespace Server.Controllers
         }
 
         /// <summary>
+        /// GET: ElectroDepot/Components/GetAvailableComponentsFromUser/{ID}
+        /// </summary>
+        /// <param name="ID">UserID</param>
+        /// <returns></returns>
+        [HttpGet("GetAvailableComponentsFromUser/{ID}")]
+        public async Task<ActionResult<IEnumerable<ComponentDTO>>> GetAvailableComponentsFromUser(int ID)
+        {
+            User? user = await _context.Users.FindAsync(ID);
+
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            try
+            {
+                IEnumerable<ComponentDTO> usersComponents = await (from ownsComponent in _context.OwnsComponent
+                                                                   join component in _context.Components
+                                                                   on ownsComponent.ComponentID equals component.ComponentID
+                                                                   where ownsComponent.UserID == user.UserID
+                                                                   select new ComponentDTO(
+                                                                       component.ComponentID,
+                                                                       component.CategoryID,
+                                                                       component.Name,
+                                                                       component.Manufacturer,
+                                                                       component.Description)
+                                                                   ).ToListAsync();
+                return Ok(usersComponents);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error ocurred");
+            }
+        }
+
+        /// <summary>
         /// GET: ElectroDepot/Components/GetUserComponents/{ID}
         /// </summary>
         /// <param name="ID"></param>

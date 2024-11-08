@@ -12,5 +12,6 @@ namespace ElectroDepotClassLibraryTests
         public static int ComponentIDBias = 1030;
         public static int UserIDBias = 1067;
         public static int ProjectIDBias = 1083;
+        public static int PurchaseIDBias= 24;
     }
 }

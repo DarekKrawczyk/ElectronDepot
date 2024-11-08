@@ -25,7 +25,7 @@ namespace Server.Controllers
         /// <param name="createPurchaseDTO"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<ActionResult<Purchase>> CreatePurchase(CreatePurchaseDTO createPurchaseDTO)
+        public async Task<ActionResult<PurchaseDTO>> CreatePurchase(CreatePurchaseDTO createPurchaseDTO)
         {
             User? userExists = await _context.Users.FindAsync(createPurchaseDTO.UserID);
             if (userExists == null)
@@ -63,35 +63,35 @@ namespace Server.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("GetByID/{id}")]
-        public async Task<ActionResult<PurchaseDTO>> GetPurchaseByID(int id)
+        [HttpGet("GetByID/{ID}")]
+        public async Task<ActionResult<PurchaseDTO>> GetPurchaseByID(int ID)
         {
-            Purchase? purchase = await _context.Purchases.FindAsync(id);
+            Purchase? purchase = await _context.Purchases.FindAsync(ID);
 
             if (purchase == null)
             {
                 return NotFound(new { title = "Not found", code = "404" });
             }
 
-            return Ok(purchase);
+            return Ok(purchase.ToPurchaseDTO());
         }
 
         /// <summary>
-        /// GET: ElectroDepot/Purchases/GetAll/{id}
+        /// GET: ElectroDepot/Purchases/GetAll/{ID}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="ID"></param>
         /// <returns></returns>
-        [HttpGet("GetPurchaseItemByID/{id}")]
-        public async Task<ActionResult<IEnumerable<PurchaseItem>>> GetPurchaseItem(int id)
+        [HttpGet("GetPurchaseItemByID/{ID}")]
+        public async Task<ActionResult<IEnumerable<PurchaseItemDTO>>> GetPurchaseItem(int ID)
         {
-            Purchase? foundPurchase = await _context.Purchases.FindAsync(id);
+            Purchase? foundPurchase = await _context.Purchases.FindAsync(ID);
 
             if (foundPurchase == null)
             {
-                return NotFound(new { title = "Not Found", code = "404", message = $"Purchase with ID:{id} doesn't exsit" });
+                return NotFound();
             }
 
-            List<PurchaseItem> foundPurchaseItems = await _context.PurchaseItems.Where(x => x.PurchaseID == id).ToListAsync();
+            List<PurchaseItemDTO> foundPurchaseItems = await _context.PurchaseItems.Where(x => x.PurchaseID == ID).Select(x=>x.ToPurchaseItemDTO()).ToListAsync();
 
             return foundPurchaseItems;
         }
@@ -99,19 +99,19 @@ namespace Server.Controllers
         /// <summary>
         /// GET: ElectroDepot/Purchases/GetAllByUserID/{ID}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="ID"></param>
         /// <returns></returns>
-        [HttpGet("GetAllByUserID/{id}")]
-        public async Task<ActionResult<IEnumerable<PurchaseDTO>>> GetAllByUserID(int id)
+        [HttpGet("GetAllByUserID/{ID}")]
+        public async Task<ActionResult<IEnumerable<PurchaseDTO>>> GetAllByUserID(int ID)
         {
-            User? foundUser = await _context.Users.FindAsync(id);
+            User? foundUser = await _context.Users.FindAsync(ID);
 
             if (foundUser == null)
             {
-                return NotFound(new { title = "Not Found", code = "404", message = $"User with ID:{id} doesn't exsit" });
+                return NotFound();
             }
 
-            IEnumerable<PurchaseDTO> purchasesOfUser = await _context.Purchases.Where(x => x.UserID == id).Select(x => x.ToPurchaseDTO()).ToListAsync();
+            IEnumerable<PurchaseDTO> purchasesOfUser = await _context.Purchases.Where(x => x.UserID == ID).Select(x => x.ToPurchaseDTO()).ToListAsync();
 
             return Ok(purchasesOfUser);
         }
@@ -121,17 +121,17 @@ namespace Server.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("GetAllBySupplierID/{id}")]
-        public async Task<ActionResult<IEnumerable<PurchaseDTO>>> GetAllBySupplierID(int id)
+        [HttpGet("GetAllBySupplierID/{ID}")]
+        public async Task<ActionResult<IEnumerable<PurchaseDTO>>> GetAllBySupplierID(int ID)
         {
-            Supplier? foundSupplier = await _context.Suppliers.FindAsync(id);
+            Supplier? foundSupplier = await _context.Suppliers.FindAsync(ID);
 
             if (foundSupplier == null)
             {
-                return NotFound(new { title = "Not Found", code = "404", message = $"Supplier with ID:{id} doesn't exsit" });
+                return NotFound(new { title = "Not Found", code = "404", message = $"Supplier with ID:{ID} doesn't exsit" });
             }
 
-            IEnumerable<PurchaseDTO> purchasesOfUser = await _context.Purchases.Where(x => x.SupplierID == id).Select(x => x.ToPurchaseDTO()).ToListAsync();
+            IEnumerable<PurchaseDTO> purchasesOfUser = await _context.Purchases.Where(x => x.SupplierID == ID).Select(x => x.ToPurchaseDTO()).ToListAsync();
 
             return Ok(purchasesOfUser);
         }
@@ -140,13 +140,13 @@ namespace Server.Controllers
         /// <summary>
         /// POST: ElectroDepot/Purchases/Update/{ID}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="ID"></param>
         /// <param name="updatePurchaseDTO"></param>
         /// <returns></returns>
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdatePurchase(int id, UpdatePurchaseDTO updatePurchaseDTO)
+        [HttpPut("Update/{ID}")]
+        public async Task<IActionResult> UpdatePurchase(int ID, UpdatePurchaseDTO updatePurchaseDTO)
         {
-            Purchase? purchase = await _context.Purchases.FindAsync(id);
+            Purchase? purchase = await _context.Purchases.FindAsync(ID);
 
             if(purchase == null)
             {
@@ -162,7 +162,7 @@ namespace Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PurchaseExists(id))
+                if (!PurchaseExists(ID))
                 {
                     return NotFound();
                 }
@@ -179,12 +179,12 @@ namespace Server.Controllers
         /// <summary>
         /// DELETE: ElectroDepot/Purchases/Delete/{ID}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="ID"></param>
         /// <returns></returns>
-        [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> DeletePurchase(int id)
+        [HttpDelete("Delete/{ID}")]
+        public async Task<IActionResult> DeletePurchase(int ID)
         {
-            Purchase? purchase = await _context.Purchases.FindAsync(id);
+            Purchase? purchase = await _context.Purchases.FindAsync(ID);
             if (purchase == null)
             {
                 return NotFound(new { title = "Not Found", code = "404" });

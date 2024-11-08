@@ -79,6 +79,41 @@ namespace Server.Controllers
         }
 
         /// <summary>
+        /// GET: ElectroDepot/PurchaseItems/GetAllPurchaseItemsFromPurchase/{PurchaseID}
+        /// </summary>
+        /// <param name="PurchaseID"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllPurchaseItemsFromPurchase/{PurchaseID}")]
+        public async Task<ActionResult<IEnumerable<PurchaseItemDTO>>> GetAllPurchaseItemsFromPurchase(int PurchaseID)
+        {
+            Purchase? foundPurchase = await _context.Purchases.FindAsync(PurchaseID);
+
+            if (foundPurchase == null)
+            {
+                return NotFound($"Purchase with ID:'{PurchaseID}' doesn't exsit");
+            }
+
+            try
+            {
+                IEnumerable<PurchaseItemDTO> purchaseItemsFromPuchase = await (from purchaseItem in _context.PurchaseItems
+                                                                               where purchaseItem.PurchaseID == PurchaseID
+                                                                               select new PurchaseItemDTO(
+                                                                                   purchaseItem.PurchaseItemID,
+                                                                                   purchaseItem.PurchaseID,
+                                                                                   purchaseItem.ComponentID,
+                                                                                   purchaseItem.Quantity,
+                                                                                   purchaseItem.PricePerUnit)
+                                                                              ).ToListAsync();
+
+                return Ok(purchaseItemsFromPuchase);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        /// <summary>
         /// GET: ElectroDepot/PurchaseItems/GetComponentsFromPurchase/{PurchaseID}
         /// </summary>
         /// <param name="PurchaseID"></param>

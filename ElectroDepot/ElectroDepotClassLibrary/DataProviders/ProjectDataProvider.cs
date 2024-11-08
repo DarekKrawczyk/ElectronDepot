@@ -21,6 +21,61 @@ namespace ElectroDepotClassLibrary.DataProviders
 
             return response.IsSuccessStatusCode;
         }
+        public async Task<ProjectDTO> GetProjectByID(int ProjectID)
+        {
+            try
+            {
+                string url = ProjectEndpoints.GetByID(ProjectID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    ProjectDTO projectWithID= JsonSerializer.Deserialize<ProjectDTO>(json, options);
+
+                    return projectWithID;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<double> GetProjectPrice(ProjectDTO project)
+        {
+            try
+            {
+                string url = ProjectEndpoints.GetPriceByID(project.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    double price = JsonSerializer.Deserialize<double>(json, options);
+                    return price;
+                }
+                else
+                {
+                    return -1.0;
+                }
+            }
+            catch (Exception ex)
+            {
+                return -1.0;
+            }
+        }
+
         public async Task<IEnumerable<ProjectDTO>> GetAllProjects()
         {
             try
