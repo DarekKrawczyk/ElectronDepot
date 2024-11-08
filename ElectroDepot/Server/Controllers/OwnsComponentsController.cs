@@ -151,23 +151,33 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            IEnumerable<OwnsComponent> ownedComponents = await (from ownedComponent in _context.OwnsComponent
-                                                                where ownedComponent.UserID == UserID
-                                                                select  ownedComponent).ToListAsync();
+            IEnumerable<OwnsComponent> unusedComponents = await _context.OwnsComponent
+                .Where(oc => !_context.ProjectComponents.Any(pc => pc.ComponentID == oc.ComponentID) && oc.UserID == UserID)
+                .ToListAsync();
 
-            IEnumerable<ProjectComponent> projectComponents = await (from projectComponent in _context.ProjectComponents
-                                                                     join project in _context.Projects
-                                                                     on projectComponent.ProjectID equals project.ProjectID
-                                                                     where project.UserID == UserID
-                                                                     select new ProjectComponent()
-                                                                     {
-                                                                         ProjectComponentID = projectComponent.ProjectComponentID,
-                                                                         ComponentID = projectComponent.ComponentID,
-                                                                         ProjectID = projectComponent.ProjectID,
-                                                                         Quantity = projectComponent.Quantity
-                                                                     }).ToListAsync();
+            return Ok(unusedComponents);
+        }
 
-            return Ok(null);
+        /// <summary>
+        /// GET: ElectroDepot/OwnsComponents/GetAllUsedFromUser/{UserID}
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllUsedFromUser/{UserID}")]
+        public async Task<ActionResult<IEnumerable<OwnsComponentDTO>>> GetAllUsedFromUser(int UserID)
+        {
+            User? user = await _context.Users.FindAsync(UserID);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<OwnsComponent> unusedComponents = await _context.OwnsComponent
+                .Where(oc => _context.ProjectComponents.Any(pc => pc.ComponentID == oc.ComponentID) && oc.UserID == UserID)
+                .ToListAsync();
+
+            return Ok(unusedComponents);
         }
         #endregion
         #region Update

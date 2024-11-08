@@ -303,14 +303,35 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 IEnumerable<OwnsComponentDTO> freeToUseComponents = await OwnsComponentDP.GetAllFreeToUseComponentsFromUser(user);
                 Assert.NotNull(freeToUseComponents);
 
-                //int[] idsFromDB = purchaseItems.Select(x => Math.Abs(Utility.ComponentIDBias - x.ComponentID)).ToArray();
-                //int[] quantitiesFromDB = purchaseItems.Select(x => x.Quantity).ToArray();
+                foreach(OwnsComponentDTO freeComponent in freeToUseComponents)
+                {
+                    Console.WriteLine(freeComponent.ToString());
+                }
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
 
-                //bool areIDsOk = idsFromDB.SequenceEqual(IDsArray);
-                //bool areQuantitiesOk = quantitiesFromDB.SequenceEqual(quantities);
+        [Fact]
+        public async Task Get_All_Used_OwnsComponents()
+        {
+            try
+            {
+                // Data definition
+                int userID = Utility.UserIDBias;
 
-                //Assert.True(areIDsOk);
-                //Assert.True(areQuantitiesOk);
+                UserDTO user = await UserDP.GetUserByID(userID);
+                Assert.NotNull(user);
+
+                IEnumerable<OwnsComponentDTO> freeToUseComponents = await OwnsComponentDP.GetAllUsedComponentsFromUser(user);
+                Assert.NotNull(freeToUseComponents);
+
+                foreach (OwnsComponentDTO freeComponent in freeToUseComponents)
+                {
+                    Console.WriteLine(freeComponent.ToString());
+                }
             }
             catch (Exception exception)
             {
@@ -343,6 +364,11 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
 
                 Assert.True(areIDsOk);
                 Assert.True(areQuantitiesOk);
+
+                foreach(OwnsComponentDTO ownComp in ownedComponents)
+                {
+                    Console.WriteLine(ownComp.ToString());
+                }
             }
             catch (Exception exception)
             {
