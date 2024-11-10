@@ -17,6 +17,9 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source='avares://DesktopClient/Templates/MenuButton.axaml' />
+        <ResourceInclude Source='avares://DesktopClient/Templates/Menu_Project_Node.axaml' />
+        <ResourceInclude Source='avares://DesktopClient/Templates/Menu_Bought_Component_Node.axaml' />
+        <ResourceInclude Source='avares://DesktopClient/Templates/Supplier_Node.axaml' />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
     <FontFamily x:Key="Roboto">avares://DesktopClient/Assets#Roboto</FontFamily>

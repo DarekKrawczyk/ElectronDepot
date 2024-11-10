@@ -4,7 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:DesktopClient.Templates"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        mc:Ignorable="d" 
+        d:DesignHeight="720"
+        MinHeight="720"
+        d:DesignWidth="1320" 
+        MinWidth="1320"
         x:Class="DesktopClient.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -33,15 +37,18 @@
                OpenPaneLength="250"
                CompactPaneLength="90"
                DisplayMode="CompactInline"
+               PaneBackground="Transparent"
                >
       <SplitView.Pane>
         <StackPanel Spacing="0"
-                    Margin="5">
+                    Margin="5"
+                    Background="Transparent">
 
-          <Button Command="{Binding TriggerPaneCommand}" Margin="0 0 0 0">
+          <Button Command="{Binding TriggerPaneCommand}" Margin="0 0 0 0" BorderBrush="{DynamicResource UIDarkGray}"
+                BorderThickness="1" >
               <Image Source="avares://DesktopClient/Assets/Resize_icon.png"
                      Width="230"
-                     Height="20"
+                     Height="12"
                      Margin="0 0 0 0"/>
             <Button.Styles>
               <Style Selector="Button">

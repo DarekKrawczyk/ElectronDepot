@@ -1,2 +1,2 @@
 ﻿# UI
-![BasicUI](Images/BasicUI.png)
+![BasicUI](Images/BasicUI.gif)
