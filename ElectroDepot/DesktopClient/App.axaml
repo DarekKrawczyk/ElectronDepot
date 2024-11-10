@@ -1,0 +1,46 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="DesktopClient.App"
+             xmlns:local="using:DesktopClient"
+             RequestedThemeVariant="Default">
+  <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+  <Application.DataTemplates>
+    <local:ViewLocator/>
+  </Application.DataTemplates>
+
+  <Application.Styles>
+    <FluentTheme />
+  </Application.Styles>
+
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source='avares://DesktopClient/Templates/MenuButton.axaml' />
+        <ResourceInclude Source='avares://DesktopClient/Templates/Menu_Project_Node.axaml' />
+        <ResourceInclude Source='avares://DesktopClient/Templates/Menu_Bought_Component_Node.axaml' />
+        <ResourceInclude Source='avares://DesktopClient/Templates/Supplier_Node.axaml' />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+    <FontFamily x:Key="Roboto">avares://DesktopClient/Assets#Roboto</FontFamily>
+
+    <!-- Primary Purple -->
+    <SolidColorBrush x:Key="UIDeepPurple" Color="#6A4C9C" />
+
+    <!-- Accent Purple -->
+    <SolidColorBrush x:Key="UIAccentPurple" Color="#9B7BC0" />
+
+    <!-- Dark Gray -->
+    <SolidColorBrush x:Key="UIDarkGray" Color="#333333" />
+
+    <!-- Medium Gray -->
+    <SolidColorBrush x:Key="UIMediumGray" Color="#808080" />
+
+    <!-- Light Gray -->
+    <SolidColorBrush x:Key="UILightGray" Color="#D3D3D3" />
+
+    <!-- Off White -->
+    <SolidColorBrush x:Key="UIOffWhite" Color="#F4F4F4" />
+  </Application.Resources>
+
+</Application>

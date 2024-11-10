@@ -1,0 +1,151 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:DesktopClient.Templates"
+             mc:Ignorable="d" 
+             d:DesignHeight="720"
+             d:DesignWidth="1320" 
+             x:Class="DesktopClient.Views.HomePageView">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto"></RowDefinition>
+      <RowDefinition Height="auto"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="0">
+          <StackPanel Orientation="Vertical"
+                      Margin="10">
+            <Label FontFamily="{DynamicResource Roboto}"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Margin="0 0 0 10">
+              Latest projects
+            </Label>
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        MinWidth="485">
+              <controls:Menu_Project_Node Margin="10"/>
+              <controls:Menu_Project_Node Margin="10"/>
+            </StackPanel>
+          </StackPanel>
+      </Grid>
+
+      <Grid Grid.Column="1">
+        <Border Width="4"
+                Background="{DynamicResource UIMediumGray}" 
+                Margin="0,10" 
+                HorizontalAlignment="Stretch"/>
+      </Grid>
+
+      <Grid Grid.Column="2">
+        <StackPanel Orientation="Vertical"
+                    Margin="10">
+          <Label FontFamily="{DynamicResource Roboto}"
+                 FontSize="28"
+                 FontWeight="Bold"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Margin="0 0 0 10">
+            Suppliers
+          </Label>
+          <UniformGrid Rows="2"
+                       Columns="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+            <controls:Supplier_Node Margin="10"/>
+            <controls:Supplier_Node Margin="10"/>
+            <controls:Supplier_Node Margin="10"/>
+            <controls:Supplier_Node Margin="10"/>
+          </UniformGrid>
+        </StackPanel>
+      </Grid>
+
+      <Grid Grid.Column="3">
+        <Border Width="4" 
+                Background="{DynamicResource UIMediumGray}" 
+                Margin="0 0 0 0" 
+                HorizontalAlignment="Stretch"/>
+      </Grid>
+
+      <Grid Grid.Column="4">
+        <StackPanel Orientation="Vertical"
+                    Margin="10">
+          <Label FontFamily="{DynamicResource Roboto}"
+                 FontSize="28"
+                 FontWeight="Bold"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Margin="0 0 0 10">
+            Just bought
+          </Label>
+          <StackPanel Orientation="Vertical">
+            <controls:Menu_Bought_Component_Node Margin="10"/>
+            <controls:Menu_Bought_Component_Node Margin="10"/>
+            <controls:Menu_Bought_Component_Node Margin="10"/>
+            <controls:Menu_Bought_Component_Node Margin="10"/>
+          </StackPanel>
+        </StackPanel>
+      </Grid>
+
+    </Grid>
+
+    <Grid Grid.Row="1">
+      <Border Height="4" 
+              Background="{DynamicResource UIMediumGray}"
+              Margin="10,0" 
+              HorizontalAlignment="Stretch"/>
+    </Grid>
+
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="70*"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
+        <ColumnDefinition Width="30*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="0">
+        <StackPanel Orientation="Vertical">
+          <Label FontFamily="{DynamicResource Roboto}"
+                 FontSize="36"
+                 FontWeight="Bold"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center">
+            Last 12 months spendings
+          </Label>
+        </StackPanel>
+      </Grid>
+
+      <Grid Grid.Column="1">
+        <Border Width="4" Background="{DynamicResource UIMediumGray}" Margin="10,5" HorizontalAlignment="Stretch"/>
+      </Grid>
+      
+      <Grid Grid.Column="2">
+        <StackPanel Orientation="Vertical">
+          <Label FontFamily="{DynamicResource Roboto}"
+                 FontSize="36"
+                 FontWeight="Bold"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center">
+            Add new
+          </Label>
+        </StackPanel>
+      </Grid>
+
+    </Grid>
+
+  </Grid>
+</UserControl>

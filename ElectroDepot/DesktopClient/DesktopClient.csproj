@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Components_icon.png" />
+    <None Remove="Assets\Home_icon.png" />
+    <None Remove="Assets\Logout_icon.png" />
+    <None Remove="Assets\Monitoring_icon.png" />
+    <None Remove="Assets\NoImage.png" />
+    <None Remove="Assets\Profile_icon.png" />
+    <None Remove="Assets\Projects_icon.png" />
+    <None Remove="Assets\Purchases_icon.png" />
+    <None Remove="Assets\Resize_icon.png" />
+    <None Remove="Assets\Roboto.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.0" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ComponentsPageView.axaml.cs">
+      <DependentUpon>ComponentsPageView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MonitoringPageView.axaml.cs">
+      <DependentUpon>MonitoringPageView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ProjectsPageView.axaml.cs">
+      <DependentUpon>ProjectsPageView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PurchasesPageView.axaml.cs">
+      <DependentUpon>PurchasesPageView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>
