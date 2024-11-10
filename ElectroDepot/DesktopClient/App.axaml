@@ -11,10 +11,14 @@
 
   <Application.Styles>
     <FluentTheme />
-    <StyleInclude Source="avares://DesktopClient/Templates/MenuButton.xaml"/>
   </Application.Styles>
 
   <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source='avares://DesktopClient/Templates/MenuButton.axaml' />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
     <FontFamily x:Key="Roboto">avares://DesktopClient/Assets#Roboto</FontFamily>
 
     <!-- Primary Purple -->

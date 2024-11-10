@@ -2,63 +2,83 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:DesktopClient.Templates">
 
-  <!--
-    Additional resources 
-    Using Control Themes:
-         https://docs.avaloniaui.net/docs/basics/user-interface/styling/control-themes
-    Using Theme Variants:
-         https://docs.avaloniaui.net/docs/guides/styles-and-resources/how-to-use-theme-variants
-  -->
-  
   <Design.PreviewWith>
     <StackPanel>      
         <StackPanel>
-          <controls:MenuButton />
+          <controls:MenuButton/>
         </StackPanel>
     </StackPanel>
   </Design.PreviewWith>
- 
-  <ControlTheme x:Key="{x:Type controls:MenuButton}" TargetType="controls:MenuButton">
 
+  <ControlTheme x:Key="{x:Type controls:MenuButton}" TargetType="controls:MenuButton">
     
     <Setter Property="Template">
       <ControlTemplate>
-        <Border Background="{DynamicResource UIDeepPurple}" Padding="5">
+        <Border>
           <Grid>
             <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
+              <RowDefinition Height="55" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="20" />
-              <ColumnDefinition Width="auto" />
-              <ColumnDefinition Width="20" />
+              <ColumnDefinition Width="10" />
+              <ColumnDefinition Width="50" />
+              <ColumnDefinition Width="10" />
               <ColumnDefinition Width="*" />
-              <ColumnDefinition Width="20" />
+              <ColumnDefinition Width="10" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="0">
-            </Grid>
+            <!-- Placeholder Column -->
+            <Grid Grid.Row="0" Grid.Column="0" />
 
+            <!-- Icon Column -->
             <Grid Grid.Row="0" Grid.Column="1">
               <Image Source="{TemplateBinding Icon}" 
+                     x:Name="Icon1"
                      Width="50" 
-                     Height="50"></Image>
+                     Height="50"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"/>
             </Grid>            
-            
-            <Grid Grid.Row="0" Grid.Column="2">
-            </Grid>
 
+            <!-- Placeholder Column -->
+            <Grid Grid.Row="0" Grid.Column="2" />
+
+            <!-- Label Column -->
             <Grid Grid.Row="0" Grid.Column="3">
-              <Label Content="{TemplateBinding Name}" 
-                     FontSize="36" 
+              <Label FontSize="24"
+                     x:Name="Lable1"
+                     Content="{TemplateBinding Name}" 
                      FontFamily="{StaticResource Roboto}"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Center"></Label>
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center">
+                
+              </Label>
             </Grid>
 
-            <Grid Grid.Row="0" Grid.Column="4">
-            </Grid>
+            <!-- Placeholder Column -->
+            <Grid Grid.Row="0" Grid.Column="4" />
           </Grid>
+          
+          <!-- Border Style for Hover and Pressed States -->
+          <Border.Styles>
+            <Style Selector="Border">
+              <Setter Property="Background" Value="{DynamicResource UIDeepPurple}"/>
+              <Setter Property="Padding" Value="5"></Setter>
+              <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{DynamicResource UIAccentPurple}"/>
+              </Style>
+              <Style Selector="^:pointerover Grid Image#Icon1">
+                <Setter Property="Width" Value="60"/>
+                <Setter Property="Height" Value="60"/>
+              </Style>
+              <Style Selector="^:pointerover Grid Label#Lable1">
+                <Setter Property="FontSize" Value="25"/>
+              </Style>
+              <Style Selector="^:pressed">
+                <Setter Property="Background" Value="{DynamicResource UIOffWhite}"/>
+              </Style>
+            </Style>
+          </Border.Styles>
         </Border>
       </ControlTemplate>
     </Setter>

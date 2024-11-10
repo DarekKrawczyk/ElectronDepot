@@ -9,7 +9,7 @@ namespace DesktopClient.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         [ObservableProperty]
-        private bool _isPanelOpen = true;
+        private bool _isPanelOpen = false;
 
         [RelayCommand]
         private void TriggerPane()
@@ -24,6 +24,8 @@ namespace DesktopClient.ViewModels
             new ListItemTemplate(typeof(ProjectsPageViewModel)),
             new ListItemTemplate(typeof(PurchasesPageViewModel)),
             new ListItemTemplate(typeof(MonitoringPageViewModel)),
+            new ListItemTemplate(typeof(ProfilePageViewModel)),
+            new ListItemTemplate(typeof(LogoutPageViewModel)),
         };
 
         [ObservableProperty]
