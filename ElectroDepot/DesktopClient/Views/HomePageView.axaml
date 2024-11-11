@@ -1,19 +1,28 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:vm="using:DesktopClient.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:DesktopClient.Templates"
              mc:Ignorable="d" 
              d:DesignHeight="720"
              d:DesignWidth="1320" 
-             x:Class="DesktopClient.Views.HomePageView">
+             x:Class="DesktopClient.Views.HomePageView"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+  x:DataType="vm:HomePageViewModel">
+
+  <Design.DataContext>
+    <vm:HomePageViewModel/>
+  </Design.DataContext>
+  
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="auto"></RowDefinition>
       <RowDefinition Height="auto"></RowDefinition>
-      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="auto"></RowDefinition>
     </Grid.RowDefinitions>
 
+   <!-- First row -->
     <Grid Grid.Row="0">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -23,6 +32,7 @@
         <ColumnDefinition Width="*"></ColumnDefinition>
       </Grid.ColumnDefinitions>
 
+      <!-- Latest projects -->
       <Grid Grid.Column="0">
           <StackPanel Orientation="Vertical"
                       Margin="10">
@@ -44,13 +54,15 @@
           </StackPanel>
       </Grid>
 
+      <!-- Separator-->
       <Grid Grid.Column="1">
         <Border Width="4"
                 Background="{DynamicResource UIMediumGray}" 
-                Margin="0,10" 
+                Margin="0,20" 
                 HorizontalAlignment="Stretch"/>
       </Grid>
 
+      <!-- Suppliers -->
       <Grid Grid.Column="2">
         <StackPanel Orientation="Vertical"
                     Margin="10">
@@ -63,9 +75,11 @@
             Suppliers
           </Label>
           <UniformGrid Rows="2"
-                       Columns="2"
+                       Columns="3"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center">
+            <controls:Supplier_Node Margin="10"/>
+            <controls:Supplier_Node Margin="10"/>
             <controls:Supplier_Node Margin="10"/>
             <controls:Supplier_Node Margin="10"/>
             <controls:Supplier_Node Margin="10"/>
@@ -74,13 +88,15 @@
         </StackPanel>
       </Grid>
 
+      <!-- Separator -->
       <Grid Grid.Column="3">
         <Border Width="4" 
                 Background="{DynamicResource UIMediumGray}" 
-                Margin="0 0 0 0" 
+                Margin="0, 20" 
                 HorizontalAlignment="Stretch"/>
       </Grid>
 
+      <!-- Just bought -->
       <Grid Grid.Column="4">
         <StackPanel Orientation="Vertical"
                     Margin="10">
@@ -103,49 +119,109 @@
 
     </Grid>
 
+    <!-- Separator -->
     <Grid Grid.Row="1">
       <Border Height="4" 
               Background="{DynamicResource UIMediumGray}"
-              Margin="10,0" 
+              Margin="20,0" 
               HorizontalAlignment="Stretch"/>
     </Grid>
 
+   <!-- Second row -->
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="70*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
         <ColumnDefinition Width="auto"></ColumnDefinition>
-        <ColumnDefinition Width="30*"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
       </Grid.ColumnDefinitions>
 
-      <Grid Grid.Column="0">
+      <!-- Last 12 months spendings-->
+      <Grid Grid.Column="0"
+            Margin="10">
         <StackPanel Orientation="Vertical">
           <Label FontFamily="{DynamicResource Roboto}"
-                 FontSize="36"
+                 FontSize="28"
                  FontWeight="Bold"
                  VerticalAlignment="Center"
-                 HorizontalAlignment="Center">
+                 HorizontalAlignment="Center"
+                 Margin="0 0 0 10">
             Last 12 months spendings
           </Label>
+            <lvc:CartesianChart 
+              Series="{Binding Series}" 
+              XAxes="{Binding XAxes}"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Height="300"
+              Width="800"
+            >
+          </lvc:CartesianChart>
         </StackPanel>
       </Grid>
 
+      <!-- Separator -->
       <Grid Grid.Column="1">
-        <Border Width="4" Background="{DynamicResource UIMediumGray}" Margin="10,5" HorizontalAlignment="Stretch"/>
+        <Border Width="4"
+                Background="{DynamicResource UIMediumGray}" 
+                Margin="0,20" 
+                HorizontalAlignment="Stretch"/>
       </Grid>
       
+      <!-- Shortcuts -->
       <Grid Grid.Column="2">
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical"
+                    Margin="10">
           <Label FontFamily="{DynamicResource Roboto}"
-                 FontSize="36"
+                 FontSize="28"
                  FontWeight="Bold"
                  VerticalAlignment="Center"
-                 HorizontalAlignment="Center">
-            Add new
+                 HorizontalAlignment="Center"
+                 Margin="0 0 0 10">
+            Shortcuts
           </Label>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+              <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40*"></ColumnDefinition>
+                <ColumnDefinition Width="60*"></ColumnDefinition>
+              </Grid.ColumnDefinitions>
+
+              <Grid Grid.Column="0">
+                <controls:General_Use_Menu_Button Name="Project" Margin="10"/>
+              </Grid>
+              
+              <Grid Grid.Column="1">
+                <controls:General_Use_Menu_Button Name="Supplier"  Margin="10"/>
+              </Grid>
+            </Grid>
+            
+            <Grid Grid.Row="1">
+              <controls:General_Use_Menu_Button Name="Manufacturer" Margin="10"/>
+            </Grid>
+            
+            <Grid Grid.Row="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60*"></ColumnDefinition>
+                <ColumnDefinition Width="40*"></ColumnDefinition>
+              </Grid.ColumnDefinitions>
+
+              <Grid Grid.Column="0">
+                <controls:General_Use_Menu_Button Name="Component" Margin="10"/>
+              </Grid>
+
+              <Grid Grid.Column="1">
+                <controls:General_Use_Menu_Button Name="Purchase" Margin="10"/>
+              </Grid>
+            </Grid>
+          </Grid>
         </StackPanel>
       </Grid>
-
     </Grid>
-
   </Grid>
 </UserControl>
