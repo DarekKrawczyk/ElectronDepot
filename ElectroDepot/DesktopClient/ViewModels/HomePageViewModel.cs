@@ -6,11 +6,23 @@ using LiveChartsCore.Kernel.Sketches;
 using System;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using System.Collections.ObjectModel;
+using DesktopClient.Models;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace DesktopClient.ViewModels
 {
-    public class HomePageViewModel : ViewModelBase
+    public partial class HomePageViewModel : ViewModelBase
     {
+        public ObservableCollection<SupplierContainer> Suppliers { get; set; } = new ObservableCollection<SupplierContainer>()
+        {
+            new SupplierContainer(new Supplier(0, "Digikey", "https://www.digikey.pl/", ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/TempLogo.png")))),
+            new SupplierContainer(new Supplier(0, "Digikey", "https://www.digikey.pl/", ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/TempLogo.png")))),
+            new SupplierContainer(new Supplier(2, "Botland", "https://botland.com.pl/", ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/Botland_icon.jpg")))),
+            new SupplierContainer(new Supplier(3, "Botland", "https://botland.com.pl/", ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/Botland_icon.jpg")))),
+        };
+
         public ISeries[] Series { get; set; } = [
             new ColumnSeries<DateTimePoint>
             {

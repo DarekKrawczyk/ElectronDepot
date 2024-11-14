@@ -45,13 +45,14 @@
                  Margin="0 0 0 10">
             Latest projects
           </Label>
-          <StackPanel Orientation="Horizontal"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      MinWidth="485">
-            <controls:Menu_Project_Node Margin="10"/>
-            <controls:Menu_Project_Node Margin="10"/>
-          </StackPanel>
+          <ScrollViewer Width="485" 
+                        HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <UniformGrid Rows="1">
+              <controls:Menu_Project_Node Margin="10"/>
+              <controls:Menu_Project_Node Margin="10"/>
+              <controls:Menu_Project_Node Margin="10"/>
+            </UniformGrid>
+          </ScrollViewer>
         </StackPanel>
       </Grid>
 
@@ -75,17 +76,25 @@
                  Margin="0 0 0 10">
             Suppliers
           </Label>
-          <UniformGrid Rows="2"
-                       Columns="3"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center">
-            <CustomControls:SupplierNodeButton Margin="10"/>
-            <CustomControls:SupplierNodeButton Margin="10"/>
-            <CustomControls:SupplierNodeButton Margin="10"/>
-            <CustomControls:SupplierNodeButton Margin="10"/>
-            <CustomControls:SupplierNodeButton Margin="10"/>
-            <CustomControls:SupplierNodeButton Margin="10"/>
-          </UniformGrid>
+          <ScrollViewer Height="270">
+            <ItemsControl ItemsSource="{Binding Suppliers}" HorizontalAlignment="Left" VerticalAlignment="Top">
+              <!-- Define the panel as UniformGrid -->
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <UniformGrid Columns="3" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+
+              <!-- Template for displaying each item -->
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <CustomControls:SupplierNodeButton Image="{Binding Supplier.Image}"
+                                                       Command="{Binding ItemClickedCommand}"
+                                                       Margin="10"/>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
         </StackPanel>
       </Grid>
 

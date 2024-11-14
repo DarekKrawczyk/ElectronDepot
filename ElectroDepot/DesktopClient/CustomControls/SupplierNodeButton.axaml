@@ -9,35 +9,50 @@
   <ControlTheme x:Key="{x:Type controls:SupplierNodeButton}" TargetType="controls:SupplierNodeButton">
     <Setter Property="Template">
       <ControlTemplate TargetType="controls:SupplierNodeButton">
-        <!-- Use a Border or Panel to define the visual style -->
-        <Border Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                x:Name="MainBorder"
-                Padding="0">
-          <Grid Background="{DynamicResource UIDeepPurple}"
-                MinHeight="100"
-                MaxHeight="100"
-                MinWidth="100"
-                MaxWidth="100"
-                Width="100"
-                Height="100"
-                x:Name="SupplierGrid"
-                RowDefinitions="*"
-                ColumnDefinitions="*">
+        <Button x:Name="OutterButton" 
+                Background="Transparent" 
+                BorderBrush="Transparent"
+                Command="{TemplateBinding Command}"
+                CommandParameter="{TemplateBinding CommandParameter}">
+          <Button.Content>
+            <!-- Use a Border or Panel to define the visual style -->
+            <Border x:Name="MainBorder" Padding="0">
+              <Grid Width="100" Height="100"
+                    Margin="0"
+                    x:Name="SupplierGrid"
+                    RowDefinitions="*"
+                    ColumnDefinitions="*">
 
-            <!-- Image Container -->
-            <Border BorderThickness="1"
-                    x:Name="SupplierBorder"
-                    Margin="0,0,0,0">
-              <Image x:Name="Icon1"/>
+                <!-- Image Container -->
+                <Border BorderThickness="1"
+                        x:Name="SupplierBorder"
+                        Margin="0,0,0,0">
+                  <Image x:Name="Icon1"/>
+                </Border>
+              </Grid>
             </Border>
-          </Grid>
-          <Border.Styles>
+          </Button.Content>
+
+          <Button.Styles>
+            <!-- Outter button -->
+            <Style Selector="Button#OutterButton">
+              <Setter Property="Margin" Value="0"/>
+              <Setter Property="Padding" Value="0"/>
+              <Setter Property="VerticalAlignment" Value="Center"/>
+              <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+
+            <!-- Outter button : click-->
+            <Style Selector="Button#OutterButton:pressed Border#MainBorder:pointerover">
+              <Setter Property="Background" Value="White"/>
+            </Style>
+            
             <!-- Border style -->
             <Style Selector="Border#MainBorder">
               <Setter Property="Background" Value="{DynamicResource UIDeepPurple}"/>
               <Setter Property="BorderBrush" Value="{DynamicResource UIDarkGray}"/>
+              <Setter Property="VerticalAlignment" Value="Center"/>
+              <Setter Property="HorizontalAlignment" Value="Center"/>
               <Setter Property="BorderThickness" Value="1"/>
               <Setter Property="Padding" Value="0"/>
 
@@ -55,10 +70,9 @@
                 <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
                 <Setter Property="Margin" Value="0,0,0,0"></Setter>
-                <Setter Property="Stretch" Value="Uniform"></Setter>
               </Style>
             </Style>
-            
+
             <!-- Hover border style -->
             <Style Selector="Border#MainBorder:pointerover">
               <Setter Property="Background" Value="{DynamicResource UIAccentPurple}"/>
@@ -67,9 +81,8 @@
                 <Setter Property="Height" Value="100"></Setter>
               </Style>
             </Style>
-            
-          </Border.Styles>
-        </Border>
+          </Button.Styles>
+      </Button>
       </ControlTemplate>
     </Setter>
   </ControlTheme>

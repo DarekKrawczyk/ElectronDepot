@@ -1,6 +1,7 @@
 ﻿using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DesktopClient.Models;
 using System;
 using System.Collections.ObjectModel;
 
@@ -23,6 +24,8 @@ namespace DesktopClient.ViewModels
             //CurrentPage = new ComponentsPageViewModel();
             //_currentPage = new HomePageViewModel();
         }
+
+
 
         public ObservableCollection<ListItemTemplate> Items { get; set; } = new()
         {
