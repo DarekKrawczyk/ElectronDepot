@@ -1,0 +1,76 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:DesktopClient.CustomControls">
+
+  <Design.PreviewWith>
+    <controls:SupplierNodeButton />
+  </Design.PreviewWith>
+
+  <ControlTheme x:Key="{x:Type controls:SupplierNodeButton}" TargetType="controls:SupplierNodeButton">
+    <Setter Property="Template">
+      <ControlTemplate TargetType="controls:SupplierNodeButton">
+        <!-- Use a Border or Panel to define the visual style -->
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                x:Name="MainBorder"
+                Padding="0">
+          <Grid Background="{DynamicResource UIDeepPurple}"
+                MinHeight="100"
+                MaxHeight="100"
+                MinWidth="100"
+                MaxWidth="100"
+                Width="100"
+                Height="100"
+                x:Name="SupplierGrid"
+                RowDefinitions="*"
+                ColumnDefinitions="*">
+
+            <!-- Image Container -->
+            <Border BorderThickness="1"
+                    x:Name="SupplierBorder"
+                    Margin="0,0,0,0">
+              <Image x:Name="Icon1"/>
+            </Border>
+          </Grid>
+          <Border.Styles>
+            <!-- Border style -->
+            <Style Selector="Border#MainBorder">
+              <Setter Property="Background" Value="{DynamicResource UIDeepPurple}"/>
+              <Setter Property="BorderBrush" Value="{DynamicResource UIDarkGray}"/>
+              <Setter Property="BorderThickness" Value="1"/>
+              <Setter Property="Padding" Value="0"/>
+
+              <!-- Image styles -->
+              <Style Selector="^ Grid#SupplierGrid Border#SupplierBorder Image#Icon1">
+                <Setter Property="Transitions">
+                  <Transitions>
+                    <DoubleTransition Property="Width" Duration="0:0:0.1"/>
+                    <DoubleTransition Property="Height" Duration="0:0:0.1"/>
+                  </Transitions>
+                </Setter>
+                <Setter Property="Source" Value="{TemplateBinding Image}"></Setter>
+                <Setter Property="Width" Value="70"></Setter>
+                <Setter Property="Height" Value="70"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Margin" Value="0,0,0,0"></Setter>
+                <Setter Property="Stretch" Value="Uniform"></Setter>
+              </Style>
+            </Style>
+            
+            <!-- Hover border style -->
+            <Style Selector="Border#MainBorder:pointerover">
+              <Setter Property="Background" Value="{DynamicResource UIAccentPurple}"/>
+              <Style Selector="^ Grid#SupplierGrid Border#SupplierBorder Image#Icon1">
+                <Setter Property="Width" Value="100"></Setter>
+                <Setter Property="Height" Value="100"></Setter>
+              </Style>
+            </Style>
+            
+          </Border.Styles>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

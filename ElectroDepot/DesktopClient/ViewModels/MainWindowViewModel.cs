@@ -17,6 +17,13 @@ namespace DesktopClient.ViewModels
             IsPanelOpen = !IsPanelOpen;
         }
 
+        public MainWindowViewModel()
+        {
+            OnSelectedListItemChanged(Items[0]);
+            //CurrentPage = new ComponentsPageViewModel();
+            //_currentPage = new HomePageViewModel();
+        }
+
         public ObservableCollection<ListItemTemplate> Items { get; set; } = new()
         {
             new ListItemTemplate(typeof(HomePageViewModel)),
@@ -29,7 +36,24 @@ namespace DesktopClient.ViewModels
         };
 
         [ObservableProperty]
-        private ViewModelBase _currentPage = new HomePageViewModel();
+        private ViewModelBase _currentPage;
+
+        partial void OnSelectedListItemChanged(ListItemTemplate value)
+        {
+            if (value is null)
+            {
+                return;
+            }
+            var instance = Activator.CreateInstance(value.ModelType);
+            if (instance is null)
+            {
+                return;
+            }
+            CurrentPage = (ViewModelBase)instance;
+        }
+
+        [ObservableProperty]
+        private ListItemTemplate _selectedListItem;
     }
 
     public class ListItemTemplate

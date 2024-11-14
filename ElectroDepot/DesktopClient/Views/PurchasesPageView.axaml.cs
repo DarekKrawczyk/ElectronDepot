@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace DesktopClient.Views;
 
-public partial class PurchasesView : UserControl
+public partial class PurchasesPageView : UserControl
 {
-    public PurchasesView()
+    public PurchasesPageView()
     {
         InitializeComponent();
     }
