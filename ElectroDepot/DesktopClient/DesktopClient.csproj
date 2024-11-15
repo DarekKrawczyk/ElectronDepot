@@ -28,6 +28,7 @@
     <None Remove="Assets\Resize_icon.png" />
     <None Remove="Assets\Roboto.ttf" />
     <None Remove="Assets\Supplier_icon.png" />
+    <None Remove="Assets\Temperature_Sensor_Icon.png" />
   </ItemGroup>
 
   <ItemGroup>

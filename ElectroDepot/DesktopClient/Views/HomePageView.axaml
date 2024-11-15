@@ -45,7 +45,7 @@
                  Margin="0 0 0 10">
             Latest projects
           </Label>
-          <ScrollViewer Width="485" 
+          <ScrollViewer Width="485"
                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
             <UniformGrid Rows="1">
               <controls:Menu_Project_Node Margin="10"/>
@@ -88,9 +88,9 @@
               <!-- Template for displaying each item -->
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <CustomControls:SupplierNodeButton Image="{Binding Supplier.Image}"
-                                                       Command="{Binding ItemClickedCommand}"
-                                                       Margin="10"/>
+                  <CustomControls:SupplierNodeButton Image="{Binding Supplier.Image}"
+                                                     Command="{Binding ItemClickedCommand}"
+                                                     Margin="10"/>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -118,11 +118,11 @@
                  Margin="0 0 0 10">
             Just bought
           </Label>
-          <StackPanel Orientation="Vertical">
-            <controls:Menu_Bought_Component_Node Margin="10"/>
-            <controls:Menu_Bought_Component_Node Margin="10"/>
-            <controls:Menu_Bought_Component_Node Margin="10"/>
-            <controls:Menu_Bought_Component_Node Margin="10"/>
+          <StackPanel Orientation="Vertical" Margin="10" Spacing="10">
+            <CustomControls:ComponentNodeButton/>
+            <CustomControls:ComponentNodeButton/>
+            <CustomControls:ComponentNodeButton/>
+            <CustomControls:ComponentNodeButton/>
           </StackPanel>
         </StackPanel>
       </Grid>
