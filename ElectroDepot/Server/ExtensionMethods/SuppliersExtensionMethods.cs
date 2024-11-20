@@ -26,7 +26,7 @@ namespace Server.ExtensionMethods
 
         public static SupplierDTO ToSupplierDTO(this Supplier supplier)
         {
-            return new SupplierDTO(ID: supplier.SupplierID, Name: supplier.Name, Website: supplier.Website);
+            return new SupplierDTO(ID: supplier.SupplierID, Name: supplier.Name, Website: supplier.Website, Image: supplier.Image);
         }
     }
 }

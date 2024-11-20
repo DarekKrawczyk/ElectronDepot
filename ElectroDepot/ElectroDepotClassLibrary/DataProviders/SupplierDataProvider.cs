@@ -2,6 +2,7 @@
 using ElectroDepotClassLibrary.Endpoints;
 using System.Text.Json;
 using System.Text;
+using ElectroDepotClassLibrary.Models;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
@@ -14,11 +15,11 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// <summary>
         /// Create new supplier in database.
         /// </summary>
-        /// <param name="supplierDTO"></param>
+        /// <param name="supplier"></param>
         /// <returns></returns>
-        public async Task<bool> CreateSupplier(CreateSupplierDTO supplierDTO)
+        public async Task<bool> CreateSupplier(Supplier supplier)
         {
-            var json = JsonSerializer.Serialize(supplierDTO);
+            var json = JsonSerializer.Serialize(supplier.ToCreateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             string url = SupplierEndpoints.Create();
@@ -35,7 +36,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// Get all suppliers from database.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<SupplierDTO>> GetAllSuppliers()
+        public async Task<IEnumerable<Supplier>> GetAllSuppliers()
         {
             try
             {
@@ -49,16 +50,16 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<SupplierDTO> categories = JsonSerializer.Deserialize<IEnumerable<SupplierDTO>>(json, options);
-                    return categories;
+                    return categories.Select(x=>x.ToModel()).ToList();
                 }
                 else
                 {
-                    return null;
+                    return new List<Supplier>();
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                return new List<Models.Supplier>();
             }
         }
         /// <summary>
@@ -66,7 +67,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public async Task<SupplierDTO> GetSupplierByID(int ID)
+        public async Task<Supplier> GetSupplierByID(int ID)
         {
             try
             {
@@ -81,7 +82,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     SupplierDTO? supplier = JsonSerializer.Deserialize<SupplierDTO>(json, options);
 
-                    return supplier;
+                    return supplier.ToModel();
                 }
                 else
                 {
@@ -98,7 +99,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public async Task<SupplierDTO> GetSupplierByName(string name)
+        public async Task<Models.Supplier> GetSupplierByName(string name)
         {
             try
             {
@@ -113,7 +114,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     SupplierDTO? supplier = JsonSerializer.Deserialize<SupplierDTO>(json, options);
 
-                    return supplier;
+                    return supplier.ToModel();
                 }
                 else
                 {
@@ -128,16 +129,16 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// <summary>
         /// Updates supplier in database.
         /// </summary>
-        /// <param name="category"></param>
+        /// <param name="supplier"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateSupplier(SupplierDTO supplierDTO)
+        public async Task<bool> UpdateSupplier(Models.Supplier supplier)
         {
-            UpdateSupplierDTO updateDTO = supplierDTO.ToUpdateSupplierDTO();
+            UpdateSupplierDTO updateDTO = supplier.ToUpdateDTO();
 
             var json = JsonSerializer.Serialize(updateDTO);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = SupplierEndpoints.Update(supplierDTO.ID);
+            string url = SupplierEndpoints.Update(supplier.ID);
             var response = await HTTPClient.PutAsync(url, content);
 
             return response.IsSuccessStatusCode;
@@ -145,11 +146,11 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// <summary>
         /// Deletes supplier from database.
         /// </summary>
-        /// <param name="supplierDTO"></param>
+        /// <param name="supplier"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteSupplier(SupplierDTO supplierDTO)
+        public async Task<bool> DeleteSupplier(Models.Supplier supplier)
         {
-            string url = SupplierEndpoints.Delete(supplierDTO.ID);
+            string url = SupplierEndpoints.Delete(supplier.ID);
             var response = await HTTPClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }

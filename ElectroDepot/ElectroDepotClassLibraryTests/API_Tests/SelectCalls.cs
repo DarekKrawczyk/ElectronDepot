@@ -1,5 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
-using System.Linq;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.TestsOperations
@@ -12,7 +12,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
         }
         #region Users
         [Fact]
-        private async Task Get_All_Users()
+        public async Task Get_All_Users()
         {
             try
             {
@@ -368,6 +368,38 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 foreach(OwnsComponentDTO ownComp in ownedComponents)
                 {
                     Console.WriteLine(ownComp.ToString());
+                }
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_All_Suppliers()
+        {
+            try
+            {
+                Supplier[] suppliers = new Supplier[]
+                {
+                    new Supplier(id: 0, name: "DigiKey", website: "https://www.digikey.pl/", image: new byte[]{ }),
+                    new Supplier(id: 1, name: "Botland", website: "https://botland.com.pl/", image: new byte[]{ }),
+                    new Supplier(id: 2, name: "Mouser", website: "https://www.mouser.com/", image: new byte[]{ }),
+                    new Supplier(id: 3, name: "Kamami", website: "https://kamami.pl/", image: new byte[]{ }),
+                    new Supplier(id: 4, name: "M-Salamon", website: "https://msalamon.pl/", image: new byte[]{ }),
+                    new Supplier(id: 5, name: "Allegro", website: "https://allegro.pl/", image: new byte[]{ }),
+                    new Supplier(id: 6, name: "AliExpress", website: "https://pl.aliexpress.com/", image: new byte[]{ })
+                };
+                IEnumerable<Supplier> allSuppliers = await SupplierDP.GetAllSuppliers();
+
+                foreach (Supplier supplierFromDB in allSuppliers)
+                {
+                    Console.WriteLine(supplierFromDB.ToString());
+                    if (!suppliers.Any(x=>x.Name == supplierFromDB.Name && x.Website == supplierFromDB.Website))
+                    {
+                        Assert.Fail($"Supplier '{supplierFromDB.Name}' not found!");
+                    }
                 }
             }
             catch (Exception exception)

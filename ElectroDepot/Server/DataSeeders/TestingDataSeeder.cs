@@ -63,14 +63,17 @@ public static class TestingDataSeeder
             context.Categories.AddRange(categories);
             await context.SaveChangesAsync();
 
+            // Seed Suppliers
+            string fullPath = "D:\\Repo\\ElectronDepot\\ElectroDepot\\Server\\Assests\\";
             List<Supplier> suppliers = new List<Supplier>
             {
-                new Supplier { Name = "Botland", Website = "https://botland.com.pl/" },
-                new Supplier { Name = "MSalamon", Website = "https://msalamon.pl/" },
-                new Supplier { Name = "DigiKey", Website = "https://www.digikey.pl/" },
-                new Supplier { Name = "Mouser", Website = "https://eu.mouser.com/" },
-                new Supplier { Name = "Aliexpress", Website = "https://pl.aliexpress.com//" },
-                new Supplier { Name = "Kamami", Website = "https://kamami.pl/" }
+                new Supplier { Name = "DigiKey", Website = "https://www.digikey.pl/", Image = File.ReadAllBytes(fullPath + "DigiKeyIcon.png") },
+                new Supplier { Name = "Botland", Website = "https://botland.com.pl/", Image = File.ReadAllBytes(fullPath + "BotlandIcon.png") },
+                new Supplier { Name = "Mouser", Website = "https://www.mouser.com/", Image = File.ReadAllBytes(fullPath + "MouserIcon.png") },
+                new Supplier { Name = "Kamami", Website = "https://kamami.pl/", Image = File.ReadAllBytes(fullPath + "KamamiIcon.png") },
+                new Supplier { Name = "M-Salamon", Website = "https://msalamon.pl/", Image = File.ReadAllBytes(fullPath + "MSalamonIcon.png") },
+                new Supplier { Name = "Allegro", Website = "https://allegro.pl/", Image = File.ReadAllBytes(fullPath + "AllegroIcon.png") },
+                new Supplier { Name = "AliExpress", Website = "https://pl.aliexpress.com/", Image = File.ReadAllBytes(fullPath + "AliexpressIcon.png") },
             };
             context.Suppliers.AddRange(suppliers);
             await context.SaveChangesAsync();
