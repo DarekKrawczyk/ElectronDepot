@@ -59,7 +59,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
             catch (Exception ex)
             {
-                return new List<Models.Supplier>();
+                return new List<Supplier>();
             }
         }
         /// <summary>
@@ -99,7 +99,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public async Task<Models.Supplier> GetSupplierByName(string name)
+        public async Task<Supplier> GetSupplierByName(string name)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// </summary>
         /// <param name="supplier"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateSupplier(Models.Supplier supplier)
+        public async Task<bool> UpdateSupplier(Supplier supplier)
         {
             UpdateSupplierDTO updateDTO = supplier.ToUpdateDTO();
 
@@ -148,7 +148,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// </summary>
         /// <param name="supplier"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteSupplier(Models.Supplier supplier)
+        public async Task<bool> DeleteSupplier(Supplier supplier)
         {
             string url = SupplierEndpoints.Delete(supplier.ID);
             var response = await HTTPClient.DeleteAsync(url);

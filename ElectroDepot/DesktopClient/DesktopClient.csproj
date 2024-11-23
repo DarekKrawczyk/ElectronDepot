@@ -43,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ElectroDepotClassLibrary\ElectroDepotClassLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Views\ComponentsPageView.axaml.cs">
       <DependentUpon>ComponentsPageView.axaml</DependentUpon>
     </Compile>

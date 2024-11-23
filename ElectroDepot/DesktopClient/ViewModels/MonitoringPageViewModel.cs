@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ElectroDepotClassLibrary.Stores;
 
 namespace DesktopClient.ViewModels
 {
-    internal class MonitoringPageViewModel : ViewModelBase
+    public class MonitoringPageViewModel : ViewModelBase
     {
+        public MonitoringPageViewModel(DatabaseStore databaseStore) : base(databaseStore)
+        {
+        }
+
+        public override void Dispose()
+        {
+        }
     }
 }

@@ -392,6 +392,8 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                     new Supplier(id: 6, name: "AliExpress", website: "https://pl.aliexpress.com/", image: new byte[]{ })
                 };
                 IEnumerable<Supplier> allSuppliers = await SupplierDP.GetAllSuppliers();
+                Assert.NotEmpty(allSuppliers);
+                Assert.NotNull(allSuppliers);
 
                 foreach (Supplier supplierFromDB in allSuppliers)
                 {

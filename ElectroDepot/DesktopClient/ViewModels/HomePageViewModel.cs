@@ -1,27 +1,21 @@
-﻿using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
+﻿using System;
+using System.Collections.ObjectModel;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel.Sketches;
-using System;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
-using System.Collections.ObjectModel;
-using DesktopClient.Models;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
+using DesktopClient.Containers;
+using ElectroDepotClassLibrary.Stores;
+using ElectroDepotClassLibrary.Models;
+using System.Data;
 
 namespace DesktopClient.ViewModels
 {
     public partial class HomePageViewModel : ViewModelBase
     {
-        public ObservableCollection<SupplierContainer> Suppliers { get; set; } = new ObservableCollection<SupplierContainer>()
-        {
-            new SupplierContainer(new Supplier(0, "Digikey", "https://www.digikey.pl/", ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/TempLogo.png")))),
-            new SupplierContainer(new Supplier(0, "Digikey", "https://www.digikey.pl/", ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/TempLogo.png")))),
-            new SupplierContainer(new Supplier(2, "Botland", "https://botland.com.pl/", ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/Botland_icon.jpg")))),
-            new SupplierContainer(new Supplier(3, "Botland", "https://botland.com.pl/", ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/Botland_icon.jpg")))),
-        };
+        public ObservableCollection<SupplierContainer> Suppliers { get; set; }
 
         public ISeries[] Series { get; set; } = [
             new ColumnSeries<DateTimePoint>
@@ -55,5 +49,26 @@ namespace DesktopClient.ViewModels
         public ICartesianAxis[] XAxes { get; set; } = [
             new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM"))
         ];
+        
+        public HomePageViewModel(DatabaseStore databaseStore) : base(databaseStore)
+        {
+            Suppliers = new ObservableCollection<SupplierContainer>();
+            DatabaseStore.SupplierStore.SuppliersLoaded += SuppliersLoadedHandler;
+            DatabaseStore.SupplierStore.Load();
+        }
+
+        private void SuppliersLoadedHandler()
+        {
+            Suppliers.Clear();
+            foreach(Supplier supplier in DatabaseStore.SupplierStore.Suppliers)
+            {
+                Suppliers.Add(new SupplierContainer(supplier));
+            }
+        }
+
+        public override void Dispose()
+        {
+            DatabaseStore.SupplierStore.SuppliersLoaded -= SuppliersLoadedHandler;
+        }
     }
 }
