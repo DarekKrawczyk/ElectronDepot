@@ -2,6 +2,7 @@
 using ElectroDepotClassLibrary.Endpoints;
 using System.Text.Json;
 using System.Text;
+using ElectroDepotClassLibrary.Models;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
@@ -77,7 +78,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<PurchaseItemDTO>> GetAllPurchaseItemsFromPurchase(PurchaseDTO purchase)
+        public async Task<IEnumerable<PurchaseItemDTO>> GetAllPurchaseItemsFromPurchase(Purchase purchase)
         {
             try
             {

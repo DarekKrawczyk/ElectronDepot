@@ -77,6 +77,72 @@ namespace Server.Controllers
         }
 
         /// <summary>
+        /// List of 12 elements. Last element is money spend this month, first element is money spend 11 months ago
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpGet("GetSpendingsForLastYearFromUser/{ID}")]
+        public async Task<ActionResult<IEnumerable<double>>> GetSpendingsForLastYearFromUser(int ID)
+        {
+            User foundUser = await _context.Users.FindAsync(ID);
+
+            if (foundUser == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<Purchase> purchases = await (from purchase in _context.Purchases
+                                                     join users in _context.Users
+                                                     on purchase.UserID equals users.UserID
+                                                     where users.UserID == foundUser.UserID &&
+                                                     purchase.PurchasedDate >= DateTime.Now.AddYears(-1)
+                                                     select new Purchase()
+                                                     {
+                                                         PurchaseID = purchase.PurchaseID,
+                                                         User = purchase.User,
+                                                         UserID = purchase.UserID,
+                                                         Supplier = purchase.Supplier,
+                                                         SupplierID = purchase.SupplierID,
+                                                         PurchasedDate = purchase.PurchasedDate,
+                                                         TotalPrice = purchase.TotalPrice,
+                                                     }).ToListAsync();
+
+            IGrouping<DateTime, Purchase>[] groupedByMonth = purchases.GroupBy(x => x.PurchasedDate).ToArray();
+
+            IEnumerable<(DateTime, double)> prices = groupedByMonth.Select(x => (x.Key, x.Sum(y => y.TotalPrice)));
+
+            DateTime now = DateTime.Now;
+            DateTime startMonth = new DateTime(now.Year, now.Month, 1).AddMonths(-11);
+
+            // Create a dictionary from the provided prices for quick lookup
+            var priceDict = prices
+                .GroupBy(p => new DateTime(p.Item1.Year, p.Item1.Month, 1)) // Group by month
+                .ToDictionary(g => g.Key, g => g.Sum(x => x.Item2)); // Sum values if multiple entries exist in the same month
+
+            // Create a list to hold the filled results
+            var result = new List<(DateTime, double)>();
+
+            // Iterate from startMonth to the current month
+            for (int i = 0; i < 12; i++)
+            {
+                DateTime month = startMonth.AddMonths(i);
+                if (priceDict.TryGetValue(month, out double value))
+                {
+                    result.Add((month, value));
+                }
+                else
+                {
+                    // If the month is missing, add a dummy value
+                    result.Add((month, 0.0));
+                }
+            }
+
+            IEnumerable<double> lastYearSpendings = result.Select(x => x.Item2);
+
+            return Ok(lastYearSpendings);
+        }
+
+        /// <summary>
         /// GET: ElectroDepot/Purchases/GetAll/{ID}
         /// </summary>
         /// <param name="ID"></param>

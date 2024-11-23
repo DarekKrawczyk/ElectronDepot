@@ -7,6 +7,7 @@
         public static string GetByID(int ID) => $"ElectroDepot/Purchases/GetByID/{ID}";
         public static string GetAllByUserID(int ID) => $"ElectroDepot/Purchases/GetAllByUserID/{ID}";
         public static string GetAllBySupplierID(int ID) => $"ElectroDepot/Purchases/GetAllBySupplierID/{ID}";
+        public static string GetSpendingsForLastYearFromUser(int ID) => $"ElectroDepot/Purchases/GetSpendingsForLastYearFromUser/{ID}";
         public static string Update(int ID) => $"ElectroDepot/Purchases/Update/{ID}";
         public static string Delete(int ID) => $"ElectroDepot/Purchases/Delete/{ID}";
     }

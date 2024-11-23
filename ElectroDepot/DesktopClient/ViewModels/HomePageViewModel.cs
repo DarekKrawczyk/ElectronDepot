@@ -9,8 +9,6 @@ using SkiaSharp;
 using DesktopClient.Containers;
 using ElectroDepotClassLibrary.Stores;
 using ElectroDepotClassLibrary.Models;
-using System.Data;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 
 namespace DesktopClient.ViewModels
@@ -19,6 +17,7 @@ namespace DesktopClient.ViewModels
     {
         public ObservableCollection<SupplierContainer> Suppliers { get; set; }
         public ObservableCollection<ComponentContainer> Components { get; set; }
+        public ObservableCollection<ProjectContainer> Projects { get; set; }
 
         public ISeries[] Series { get; set; } = [
             new ColumnSeries<DateTimePoint>
@@ -60,6 +59,7 @@ namespace DesktopClient.ViewModels
             {
                 Suppliers = new ObservableCollection<SupplierContainer>();
                 Components = new ObservableCollection<ComponentContainer>();
+                Projects = new ObservableCollection<ProjectContainer>();
             }
         }
 
@@ -72,6 +72,19 @@ namespace DesktopClient.ViewModels
             Components = new ObservableCollection<ComponentContainer>();
             DatabaseStore.ComponentStore.ComponentsLoaded += ComponentsLoadedHandler;
             DatabaseStore.ComponentStore.Load();
+
+            Projects = new ObservableCollection<ProjectContainer>();
+            DatabaseStore.ProjectStore.ProjectsLoaded += ProjectsLoadedHandler;
+            DatabaseStore.ProjectStore.Load();
+        }
+
+        private void ProjectsLoadedHandler()
+        {
+            Projects.Clear();
+            foreach(Project project in DatabaseStore.ProjectStore.Projects)
+            {
+                Projects.Add(new ProjectContainer(project));
+            }
         }
 
         private async void ComponentsLoadedHandler()
@@ -80,7 +93,7 @@ namespace DesktopClient.ViewModels
             foreach (Component component in DatabaseStore.ComponentStore.Components)
             {
                 int categoryID = component.CategoryID;
-                Category foundCategory = await DatabaseStore.CategoriesStore.DB.GetCategoryByID(categoryID);
+                Category foundCategory = await DatabaseStore.CategorieStore.DB.GetCategoryByID(categoryID);
                 
                 component.Category = foundCategory;
                 

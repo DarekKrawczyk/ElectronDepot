@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using ElectroDepotClassLibrary.Models;
 using System;
-using System.Diagnostics;
 
 namespace DesktopClient.Containers
 {

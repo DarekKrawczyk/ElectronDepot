@@ -80,8 +80,8 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 int[] ProjectsIDsOfJacekJaworek = new int[] { 0, 4 };
 
                 UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
-                IEnumerable<ProjectDTO> projectsOfUser = await ProjectDP.GetAllProjectOfUser(user);
-                foreach (ProjectDTO project in projectsOfUser)
+                IEnumerable<Project> projectsOfUser = await ProjectDP.GetAllProjectOfUser(user);
+                foreach (Project project in projectsOfUser)
                 {
                     // Bias is used to match with ids from TestingData.md
                     Console.WriteLine($"UserID: '{user.ID - Utility.UserIDBias}', Project: '{project.Name}'");
@@ -155,7 +155,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
 
                 int projectID = Utility.ProjectIDBias;
 
-                ProjectDTO project = await ProjectDP.GetProjectByID(projectID); 
+                Project project = await ProjectDP.GetProjectByID(projectID); 
                 Assert.NotNull(project);
 
                 IEnumerable<ComponentDTO> ComponentsOfProject = await ProjectDP.GetAllComponentsFromProject(project);
@@ -191,7 +191,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 UserDTO user = await UserDP.GetUserByUsername(username);
                 Assert.NotNull(user);
 
-                IEnumerable<PurchaseDTO> purchases = await PurchaseDP.GetAllPurchasesFromUser(user);
+                IEnumerable<Purchase> purchases = await PurchaseDP.GetAllPurchasesFromUser(user);
                 Assert.NotNull(purchases);
                 Assert.NotEmpty(purchases);
 
@@ -199,7 +199,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 bool isSame = purIDS.SequenceEqual(purchaseIDS);
                 Assert.True(isSame);
 
-                foreach (PurchaseDTO purchase in purchases)
+                foreach (Purchase purchase in purchases)
                 {
                     Console.WriteLine(purchase.ToString());
                 }
@@ -219,7 +219,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 int projectID = Utility.ProjectIDBias;
                 //
 
-                ProjectDTO project = await ProjectDP.GetProjectByID(projectID);
+                Project project = await ProjectDP.GetProjectByID(projectID);
                 Assert.NotNull(project);
 
                 double projectPrice = await ProjectDP.GetProjectPrice(project);
@@ -242,7 +242,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 // Data definition
                 int projectID = Utility.ProjectIDBias;
 
-                ProjectDTO project = await ProjectDP.GetProjectByID(projectID);
+                Project project = await ProjectDP.GetProjectByID(projectID);
                 Assert.NotNull(project);
 
                 double projectPrice = await ProjectDP.GetProjectPrice(project);
@@ -267,7 +267,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 int[] IDsArray = new int[] { 77, 2, 5, 38, 82, 67, 9 };
                 int[] quantities = new int[] { 1, 1, 2, 1, 2, 2, 2 };
 
-                PurchaseDTO purchase = await PurchaseDP.GetPurchaseByID(purchaseID);
+                Purchase purchase = await PurchaseDP.GetPurchaseByID(purchaseID);
                 Assert.NotNull(purchase);
 
                 IEnumerable<PurchaseItemDTO> purchaseItems = await PurchaseItemDP.GetAllPurchaseItemsFromPurchase(purchase);
@@ -403,6 +403,29 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                         Assert.Fail($"Supplier '{supplierFromDB.Name}' not found!");
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Get_Year_Spendings()
+        {
+            try
+            {
+                UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
+
+                IEnumerable<double> spendings = await PurchaseDP.GetSpendingsForLastYearFromUser(user);
+                Assert.NotEmpty(spendings);
+                Assert.NotNull(spendings);
+
+                foreach(double spending in spendings)
+                {
+                    Console.WriteLine(spending.ToString());
+                }
+
             }
             catch (Exception exception)
             {

@@ -16,9 +16,9 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find Project and Component
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjects();
                 Assert.NotNull(projects);
-                ProjectDTO? project = projects.FirstOrDefault();
+                Project? project = projects.FirstOrDefault();
                 Assert.NotNull(project);
 
                 IEnumerable<Component> components = await ComponentDP.GetAllComponents();
@@ -43,9 +43,9 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjects();
                 Assert.NotNull(projects);
-                ProjectDTO? project = projects.FirstOrDefault();
+                Project? project = projects.FirstOrDefault();
                 Assert.NotNull(project);
 
                 IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponentsOfProject(project);

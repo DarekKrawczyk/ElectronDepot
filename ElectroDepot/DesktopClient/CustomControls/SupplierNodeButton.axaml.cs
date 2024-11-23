@@ -10,13 +10,13 @@ namespace DesktopClient.CustomControls;
 public class SupplierNodeButton : Button
 {
     /// <summary>
-    /// Image StyledProperty definition
+    /// ProjectImage StyledProperty definition
     /// </summary>
     public static readonly StyledProperty<Bitmap> ImageProperty =
         AvaloniaProperty.Register<MenuButton, Bitmap>(nameof(Image), ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/TempLogo.png")));
 
     /// <summary>
-    /// Gets or sets the Image property. This StyledProperty 
+    /// Gets or sets the ProjectImage property. This StyledProperty 
     /// indicates ....
     /// </summary>
     public Bitmap Image
