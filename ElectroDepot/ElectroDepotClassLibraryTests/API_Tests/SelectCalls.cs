@@ -55,8 +55,8 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 int[] CompsIDsOfJacekJaworek = new int[] { 77, 2, 5, 38, 82, 67, 9 };
 
                 UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
-                IEnumerable<ComponentDTO> componentsOfUser = await ComponentDP.GetAllUserComponent(user.ID);
-                foreach(ComponentDTO component in componentsOfUser)
+                IEnumerable<Component> componentsOfUser = await ComponentDP.GetAllUserComponent(user.ID);
+                foreach(Component component in componentsOfUser)
                 {
                     // Bias is Used to match with ids from TestingData.md
                     Console.WriteLine($"UserID: '{user.ID - Utility.UserIDBias}', ComponentID: '{component.ID - Utility.ComponentIDBias}'");
@@ -128,10 +128,10 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                     Assert.True(OwnedComponentCountOfJacekJaworek.Any(y => y.OrderBy(x => x).SequenceEqual(dbIDs.OrderBy(x => x))));
                 }
 
-                IEnumerable<ComponentDTO> ComponentsOfUser = await ComponentDP.GetAllUserComponent(user.ID);
+                IEnumerable<Component> ComponentsOfUser = await ComponentDP.GetAllUserComponent(user.ID);
                 Assert.NotNull(ComponentsOfUser);
 
-                ComponentDTO FirstComponent = ComponentsOfUser.FirstOrDefault();
+                Component FirstComponent = ComponentsOfUser.FirstOrDefault();
                 Assert.NotNull(FirstComponent);
 
                 OwnsComponentDTO componentOfComponentAndUser = await OwnsComponentDP.GetOwnComponentsFromUser(user, FirstComponent);

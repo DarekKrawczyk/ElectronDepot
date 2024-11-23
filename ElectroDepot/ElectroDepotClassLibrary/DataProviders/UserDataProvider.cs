@@ -2,11 +2,10 @@
 using ElectroDepotClassLibrary.Endpoints;
 using System.Text.Json;
 using System.Text;
-using ElectroDepotClassLibrary.DataProviders.Interfaces;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
-    public class UserDataProvider : BaseDataProvider, IUserDataProvider
+    public class UserDataProvider : BaseDataProvider
     {
         public UserDataProvider(string url) : base(url) { }
         #region API Calls

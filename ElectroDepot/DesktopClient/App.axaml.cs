@@ -16,7 +16,9 @@ namespace DesktopClient
         public override void Initialize()
         {
             SupplierDataProvider supplierDataProvider = new SupplierDataProvider(ConnectionURL);
-            _databaseStore = new DatabaseStore(supplierDataProvider);
+            ComponentDataProvider componentDataProvider = new ComponentDataProvider(ConnectionURL);
+            CategoryDataProvider categoryDataProvider = new CategoryDataProvider(ConnectionURL);
+            _databaseStore = new DatabaseStore(supplierDataProvider, componentDataProvider, categoryDataProvider);
 
             AvaloniaXamlLoader.Load(this);
         }

@@ -10,12 +10,15 @@ using DesktopClient.Containers;
 using ElectroDepotClassLibrary.Stores;
 using ElectroDepotClassLibrary.Models;
 using System.Data;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 
 namespace DesktopClient.ViewModels
 {
     public partial class HomePageViewModel : ViewModelBase
     {
         public ObservableCollection<SupplierContainer> Suppliers { get; set; }
+        public ObservableCollection<ComponentContainer> Components { get; set; }
 
         public ISeries[] Series { get; set; } = [
             new ColumnSeries<DateTimePoint>
@@ -49,12 +52,40 @@ namespace DesktopClient.ViewModels
         public ICartesianAxis[] XAxes { get; set; } = [
             new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMM"))
         ];
-        
+
+        [Obsolete("DO NOT USE THIS! THIS IS JUST FOR AVALONIA DESIGNER!")]
+        public HomePageViewModel() : base(null)
+        {
+            if (Design.IsDesignMode)
+            {
+                Suppliers = new ObservableCollection<SupplierContainer>();
+                Components = new ObservableCollection<ComponentContainer>();
+            }
+        }
+
         public HomePageViewModel(DatabaseStore databaseStore) : base(databaseStore)
         {
             Suppliers = new ObservableCollection<SupplierContainer>();
             DatabaseStore.SupplierStore.SuppliersLoaded += SuppliersLoadedHandler;
             DatabaseStore.SupplierStore.Load();
+
+            Components = new ObservableCollection<ComponentContainer>();
+            DatabaseStore.ComponentStore.ComponentsLoaded += ComponentsLoadedHandler;
+            DatabaseStore.ComponentStore.Load();
+        }
+
+        private async void ComponentsLoadedHandler()
+        {
+            Components.Clear();
+            foreach (Component component in DatabaseStore.ComponentStore.Components)
+            {
+                int categoryID = component.CategoryID;
+                Category foundCategory = await DatabaseStore.CategoriesStore.DB.GetCategoryByID(categoryID);
+                
+                component.Category = foundCategory;
+                
+                Components.Add(new ComponentContainer(component));
+            }
         }
 
         private void SuppliersLoadedHandler()

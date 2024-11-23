@@ -2,6 +2,7 @@
 using ElectroDepotClassLibrary.Endpoints;
 using System.Text.Json;
 using System.Text;
+using ElectroDepotClassLibrary.Models;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
@@ -127,11 +128,11 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<OwnsComponentDTO> GetOwnComponentsFromUser(UserDTO userDTO, ComponentDTO compDTO)
+        public async Task<OwnsComponentDTO> GetOwnComponentsFromUser(UserDTO userDTO, Component component)
         {
             try
             {
-                string url = OwnsComponentEndpoints.GetOwnComponentFromUser(userDTO.ID, compDTO.ID);
+                string url = OwnsComponentEndpoints.GetOwnComponentFromUser(userDTO.ID, component.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -140,8 +141,8 @@ namespace ElectroDepotClassLibrary.DataProviders
                     options.PropertyNameCaseInsensitive = true;
 
                     var json = await response.Content.ReadAsStringAsync();
-                    OwnsComponentDTO component = JsonSerializer.Deserialize<OwnsComponentDTO>(json, options);
-                    return component;
+                    OwnsComponentDTO ownsComponent = JsonSerializer.Deserialize<OwnsComponentDTO>(json, options);
+                    return ownsComponent;
                 }
                 else
                 {

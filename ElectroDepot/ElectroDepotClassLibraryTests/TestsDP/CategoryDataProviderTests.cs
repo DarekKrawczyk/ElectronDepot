@@ -1,4 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.Tests
@@ -14,7 +15,7 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<CategoryDTO> categories = await CategoryDP.GetAllCategories();
+                IEnumerable<Category> categories = await CategoryDP.GetAllCategories();
                 Assert.NotNull(categories);
                 Console.WriteLine($"Returned '{categories.Count()}' records");
             }
@@ -28,7 +29,7 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                CreateCategoryDTO category = new CreateCategoryDTO(Name: "Wiertara", Description: "Fajnie wierci");
+                Category category = new Category(id: 0, name: "Wiertara", description: "Fajnie wierci", image: new byte[] { });
 
                 bool wasCreated = await CategoryDP.CreateCategory(category);
 
@@ -45,13 +46,13 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<CategoryDTO> categories = await CategoryDP.GetAllCategories();
+                IEnumerable<Category> categories = await CategoryDP.GetAllCategories();
                 Assert.NotNull(categories);
                 Assert.True(categories.Count() > 0);
 
                 int countBefore = categories.Count();
 
-                CategoryDTO last = categories.Last();
+                Category last = categories.Last();
 
                 await CategoryDP.DeleteCategory(last);
 
@@ -74,16 +75,16 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Create
-                CreateCategoryDTO category = new CreateCategoryDTO(Name: "CreateUpdateDeleteFind3_True", Description: "CreateUpdateDeleteFind1_True");
+                Category category = new Category(id: 0, name: "CreateUpdateDeleteFind3_True", description: "CreateUpdateDeleteFind1_True", image: new byte[] { });
                 bool wasCreated = await CategoryDP.CreateCategory(category);
                 Assert.True(wasCreated);
 
                 // Find
-                CategoryDTO foundCategory = await CategoryDP.GetCategoryByName(category.Name);
+                Category foundCategory = await CategoryDP.GetCategoryByName(category.Name);
                 Assert.NotNull(foundCategory);
 
                 // Update
-                CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
+                Category editedCategoryDTO = new Category(id: foundCategory.ID, name: foundCategory.Name, description: "Edited category", image: new byte[] { });
                 bool wasUpdated = await CategoryDP.UpdateCategory(editedCategoryDTO);
                 Assert.True(wasUpdated);
 
@@ -92,7 +93,7 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Assert.True(wasDeleted);
 
                 // Find again
-                CategoryDTO foundAgain = await CategoryDP.GetCategoryByName(editedCategoryDTO.Name);
+                Category foundAgain = await CategoryDP.GetCategoryByName(editedCategoryDTO.Name);
                 Assert.Null(foundAgain);
 
             }
@@ -107,11 +108,11 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find
-                CategoryDTO foundCategory = await CategoryDP.GetCategoryByID(1);
+                Category foundCategory = await CategoryDP.GetCategoryByID(1);
                 Assert.NotNull(foundCategory);
 
                 // Update
-                CategoryDTO editedCategoryDTO = new CategoryDTO(ID: foundCategory.ID, Name: foundCategory.Name, Description: "Edited category");
+                Category editedCategoryDTO = new Category(id: foundCategory.ID, name: foundCategory.Name, description: "Edited category", image: new byte[] { });
                 bool wasUpdated = await CategoryDP.UpdateCategory(editedCategoryDTO);
                 Assert.True(wasUpdated);
             }
@@ -126,10 +127,10 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find
-                IEnumerable<CategoryDTO> allCategories = await CategoryDP.GetAllCategories();
+                IEnumerable<Category> allCategories = await CategoryDP.GetAllCategories();
                 Assert.NotNull(allCategories);
 
-                foreach (CategoryDTO category in allCategories)
+                foreach (Category category in allCategories)
                 {
                     Console.WriteLine(category.ToString());
                 }
@@ -143,7 +144,7 @@ namespace ElectroDepotClassLibraryTests.Tests
                 }
 
                 // Now components table should be empty
-                IEnumerable<ComponentDTO> allComponents = await ComponentDP.GetAllComponents();
+                IEnumerable<Component> allComponents = await ComponentDP.GetAllComponents();
                 Assert.True(allComponents.Count() == 0);
             }
             catch (Exception ex)

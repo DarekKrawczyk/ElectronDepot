@@ -1,4 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,10 @@ namespace ElectroDepotClassLibraryTests.Tests
                 UserDTO foundUser = allUsers.FirstOrDefault();
                 Assert.NotNull(foundUser);
 
-                IEnumerable<ComponentDTO> allComponents = await ComponentDP.GetAllComponents();
+                IEnumerable<Component> allComponents = await ComponentDP.GetAllComponents();
                 Assert.NotNull(allComponents);
                 Assert.NotEmpty(allComponents);
-                ComponentDTO foundComponent = allComponents.FirstOrDefault();
+                Component foundComponent = allComponents.FirstOrDefault();
                 Assert.NotNull(foundComponent);
 
                 CreateOwnsComponentDTO ownsComponentDTO = new CreateOwnsComponentDTO(UserID: foundUser.ID, ComponentID: foundComponent.ID, 20);

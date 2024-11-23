@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-              xmlns:vm="using:DesktopClient.ViewModels"
+             xmlns:vm="using:DesktopClient.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:DesktopClient.Templates"
              xmlns:CustomControls="clr-namespace:DesktopClient.CustomControls"
@@ -10,7 +10,7 @@
              d:DesignWidth="1320"
              x:Class="DesktopClient.Views.HomePageView"
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
-  x:DataType="vm:HomePageViewModel">
+             x:DataType="vm:HomePageViewModel">
 
   <Design.DataContext>
     <vm:HomePageViewModel/>
@@ -30,7 +30,7 @@
         <ColumnDefinition Width="auto"></ColumnDefinition>
         <ColumnDefinition Width="auto"></ColumnDefinition>
         <ColumnDefinition Width="auto"></ColumnDefinition>
-        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
       </Grid.ColumnDefinitions>
 
       <!-- Latest projects -->
@@ -107,7 +107,7 @@
       </Grid>
 
       <!-- Just bought -->
-      <Grid Grid.Column="4">
+      <Grid Grid.Column="4" MinWidth="400">
         <StackPanel Orientation="Vertical"
                     Margin="10">
           <Label FontFamily="{DynamicResource Roboto}"
@@ -118,12 +118,26 @@
                  Margin="0 0 0 10">
             Just bought
           </Label>
-          <StackPanel Orientation="Vertical" Margin="10" Spacing="10">
-            <CustomControls:ComponentNodeButton/>
-            <CustomControls:ComponentNodeButton/>
-            <CustomControls:ComponentNodeButton/>
-            <CustomControls:ComponentNodeButton/>
-          </StackPanel>
+          <ScrollViewer Height="270">
+            <ItemsControl ItemsSource="{Binding Components}" HorizontalAlignment="Left" VerticalAlignment="Top">
+              <!-- Define the panel as UniformGrid -->
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <UniformGrid Columns="1" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+
+              <!-- Template for displaying each item -->
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <CustomControls:ComponentNodeButton Image="{Binding Component.Category.Image}"
+                                                      ComponentName="{Binding Component.Name}"
+                                                      Command="{Binding ItemClickedCommand}"
+                                                      Margin="10"/>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
         </StackPanel>
       </Grid>
 
@@ -140,7 +154,7 @@
     <!-- Second row -->
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="auto"></ColumnDefinition>
         <ColumnDefinition Width="auto"></ColumnDefinition>
         <ColumnDefinition Width="auto"></ColumnDefinition>
       </Grid.ColumnDefinitions>
