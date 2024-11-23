@@ -1,7 +1,7 @@
 ﻿using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DesktopClient.Models;
+using ElectroDepotClassLibrary.Stores;
 using System;
 using System.Collections.ObjectModel;
 
@@ -18,7 +18,7 @@ namespace DesktopClient.ViewModels
             IsPanelOpen = !IsPanelOpen;
         }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(DatabaseStore databaseStore) : base(databaseStore)
         {
             OnSelectedListItemChanged(Items[0]);
             //CurrentPage = new ComponentsPageViewModel();
@@ -47,12 +47,17 @@ namespace DesktopClient.ViewModels
             {
                 return;
             }
-            var instance = Activator.CreateInstance(value.ModelType);
+            var instance = Activator.CreateInstance(value.ModelType, args: DatabaseStore);
             if (instance is null)
             {
                 return;
             }
+            CurrentPage?.Dispose();
             CurrentPage = (ViewModelBase)instance;
+        }
+
+        public override void Dispose()
+        {
         }
 
         [ObservableProperty]

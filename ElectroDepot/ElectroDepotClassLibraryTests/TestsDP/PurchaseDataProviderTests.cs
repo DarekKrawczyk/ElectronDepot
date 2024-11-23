@@ -1,4 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.Tests
@@ -21,10 +22,10 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Assert.NotNull(user);
 
                 // Find 'Supplier'
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<ElectroDepotClassLibrary.Models.Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO? supplier = suppliers.FirstOrDefault();
+                ElectroDepotClassLibrary.Models.Supplier? supplier = suppliers.FirstOrDefault();
                 Assert.NotNull(supplier);
 
                 // Create new 'Purchase'
@@ -88,10 +89,10 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find 'Supplier'
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO? supplier = suppliers.FirstOrDefault();
+                Supplier? supplier = suppliers.FirstOrDefault();
                 Assert.NotNull(supplier);
 
                 IEnumerable<PurchaseDTO> purchaeses = await PurchaseDP.GetAllPurchasesFromSupplier(supplier);
@@ -139,10 +140,10 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find any purchase
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO? lastSupplier = suppliers.LastOrDefault();
+                Supplier? lastSupplier = suppliers.LastOrDefault();
                 Assert.NotNull(lastSupplier);
 
                 // Delete

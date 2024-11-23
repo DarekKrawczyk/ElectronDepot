@@ -1,4 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.Tests
@@ -13,7 +14,7 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                CreateSupplierDTO newSupplier = new CreateSupplierDTO(Name: "Botland", Website: @"https://botland.com.pl/");
+                Supplier newSupplier = new Supplier(id: -1, name: "Botland", website: @"https://botland.com.pl/", image: new byte[] { });
                 bool wasCreated = await SupplierDP.CreateSupplier(newSupplier);
                 Assert.True(wasCreated);
 
@@ -29,9 +30,9 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
-                foreach (SupplierDTO supplier in suppliers)
+                foreach (Supplier supplier in suppliers)
                 {
                     Console.WriteLine(supplier.ToString());
                 }
@@ -46,15 +47,15 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO supplier = suppliers.FirstOrDefault();
+                Supplier supplier = suppliers.FirstOrDefault();
                 Assert.NotNull(supplier);
 
                 string name = supplier.Name;
 
-                SupplierDTO foundSupplier = await SupplierDP.GetSupplierByName(name);
+                Supplier foundSupplier = await SupplierDP.GetSupplierByName(name);
                 Assert.NotNull(foundSupplier);
                 Console.WriteLine(foundSupplier.ToString());
             }
@@ -68,15 +69,15 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO supplier = suppliers.FirstOrDefault();
+                Supplier supplier = suppliers.FirstOrDefault();
                 Assert.NotNull(supplier);
 
                 int id = supplier.ID;
 
-                SupplierDTO foundSupplier = await SupplierDP.GetSupplierByID(id);
+                Supplier foundSupplier = await SupplierDP.GetSupplierByID(id);
                 Assert.NotNull(foundSupplier);
                 Console.WriteLine(foundSupplier.ToString());
             }
@@ -91,16 +92,16 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find
-                IEnumerable<SupplierDTO> allSuppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> allSuppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(allSuppliers);
                 Assert.NotEmpty(allSuppliers);
-                SupplierDTO? supplierToBeEdited = allSuppliers.FirstOrDefault();
+                Supplier? supplierToBeEdited = allSuppliers.FirstOrDefault();
                 Assert.NotNull(supplierToBeEdited);
 
                 Console.WriteLine(supplierToBeEdited.ToString());
 
                 // Update
-                SupplierDTO supplier = new SupplierDTO(ID: supplierToBeEdited.ID, Name: "Botlandzik", Website: supplierToBeEdited.Website);
+                Supplier supplier = new Supplier(id: supplierToBeEdited.ID, name: "Botlandzik", website: supplierToBeEdited.Website, image: supplierToBeEdited.ByteImage);
                 bool wasUpdated = await SupplierDP.UpdateSupplier(supplier);
                 Assert.True(wasUpdated);
                 Console.WriteLine(supplier.ToString());
@@ -116,10 +117,10 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find any supplier
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO? lastSupplier = suppliers.LastOrDefault();
+                Supplier? lastSupplier = suppliers.LastOrDefault();
                 Assert.NotNull(lastSupplier);
 
                 // Delete
