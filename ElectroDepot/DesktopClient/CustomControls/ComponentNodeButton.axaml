@@ -18,10 +18,10 @@
             <!-- Use a Border or Panel to define the visual style -->
             <Border x:Name="MainBorder"
                     Padding="0">
-              <Grid MaxWidth="220"
-                    Width="220"
-                    MaxHeight="45"
-                    MinHeight="45"
+              <Grid MaxWidth="350"
+                    Width="350"
+                    MaxHeight="60"
+                    MinHeight="60"
                     x:Name="MainGrid"
                     RowDefinitions="*"
                     ColumnDefinitions="20*, auto, 80*">
@@ -73,8 +73,8 @@
                   </Transitions>
                 </Setter>
                 <Setter Property="Source" Value="{TemplateBinding Image}"></Setter>
-                <Setter Property="Width" Value="32"></Setter>
-                <Setter Property="Height" Value="32"></Setter>
+                <Setter Property="Width" Value="36"></Setter>
+                <Setter Property="Height" Value="36"></Setter>
                 <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
                 <Setter Property="Margin" Value="0,0,0,0"></Setter>
@@ -103,13 +103,13 @@
               
               <!-- Hover image -->
               <Style Selector="^ Grid#MainGrid Image#MainImage">
-                <Setter Property="Width" Value="38"></Setter>
-                <Setter Property="Height" Value="38"></Setter>
+                <Setter Property="Width" Value="55"></Setter>
+                <Setter Property="Height" Value="55"></Setter>
               </Style>
 
               <!-- Hover text -->
               <Style Selector="^ Grid#MainGrid TextBlock#ComponentName">
-                <Setter Property="FontSize" Value="18"></Setter>
+                <Setter Property="FontSize" Value="20"></Setter>
               </Style>
             </Style>
           </Button.Styles>

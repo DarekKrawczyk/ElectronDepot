@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ElectroDepotClassLibrary.Utility;
+using Microsoft.EntityFrameworkCore;
 using Server.Context;
 using Server.Models;
 
@@ -39,32 +40,33 @@ public static class TestingDataSeeder
             context.Users.AddRange(users);
             await context.SaveChangesAsync();
 
+            string fullPath = "D:\\Repo\\ElectronDepot\\ElectroDepot\\Server\\Assests\\";
+            string categoriesFullPath = fullPath + "Categories\\";
             List<Category> categories = new List<Category>
             {
-                new Category { Name = "Czujnik ciśnienia", Description = "Mierzy ciśnienie" },
-                new Category { Name = "Czujnik czystości powietrza", Description = "Mierzy poziom czystości powietrza" },
-                new Category { Name = "Czujnik gestów", Description = "Wykrywa gesty" },
-                new Category { Name = "Czujnik krańcowe", Description = "Wykrywa osiągnięcie krańca ruchu" },
-                new Category { Name = "Czujnik gazów", Description = "Mierzy stężenie gazów" },
-                new Category { Name = "Czujnik magnetyczne", Description = "Wykrywa pole magnetyczne" },
-                new Category { Name = "Czujnik odbiciowe", Description = "Wykrywa obiekty przez odbicie światła" },
-                new Category { Name = "Czujnik odległości", Description = "Mierzy odległość" },
-                new Category { Name = "Czujnik temperatury", Description = "Mierzy temperaturę" },
-                new Category { Name = "Czujnik wilgotności", Description = "Mierzy wilgotność" },
-                new Category { Name = "Enkodery", Description = "Mierzą pozycję kątową lub liniową" },
-                new Category { Name = "Fotorezystory", Description = "Zmieniają opór w zależności od światła" },
-                new Category { Name = "Fototranzystory", Description = "Wykrywają światło za pomocą tranzystora" },
-                new Category { Name = "Odbiornik podczerwieni", Description = "Odbiera sygnały podczerwieni" },
-                new Category { Name = "Akcelerometry", Description = "Mierzy przyspieszenie" },
-                new Category { Name = "Czujnik hallotronowe", Description = "Wykrywa pole magnetyczne za pomocą efektu Halla" },
-                new Category { Name = "Mikrokontroler", Description = "Programowo sterowany układ elektroniczny" }
+                new Category { Name = "Czujnik ciśnienia", Description = "Mierzy ciśnienie", Image = File.ReadAllBytes(categoriesFullPath + "Pressure.png")},
+                new Category { Name = "Czujnik czystości powietrza", Description = "Mierzy poziom czystości powietrza", Image = File.ReadAllBytes(categoriesFullPath + "AirQuality.png") },
+                new Category { Name = "Czujnik gestów", Description = "Wykrywa gesty", Image = File.ReadAllBytes(categoriesFullPath + "Gesture.png") },
+                new Category { Name = "Czujnik krańcowe", Description = "Wykrywa osiągnięcie krańca ruchu", Image = File.ReadAllBytes(categoriesFullPath + "LimitSensor.png") },
+                new Category { Name = "Czujnik gazów", Description = "Mierzy stężenie gazów", Image = File.ReadAllBytes(categoriesFullPath + "GasSensor.png") },
+                new Category { Name = "Czujnik magnetyczne", Description = "Wykrywa pole magnetyczne", Image = File.ReadAllBytes(categoriesFullPath + "MagneticSensor.png") },
+                new Category { Name = "Czujnik odbiciowe", Description = "Wykrywa obiekty przez odbicie światła", Image = File.ReadAllBytes(categoriesFullPath + "ReflectiveSensor.png") },
+                new Category { Name = "Czujnik odległości", Description = "Mierzy odległość", Image = File.ReadAllBytes(categoriesFullPath + "Distance.png") },
+                new Category { Name = "Czujnik temperatury", Description = "Mierzy temperaturę", Image = File.ReadAllBytes(categoriesFullPath + "Temperature.png") },
+                new Category { Name = "Czujnik wilgotności", Description = "Mierzy wilgotność", Image = File.ReadAllBytes(categoriesFullPath + "Humidity.png") },
+                new Category { Name = "Enkodery", Description = "Mierzą pozycję kątową lub liniową", Image = File.ReadAllBytes(categoriesFullPath + "Encoder.png") },
+                new Category { Name = "Fotorezystory", Description = "Zmieniają opór w zależności od światła", Image = File.ReadAllBytes(categoriesFullPath + "Photoresistor.png") },
+                new Category { Name = "Fototranzystory", Description = "Wykrywają światło za pomocą tranzystora", Image = File.ReadAllBytes(categoriesFullPath + "Phototransistor.png") },
+                new Category { Name = "Odbiornik podczerwieni", Description = "Odbiera sygnały podczerwieni", Image = File.ReadAllBytes(categoriesFullPath + "Infrared.png") },
+                new Category { Name = "Akcelerometry", Description = "Mierzy przyspieszenie", Image = File.ReadAllBytes(categoriesFullPath + "Accelerometer.png") },
+                new Category { Name = "Czujnik hallotronowe", Description = "Wykrywa pole magnetyczne za pomocą efektu Halla", Image = File.ReadAllBytes(categoriesFullPath + "Hall.png") },
+                new Category { Name = "Mikrokontroler", Description = "Programowo sterowany układ elektroniczny", Image = File.ReadAllBytes(categoriesFullPath + "Microcontroller.png") }
             };
 
             context.Categories.AddRange(categories);
             await context.SaveChangesAsync();
 
             // Seed Suppliers
-            string fullPath = "D:\\Repo\\ElectronDepot\\ElectroDepot\\Server\\Assests\\";
             List<Supplier> suppliers = new List<Supplier>
             {
                 new Supplier { Name = "DigiKey", Website = "https://www.digikey.pl/", Image = File.ReadAllBytes(fullPath + "DigiKeyIcon.png") },

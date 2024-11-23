@@ -21,8 +21,4 @@
     <ProjectReference Include="..\ElectroDepotClassLibrary\ElectroDepotClassLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Assests\" />
-  </ItemGroup>
-
 </Project>
