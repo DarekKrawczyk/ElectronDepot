@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ElectroDepotClassLibrary.Stores;
 
 namespace DesktopClient.ViewModels
 {
-    internal class LogoutPageViewModel : ViewModelBase
+    public class LogoutPageViewModel : ViewModelBase
     {
+        public LogoutPageViewModel(DatabaseStore databaseStore) : base(databaseStore)
+        {
+        }
+
+        public override void Dispose()
+        {
+        }
     }
 }

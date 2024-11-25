@@ -1,13 +1,12 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.Tests
 {
     public class PurchaseDataProviderTests : BaseDataProviderTest
     {
-        public PurchaseDataProviderTests(ITestOutputHelper output) : base(output)
-        {
-        }
+        public PurchaseDataProviderTests(ITestOutputHelper output) : base(output) { }
         [Fact]
         public async Task Create()
         {
@@ -21,14 +20,14 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Assert.NotNull(user);
 
                 // Find 'Supplier'
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO? supplier = suppliers.FirstOrDefault();
+                Supplier? supplier = suppliers.FirstOrDefault();
                 Assert.NotNull(supplier);
 
                 // Create new 'Purchase'
-                CreatePurchaseDTO newPurchase = new CreatePurchaseDTO(UserID: user.ID, SupplierID: supplier.ID, PurchaseDate: DateTime.Now, TotalPrice: 0);
+                Purchase newPurchase = new Purchase(iD: 0, userID: user.ID, supplierID: supplier.ID, supplier: supplier, purchaseDate: DateTime.Now, totalPrice: 0);
                 bool wasCreated = await PurchaseDP.CreatePurchase(newPurchase);
                 Assert.True(wasCreated);
 
@@ -44,9 +43,9 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<PurchaseDTO> purchases = await PurchaseDP.GetAllPurchases();
+                IEnumerable<Purchase> purchases = await PurchaseDP.GetAllPurchases();
                 Assert.NotNull(purchases);
-                foreach (PurchaseDTO purchase in purchases)
+                foreach (Purchase purchase in purchases)
                 {
                     Console.WriteLine(purchase.ToString());
                 }
@@ -68,10 +67,10 @@ namespace ElectroDepotClassLibraryTests.Tests
                 UserDTO? user = users.FirstOrDefault();
                 Assert.NotNull(user);
 
-                IEnumerable<PurchaseDTO> purchaeses = await PurchaseDP.GetAllPurchasesFromUser(user);
+                IEnumerable<Purchase> purchaeses = await PurchaseDP.GetAllPurchasesFromUser(user);
                 Assert.NotNull(purchaeses);
 
-                foreach (PurchaseDTO purchase in purchaeses)
+                foreach (Purchase purchase in purchaeses)
                 {
                     Console.WriteLine(purchase.ToString());
                 }
@@ -88,16 +87,16 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find 'Supplier'
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO? supplier = suppliers.FirstOrDefault();
+                Supplier? supplier = suppliers.FirstOrDefault();
                 Assert.NotNull(supplier);
 
-                IEnumerable<PurchaseDTO> purchaeses = await PurchaseDP.GetAllPurchasesFromSupplier(supplier);
+                IEnumerable<Purchase> purchaeses = await PurchaseDP.GetAllPurchasesFromSupplier(supplier);
                 Assert.NotNull(purchaeses);
 
-                foreach (PurchaseDTO purchase in purchaeses)
+                foreach (Purchase purchase in purchaeses)
                 {
                     Console.WriteLine(purchase.ToString());
                 }
@@ -114,16 +113,16 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find
-                IEnumerable<PurchaseDTO> allPurchases = await PurchaseDP.GetAllPurchases();
+                IEnumerable<Purchase> allPurchases = await PurchaseDP.GetAllPurchases();
                 Assert.NotNull(allPurchases);
                 Assert.NotEmpty(allPurchases);
-                PurchaseDTO? purchaseToBeEdited = allPurchases.FirstOrDefault();
+                Purchase? purchaseToBeEdited = allPurchases.FirstOrDefault();
                 Assert.NotNull(purchaseToBeEdited);
 
                 Console.WriteLine(purchaseToBeEdited.ToString());
 
                 // Update
-                PurchaseDTO purchase = new PurchaseDTO(ID: purchaseToBeEdited.ID, UserID: purchaseToBeEdited.UserID, SupplierID: purchaseToBeEdited.SupplierID, PurchaseDate: purchaseToBeEdited.PurchaseDate, TotalPrice: 201);
+                Purchase purchase = new Purchase(iD: purchaseToBeEdited.ID, userID: purchaseToBeEdited.UserID, supplierID: purchaseToBeEdited.SupplierID, supplier: null, purchaseDate: purchaseToBeEdited.PurchaseDate, totalPrice: 201);
                 bool wasUpdated = await PurchaseDP.UpdatePurchase(purchase);
                 Assert.True(wasUpdated);
                 Console.WriteLine(purchase.ToString());
@@ -139,10 +138,10 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find any purchase
-                IEnumerable<SupplierDTO> suppliers = await SupplierDP.GetAllSuppliers();
+                IEnumerable<Supplier> suppliers = await SupplierDP.GetAllSuppliers();
                 Assert.NotNull(suppliers);
                 Assert.NotEmpty(suppliers);
-                SupplierDTO? lastSupplier = suppliers.LastOrDefault();
+                Supplier? lastSupplier = suppliers.LastOrDefault();
                 Assert.NotNull(lastSupplier);
 
                 // Delete

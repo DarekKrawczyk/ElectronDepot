@@ -1,4 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.Tests
@@ -19,7 +20,7 @@ namespace ElectroDepotClassLibraryTests.Tests
 
                 Assert.NotNull(user);
 
-                CreateProjectDTO project = new CreateProjectDTO(UserID: user.ID, Name: "Stacja meterologiczna", Description: "Na SMIW");
+                Project project = new Project(id: 0, userID: user.ID, name: "Stacja meterologiczna", image: null, description: "Na SMIW", createdAt: DateTime.Now);
                 bool wasCreate = await ProjectDP.CreateProject(project);
                 Assert.True(wasCreate);
 
@@ -36,9 +37,9 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjects();
                 Assert.NotNull(projects);
-                foreach (ProjectDTO project in projects)
+                foreach (Project project in projects)
                 {
                     Console.WriteLine($"{project.ToString()}");
                 }
@@ -59,9 +60,9 @@ namespace ElectroDepotClassLibraryTests.Tests
                 UserDTO? user = users.FirstOrDefault();
                 Assert.NotNull(user);
 
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjectOfUser(user);
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjectOfUser(user);
                 Assert.NotNull(projects);
-                foreach (ProjectDTO project in projects)
+                foreach (Project project in projects)
                 {
                     Console.WriteLine($"{project.ToString()}");
                 }
@@ -78,8 +79,8 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find any Project
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
-                ProjectDTO? project = projects.FirstOrDefault();
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjects();
+                Project? project = projects.FirstOrDefault();
                 Assert.NotNull(project);
 
                 IEnumerable<ComponentDTO> componentsOfProject = await ProjectDP.GetAllComponentsFromProject(project);
@@ -105,24 +106,24 @@ namespace ElectroDepotClassLibraryTests.Tests
                 UserDTO? user = users.FirstOrDefault();
                 Assert.NotNull(user);
 
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjectOfUser(user);
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjectOfUser(user);
                 Assert.NotNull(projects);
                 Console.WriteLine("Before update");
-                foreach (ProjectDTO project in projects)
+                foreach (Project project in projects)
                 {
                     Console.WriteLine($"{project.ToString()}");
                 }
 
-                ProjectDTO projectUpdated = projects.FirstOrDefault();
-                ProjectDTO projectToSend = new ProjectDTO(ID: projectUpdated.ID, UserID: projectUpdated.UserID, Name: "Fajna stacja pogodowa", Description: projectUpdated.Description, CreatedAt: projectUpdated.CreatedAt);
+                Project projectUpdated = projects.FirstOrDefault();
+                Project projectToSend = new Project(id: 0, userID: projectUpdated.UserID, name: "Fajna stacja pogodowa", image: null, description: projectUpdated.Description, createdAt: projectUpdated.CreatedAt);
 
                 bool wasChanged = await ProjectDP.UpdateProject(projectToSend);
                 Assert.True(wasChanged);
 
-                IEnumerable<ProjectDTO> updatedProjects = await ProjectDP.GetAllProjectOfUser(user);
+                IEnumerable<Project> updatedProjects = await ProjectDP.GetAllProjectOfUser(user);
                 Assert.NotNull(updatedProjects);
                 Console.WriteLine("\nAfter update");
-                foreach (ProjectDTO project in updatedProjects)
+                foreach (Project project in updatedProjects)
                 {
                     Console.WriteLine($"{project.ToString()}");
                 }
@@ -138,10 +139,10 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find any Project
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjects();
                 Assert.NotNull(projects);
 
-                ProjectDTO? projectToDelete = projects.FirstOrDefault();
+                Project? projectToDelete = projects.FirstOrDefault();
                 Assert.NotNull(projectToDelete);
 
                 bool wasDeleted = await ProjectDP.DeleteProject(projectToDelete);

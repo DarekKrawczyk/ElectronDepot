@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ElectroDepotClassLibrary.Stores;
 
 namespace DesktopClient.ViewModels
 {
-    internal class PurchasesPageViewModel : ViewModelBase
+    public class PurchasesPageViewModel : ViewModelBase
     {
+        public PurchasesPageViewModel(DatabaseStore databaseStore) : base(databaseStore)
+        {
+        }
+
+        public override void Dispose()
+        {
+        }
     }
 }

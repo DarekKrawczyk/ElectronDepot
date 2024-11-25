@@ -1,4 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.Tests
@@ -15,14 +16,14 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find Project and Component
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjects();
                 Assert.NotNull(projects);
-                ProjectDTO? project = projects.FirstOrDefault();
+                Project? project = projects.FirstOrDefault();
                 Assert.NotNull(project);
 
-                IEnumerable<ComponentDTO> components = await ComponentDP.GetAllComponents();
+                IEnumerable<Component> components = await ComponentDP.GetAllComponents();
                 Assert.NotNull(components);
-                ComponentDTO? component = components.FirstOrDefault();
+                Component? component = components.FirstOrDefault();
                 Assert.NotNull(component);
 
                 CreateProjectComponentDTO projectComponent = new CreateProjectComponentDTO(ComponentID: component.ID, ProjectID: project.ID, 20);
@@ -42,9 +43,9 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<ProjectDTO> projects = await ProjectDP.GetAllProjects();
+                IEnumerable<Project> projects = await ProjectDP.GetAllProjects();
                 Assert.NotNull(projects);
-                ProjectDTO? project = projects.FirstOrDefault();
+                Project? project = projects.FirstOrDefault();
                 Assert.NotNull(project);
 
                 IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponentsOfProject(project);

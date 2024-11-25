@@ -28,6 +28,9 @@ namespace Server.Models
         
         [Required]
         public DateTime CreatedAt { get; set; }
+
+        [Column(TypeName = "nvarchar(255)")]
+        public string ImageURI { get; set; }
         #endregion
     }
 }

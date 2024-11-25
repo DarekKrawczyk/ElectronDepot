@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ElectroDepotClassLibrary.DTOs;
-using Microsoft.AspNetCore.Http;
+﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
@@ -17,10 +13,13 @@ namespace Server.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly ImageStorageService ISS;
 
         public ProjectsController(DatabaseContext context)
         {
             _context = context;
+            ISS = new ImageStorageService(AppDomain.CurrentDomain.BaseDirectory);
+            ISS.Initialize();
         }
         #region Create
         /// <summary>
@@ -31,7 +30,8 @@ namespace Server.Controllers
         [HttpPost("Create")]
         public async Task<ActionResult<ProjectDTO>> CreateProject(CreateProjectDTO project)
         {
-            Project newProject = project.ToProject();
+            Project newProject = project.ToProject(ISS);
+            
             newProject.CreatedAt = DateTime.Now;
 
             _context.Projects.Add(newProject);
@@ -39,7 +39,6 @@ namespace Server.Controllers
 
             return CreatedAtAction(nameof(GetProjectsOfUser), new { id = newProject.ProjectID }, newProject);
         }
-
         #endregion
         #region Read
         /// <summary>
@@ -49,7 +48,7 @@ namespace Server.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<ProjectDTO>>> GetAllProjects()
         {
-            return await _context.Projects.Select(x => x.ToProjectDTO()).ToListAsync();
+            return await _context.Projects.Select(x => x.ToProjectDTO(ISS)).ToListAsync();
         }
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            return await _context.Projects.Where(x => x.UserID == ID).Select(x => x.ToProjectDTO()).ToListAsync();
+            return await _context.Projects.Where(x => x.UserID == ID).Select(x => x.ToProjectDTO(ISS)).ToListAsync();
         }
 
         /// <summary>
@@ -85,7 +84,27 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            return project.ToProjectDTO();
+            return project.ToProjectDTO(ISS);
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/Projects/GetImageOfProjectByID/{ID}
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        [HttpGet("GetImageOfProjectByID/{ID}")]
+        public async Task<ActionResult<byte[]>> GetImageOfProjectByID(int ID)
+        {
+            Project project = await _context.Projects.FindAsync(ID);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            byte[] image = ISS.RetrieveProjectImage(project.ImageURI);
+
+            return Ok(image);
         }
 
         /// <summary>
@@ -182,7 +201,7 @@ namespace Server.Controllers
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="project"></param>
+        /// <param name="projectDTO"></param>
         /// <returns></returns>
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateProject(int id, UpdateProjectDTO projectDTO)
@@ -199,6 +218,14 @@ namespace Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                try
+                {
+                    ISS.UpdateProjectImage(project.ImageURI, projectDTO.Image);
+                }
+                catch(Exception exception)
+                {
+                    Console.WriteLine($"Eception while updating image for '{project.Name}' project");
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -216,18 +243,28 @@ namespace Server.Controllers
         }
         #endregion
         #region Delete
-
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteProject(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            Project project = await _context.Projects.FindAsync(id);
             if (project == null)
             {
                 return NotFound();
             }
 
+            string imageURI = project.ImageURI;
+
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
+
+            try
+            {
+                ISS.RemoveProjectImage(imageURI);
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine($"Exception while removing image for deleted project!");
+            }
 
             return Ok();
         }

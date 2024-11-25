@@ -10,7 +10,8 @@ namespace Server.ExtensionMethods
             return new CategoryDTO(
                 category.CategoryID,
                 category.Name,
-                category.Description
+                category.Description,
+                category.Image
             );
         }
 
@@ -20,7 +21,8 @@ namespace Server.ExtensionMethods
             {
                 CategoryID = categoryDTO.ID,
                 Name = categoryDTO.Name,
-                Description = categoryDTO.Description
+                Description = categoryDTO.Description,
+                Image = categoryDTO.Image
             };
         }
 
@@ -29,7 +31,8 @@ namespace Server.ExtensionMethods
             return new Category()
             {
                 Name = categoryDTO.Name,
-                Description = categoryDTO.Description
+                Description = categoryDTO.Description,
+                Image = categoryDTO.Image
             };
         }
 
@@ -38,7 +41,8 @@ namespace Server.ExtensionMethods
             return new Category()
             {
                 Name = categoryDTO.Name,
-                Description = categoryDTO.Description
+                Description = categoryDTO.Description,
+                Image = categoryDTO.Image
             };
         }
     }

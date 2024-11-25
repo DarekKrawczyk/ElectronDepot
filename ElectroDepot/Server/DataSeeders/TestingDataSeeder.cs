@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ElectroDepotClassLibrary.Services;
+using ElectroDepotClassLibrary.Utility;
+using Microsoft.EntityFrameworkCore;
 using Server.Context;
 using Server.Models;
 
@@ -39,38 +41,42 @@ public static class TestingDataSeeder
             context.Users.AddRange(users);
             await context.SaveChangesAsync();
 
+            string fullPath = "D:\\Repo\\ElectronDepot\\ElectroDepot\\Server\\Assests\\";
+            string categoriesFullPath = fullPath + "Categories\\";
             List<Category> categories = new List<Category>
             {
-                new Category { Name = "Czujnik ciśnienia", Description = "Mierzy ciśnienie" },
-                new Category { Name = "Czujnik czystości powietrza", Description = "Mierzy poziom czystości powietrza" },
-                new Category { Name = "Czujnik gestów", Description = "Wykrywa gesty" },
-                new Category { Name = "Czujnik krańcowe", Description = "Wykrywa osiągnięcie krańca ruchu" },
-                new Category { Name = "Czujnik gazów", Description = "Mierzy stężenie gazów" },
-                new Category { Name = "Czujnik magnetyczne", Description = "Wykrywa pole magnetyczne" },
-                new Category { Name = "Czujnik odbiciowe", Description = "Wykrywa obiekty przez odbicie światła" },
-                new Category { Name = "Czujnik odległości", Description = "Mierzy odległość" },
-                new Category { Name = "Czujnik temperatury", Description = "Mierzy temperaturę" },
-                new Category { Name = "Czujnik wilgotności", Description = "Mierzy wilgotność" },
-                new Category { Name = "Enkodery", Description = "Mierzą pozycję kątową lub liniową" },
-                new Category { Name = "Fotorezystory", Description = "Zmieniają opór w zależności od światła" },
-                new Category { Name = "Fototranzystory", Description = "Wykrywają światło za pomocą tranzystora" },
-                new Category { Name = "Odbiornik podczerwieni", Description = "Odbiera sygnały podczerwieni" },
-                new Category { Name = "Akcelerometry", Description = "Mierzy przyspieszenie" },
-                new Category { Name = "Czujnik hallotronowe", Description = "Wykrywa pole magnetyczne za pomocą efektu Halla" },
-                new Category { Name = "Mikrokontroler", Description = "Programowo sterowany układ elektroniczny" }
+                new Category { Name = "Czujnik ciśnienia", Description = "Mierzy ciśnienie", Image = File.ReadAllBytes(categoriesFullPath + "Pressure.png")},
+                new Category { Name = "Czujnik czystości powietrza", Description = "Mierzy poziom czystości powietrza", Image = File.ReadAllBytes(categoriesFullPath + "AirQuality.png") },
+                new Category { Name = "Czujnik gestów", Description = "Wykrywa gesty", Image = File.ReadAllBytes(categoriesFullPath + "Gesture.png") },
+                new Category { Name = "Czujnik krańcowe", Description = "Wykrywa osiągnięcie krańca ruchu", Image = File.ReadAllBytes(categoriesFullPath + "LimitSensor.png") },
+                new Category { Name = "Czujnik gazów", Description = "Mierzy stężenie gazów", Image = File.ReadAllBytes(categoriesFullPath + "GasSensor.png") },
+                new Category { Name = "Czujnik magnetyczne", Description = "Wykrywa pole magnetyczne", Image = File.ReadAllBytes(categoriesFullPath + "MagneticSensor.png") },
+                new Category { Name = "Czujnik odbiciowe", Description = "Wykrywa obiekty przez odbicie światła", Image = File.ReadAllBytes(categoriesFullPath + "ReflectiveSensor.png") },
+                new Category { Name = "Czujnik odległości", Description = "Mierzy odległość", Image = File.ReadAllBytes(categoriesFullPath + "Distance.png") },
+                new Category { Name = "Czujnik temperatury", Description = "Mierzy temperaturę", Image = File.ReadAllBytes(categoriesFullPath + "Temperature.png") },
+                new Category { Name = "Czujnik wilgotności", Description = "Mierzy wilgotność", Image = File.ReadAllBytes(categoriesFullPath + "Humidity.png") },
+                new Category { Name = "Enkodery", Description = "Mierzą pozycję kątową lub liniową", Image = File.ReadAllBytes(categoriesFullPath + "Encoder.png") },
+                new Category { Name = "Fotorezystory", Description = "Zmieniają opór w zależności od światła", Image = File.ReadAllBytes(categoriesFullPath + "Photoresistor.png") },
+                new Category { Name = "Fototranzystory", Description = "Wykrywają światło za pomocą tranzystora", Image = File.ReadAllBytes(categoriesFullPath + "Phototransistor.png") },
+                new Category { Name = "Odbiornik podczerwieni", Description = "Odbiera sygnały podczerwieni", Image = File.ReadAllBytes(categoriesFullPath + "Infrared.png") },
+                new Category { Name = "Akcelerometry", Description = "Mierzy przyspieszenie", Image = File.ReadAllBytes(categoriesFullPath + "Accelerometer.png") },
+                new Category { Name = "Czujnik hallotronowe", Description = "Wykrywa pole magnetyczne za pomocą efektu Halla", Image = File.ReadAllBytes(categoriesFullPath + "Hall.png") },
+                new Category { Name = "Mikrokontroler", Description = "Programowo sterowany układ elektroniczny", Image = File.ReadAllBytes(categoriesFullPath + "Microcontroller.png") }
             };
 
             context.Categories.AddRange(categories);
             await context.SaveChangesAsync();
 
+            // Seed Suppliers
             List<Supplier> suppliers = new List<Supplier>
             {
-                new Supplier { Name = "Botland", Website = "https://botland.com.pl/" },
-                new Supplier { Name = "MSalamon", Website = "https://msalamon.pl/" },
-                new Supplier { Name = "DigiKey", Website = "https://www.digikey.pl/" },
-                new Supplier { Name = "Mouser", Website = "https://eu.mouser.com/" },
-                new Supplier { Name = "Aliexpress", Website = "https://pl.aliexpress.com//" },
-                new Supplier { Name = "Kamami", Website = "https://kamami.pl/" }
+                new Supplier { Name = "DigiKey", Website = "https://www.digikey.pl/", Image = File.ReadAllBytes(fullPath + "DigiKeyIcon.png") },
+                new Supplier { Name = "Botland", Website = "https://botland.com.pl/", Image = File.ReadAllBytes(fullPath + "BotlandIcon.png") },
+                new Supplier { Name = "Mouser", Website = "https://www.mouser.com/", Image = File.ReadAllBytes(fullPath + "MouserIcon.png") },
+                new Supplier { Name = "Kamami", Website = "https://kamami.pl/", Image = File.ReadAllBytes(fullPath + "KamamiIcon.png") },
+                new Supplier { Name = "M-Salamon", Website = "https://msalamon.pl/", Image = File.ReadAllBytes(fullPath + "MSalamonIcon.png") },
+                new Supplier { Name = "Allegro", Website = "https://allegro.pl/", Image = File.ReadAllBytes(fullPath + "AllegroIcon.png") },
+                new Supplier { Name = "AliExpress", Website = "https://pl.aliexpress.com/", Image = File.ReadAllBytes(fullPath + "AliexpressIcon.png") },
             };
             context.Suppliers.AddRange(suppliers);
             await context.SaveChangesAsync();
@@ -280,22 +286,32 @@ public static class TestingDataSeeder
             context.PurchaseItems.AddRange(purchaseItems);
             await context.SaveChangesAsync();
 
+            ImageStorageService ISS = new ImageStorageService(AppDomain.CurrentDomain.BaseDirectory);
+            ISS.Initialize();
+
+            byte[] image = File.ReadAllBytes("D:\\Repo\\ElectronDepot\\ElectroDepot\\ElectroDepotClassLibraryTests\\Assets\\image2.png");
+            List<string> imageIDS = new List<string>();
+            for(int i = 0; i < 14; i++)
+            {
+                imageIDS.Add(ISS.InsertProjectImage(image));
+            }
+
             List<Project> projects = new List<Project>
             {
-                new Project { UserID = users[0].UserID, Name = "Smart Home System", Description = "System automatyzacji domu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[1].UserID, Name = "Weather Station", Description = "Monitorowanie pogody", CreatedAt = DateTime.Now },
-                new Project { UserID = users[2].UserID, Name = "Automated Irrigation System", Description = "System do automatycznego nawadniania ogrodu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[3].UserID, Name = "Home Security System", Description = "System monitorowania bezpieczeństwa domu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[0].UserID, Name = "Fitness Tracker", Description = "Aplikacja do monitorowania aktywności fizycznej", CreatedAt = DateTime.Now },
-                new Project { UserID = users[1].UserID, Name = "Air Quality Monitor", Description = "System monitorowania jakości powietrza", CreatedAt = DateTime.Now },
-                new Project { UserID = users[2].UserID, Name = "Industrial Automation", Description = "Automatyzacja procesów przemysłowych", CreatedAt = DateTime.Now },
-                new Project { UserID = users[3].UserID, Name = "Plant Monitoring System", Description = "System monitorowania wilgotności gleby i zdrowia roślin", CreatedAt = DateTime.Now },
-                new Project { UserID = users[4].UserID, Name = "Smart Lighting System", Description = "Automatyczne oświetlenie zależne od warunków otoczenia", CreatedAt = DateTime.Now },
-                new Project { UserID = users[5].UserID, Name = "Remote Health Monitoring", Description = "Zdalny system monitorowania parametrów zdrowotnych", CreatedAt = DateTime.Now },
-                new Project { UserID = users[6].UserID, Name = "Energy Management System", Description = "Monitorowanie zużycia energii elektrycznej w domu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[7].UserID, Name = "Robot Navigation", Description = "System nawigacji dla robota autonomicznego", CreatedAt = DateTime.Now },
-                new Project { UserID = users[8].UserID, Name = "Voice Controlled Assistant", Description = "Asystent głosowy do sterowania urządzeniami w domu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[9].UserID, Name = "Smart Thermostat", Description = "Inteligentny system zarządzania temperaturą w domu", CreatedAt = DateTime.Now }
+                new Project { UserID = users[0].UserID, ImageURI = imageIDS[0], Name = "Smart Home System", Description = "System automatyzacji domu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[1].UserID, ImageURI = imageIDS[1], Name = "Weather Station", Description = "Monitorowanie pogody", CreatedAt = DateTime.Now },
+                new Project { UserID = users[2].UserID, ImageURI = imageIDS[2], Name = "Automated Irrigation System", Description = "System do automatycznego nawadniania ogrodu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[3].UserID, ImageURI = imageIDS[3], Name = "Home Security System", Description = "System monitorowania bezpieczeństwa domu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[0].UserID, ImageURI = imageIDS[4], Name = "Fitness Tracker", Description = "Aplikacja do monitorowania aktywności fizycznej", CreatedAt = DateTime.Now },
+                new Project { UserID = users[1].UserID, ImageURI = imageIDS[5], Name = "Air Quality Monitor", Description = "System monitorowania jakości powietrza", CreatedAt = DateTime.Now },
+                new Project { UserID = users[2].UserID, ImageURI = imageIDS[6], Name = "Industrial Automation", Description = "Automatyzacja procesów przemysłowych", CreatedAt = DateTime.Now },
+                new Project { UserID = users[3].UserID, ImageURI = imageIDS[7], Name = "Plant Monitoring System", Description = "System monitorowania wilgotności gleby i zdrowia roślin", CreatedAt = DateTime.Now },
+                new Project { UserID = users[4].UserID, ImageURI = imageIDS[8], Name = "Smart Lighting System", Description = "Automatyczne oświetlenie zależne od warunków otoczenia", CreatedAt = DateTime.Now },
+                new Project { UserID = users[5].UserID, ImageURI = imageIDS[9], Name = "Remote Health Monitoring", Description = "Zdalny system monitorowania parametrów zdrowotnych", CreatedAt = DateTime.Now },
+                new Project { UserID = users[6].UserID, ImageURI = imageIDS[10], Name = "Energy Management System", Description = "Monitorowanie zużycia energii elektrycznej w domu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[7].UserID, ImageURI = imageIDS[11], Name = "Robot Navigation", Description = "System nawigacji dla robota autonomicznego", CreatedAt = DateTime.Now },
+                new Project { UserID = users[8].UserID, ImageURI = imageIDS[12], Name = "Voice Controlled Assistant", Description = "Asystent głosowy do sterowania urządzeniami w domu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[9].UserID, ImageURI = imageIDS[13], Name = "Smart Thermostat", Description = "Inteligentny system zarządzania temperaturą w domu", CreatedAt = DateTime.Now }
             };
             context.Projects.AddRange(projects);
             await context.SaveChangesAsync();

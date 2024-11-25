@@ -1,4 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.Tests
@@ -14,16 +15,16 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find 'Purchase' and 'Component'
-                IEnumerable<PurchaseDTO> purchases = await PurchaseDP.GetAllPurchases();
+                IEnumerable<Purchase> purchases = await PurchaseDP.GetAllPurchases();
                 Assert.NotNull(purchases);
                 Assert.NotEmpty(purchases);
-                PurchaseDTO? purchase = purchases.FirstOrDefault();
+                Purchase? purchase = purchases.FirstOrDefault();
                 Assert.NotNull(purchase);
 
-                IEnumerable<ComponentDTO> componenets = await ComponentDP.GetAllComponents();
+                IEnumerable<Component> componenets = await ComponentDP.GetAllComponents();
                 Assert.NotNull(componenets);
                 Assert.NotEmpty(componenets);
-                ComponentDTO? component = componenets.FirstOrDefault();
+                Component? component = componenets.FirstOrDefault();
                 Assert.NotNull(component);
 
                 CreatePurchaseItemDTO purchaseItem = new CreatePurchaseItemDTO(PurchaseID: purchase.ID, ComponentID: component.ID, Quantity: 30, PricePerUnit: 19.99);

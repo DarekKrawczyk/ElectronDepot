@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ElectroDepotClassLibrary.DTOs;
-using Microsoft.AspNetCore.Http;
+﻿using ElectroDepotClassLibrary.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.Kerberos;
 using Server.Context;
 using Server.ExtensionMethods;
 using Server.Models;

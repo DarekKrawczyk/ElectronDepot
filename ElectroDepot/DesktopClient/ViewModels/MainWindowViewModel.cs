@@ -1,6 +1,7 @@
 ﻿using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ElectroDepotClassLibrary.Stores;
 using System;
 using System.Collections.ObjectModel;
 
@@ -17,6 +18,15 @@ namespace DesktopClient.ViewModels
             IsPanelOpen = !IsPanelOpen;
         }
 
+        public MainWindowViewModel(DatabaseStore databaseStore) : base(databaseStore)
+        {
+            OnSelectedListItemChanged(Items[0]);
+            //CurrentPage = new ComponentsPageViewModel();
+            //_currentPage = new HomePageViewModel();
+        }
+
+
+
         public ObservableCollection<ListItemTemplate> Items { get; set; } = new()
         {
             new ListItemTemplate(typeof(HomePageViewModel)),
@@ -29,7 +39,29 @@ namespace DesktopClient.ViewModels
         };
 
         [ObservableProperty]
-        private ViewModelBase _currentPage = new HomePageViewModel();
+        private ViewModelBase _currentPage;
+
+        partial void OnSelectedListItemChanged(ListItemTemplate value)
+        {
+            if (value is null)
+            {
+                return;
+            }
+            var instance = Activator.CreateInstance(value.ModelType, args: DatabaseStore);
+            if (instance is null)
+            {
+                return;
+            }
+            CurrentPage?.Dispose();
+            CurrentPage = (ViewModelBase)instance;
+        }
+
+        public override void Dispose()
+        {
+        }
+
+        [ObservableProperty]
+        private ListItemTemplate _selectedListItem;
     }
 
     public class ListItemTemplate

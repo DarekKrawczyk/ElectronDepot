@@ -20,6 +20,9 @@ namespace Server.Models
 
         [Column(TypeName = "nvarchar(255)")]
         public string Website { get; set; }
+
+        [Required]
+        public byte[] Image { get; set; }
         #endregion
     }
 }
