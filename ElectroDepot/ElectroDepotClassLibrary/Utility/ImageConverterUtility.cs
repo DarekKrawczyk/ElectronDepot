@@ -2,7 +2,7 @@
 
 namespace ElectroDepotClassLibrary.Utility
 {
-    public static class ImageConverter
+    public static class ImageConverterUtility
     {
         public static byte[] BitmapToBytes(Bitmap image)
         {

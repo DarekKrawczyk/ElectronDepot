@@ -18,7 +18,9 @@ namespace DesktopClient
             SupplierDataProvider supplierDataProvider = new SupplierDataProvider(ConnectionURL);
             ComponentDataProvider componentDataProvider = new ComponentDataProvider(ConnectionURL);
             CategoryDataProvider categoryDataProvider = new CategoryDataProvider(ConnectionURL);
-            _databaseStore = new DatabaseStore(supplierDataProvider, componentDataProvider, categoryDataProvider);
+            ProjectDataProvider projectDataProvider = new ProjectDataProvider(ConnectionURL);
+            PurchaseDataProvider purchaseDataProvider = new PurchaseDataProvider(ConnectionURL);
+            _databaseStore = new DatabaseStore(supplierDataProvider, componentDataProvider, categoryDataProvider, projectDataProvider, purchaseDataProvider);
 
             AvaloniaXamlLoader.Load(this);
         }

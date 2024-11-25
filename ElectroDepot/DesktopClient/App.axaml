@@ -18,6 +18,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source='avares://DesktopClient/CustomControls/SupplierNodeButton.axaml' />
         <ResourceInclude Source='avares://DesktopClient/CustomControls/ComponentNodeButton.axaml' />
+        <ResourceInclude Source='avares://DesktopClient/CustomControls/ProjectNodeButton.axaml' />
         <ResourceInclude Source='avares://DesktopClient/Templates/MenuButton.axaml' />
         <ResourceInclude Source='avares://DesktopClient/Templates/General_Use_Menu_Button.axaml' />
         <ResourceInclude Source='avares://DesktopClient/Templates/Menu_Project_Node.axaml' />

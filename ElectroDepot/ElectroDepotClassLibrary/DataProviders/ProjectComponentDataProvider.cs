@@ -2,6 +2,7 @@
 using ElectroDepotClassLibrary.Endpoints;
 using System.Text.Json;
 using System.Text;
+using ElectroDepotClassLibrary.Models;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
@@ -48,11 +49,11 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<IEnumerable<ProjectComponentDTO>> GetAllProjectComponentsOfProject(ProjectDTO projectDTO)
+        public async Task<IEnumerable<ProjectComponentDTO>> GetAllProjectComponentsOfProject(Project project)
         {
             try
             {
-                string url = ProjectComponentEndpoints.GetAllByProject(projectDTO.ID);
+                string url = ProjectComponentEndpoints.GetAllByProject(project.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)

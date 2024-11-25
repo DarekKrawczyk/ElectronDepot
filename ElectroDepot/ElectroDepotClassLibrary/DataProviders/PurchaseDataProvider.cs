@@ -15,11 +15,11 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// <summary>
         /// Creates new 'Purchase' in database.
         /// </summary>
-        /// <param name="createPurchaseDTO"></param>
+        /// <param name="purchase"></param>
         /// <returns></returns>
-        public async Task<bool> CreatePurchase(CreatePurchaseDTO createPurchaseDTO)
+        public async Task<bool> CreatePurchase(Purchase purchase)
         {
-            var json = JsonSerializer.Serialize(createPurchaseDTO);
+            var json = JsonSerializer.Serialize(purchase);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             string url = PurchaseEndpoints.Create();
@@ -33,7 +33,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             return false;
         }
 
-        public async Task<PurchaseDTO> GetPurchaseByID(int ID)
+        public async Task<Purchase> GetPurchaseByID(int ID)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     PurchaseDTO? purchase = JsonSerializer.Deserialize<PurchaseDTO>(json, options);
-                    return purchase;
+                    return purchase?.ToModel();
                 }
                 else
                 {
@@ -64,7 +64,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// Gets all 'Purchase's from database.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<PurchaseDTO>> GetAllPurchases()
+        public async Task<IEnumerable<Purchase>> GetAllPurchases()
         {
             try
             {
@@ -78,7 +78,9 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<PurchaseDTO> purchases = JsonSerializer.Deserialize<IEnumerable<PurchaseDTO>>(json, options);
-                    return purchases;
+                    List<Purchase> purchasesModels = purchases.Select(x=>x.ToModel()).ToList();
+
+                    return purchasesModels;
                 }
                 else
                 {
@@ -95,7 +97,7 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// </summary>
         /// <param name="userDTO"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<PurchaseDTO>> GetAllPurchasesFromUser(UserDTO userDTO)
+        public async Task<IEnumerable<Purchase>> GetAllPurchasesFromUser(UserDTO userDTO)
         {
             try
             {
@@ -109,7 +111,8 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<PurchaseDTO> purchases = JsonSerializer.Deserialize<IEnumerable<PurchaseDTO>>(json, options);
-                    return purchases;
+                    List<Purchase> purchasesModels = purchases.Select(x=>x.ToModel()).ToList();
+                    return purchasesModels;
                 }
                 else
                 {
@@ -124,13 +127,13 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// <summary>
         /// Gets all 'Purchases' of given 'Supplier'
         /// </summary>
-        /// <param name="supplierDTO"></param>
+        /// <param name="supplier"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<PurchaseDTO>> GetAllPurchasesFromSupplier(Supplier supplierDTO)
+        public async Task<IEnumerable<Purchase>> GetAllPurchasesFromSupplier(Supplier supplier)
         {
             try
             {
-                string url = PurchaseEndpoints.GetAllBySupplierID(supplierDTO.ID);
+                string url = PurchaseEndpoints.GetAllBySupplierID(supplier.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -140,7 +143,8 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<PurchaseDTO> purchases = JsonSerializer.Deserialize<IEnumerable<PurchaseDTO>>(json, options);
-                    return purchases;
+                    List<Purchase> purchasesModels = purchases.Select(x=>x.ToModel()).ToList();
+                    return purchasesModels;
                 }
                 else
                 {
@@ -152,21 +156,54 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
+
         /// <summary>
-        /// Updated 'Purchase' in database
+        /// 
         /// </summary>
-        /// <param name="purchaseDTO"></param>
+        /// <param name="userDTO"></param>
         /// <returns></returns>
-        public async Task<bool> UpdatePurchase(PurchaseDTO purchaseDTO)
+        public async Task<IEnumerable<double>> GetSpendingsForLastYearFromUser(UserDTO userDTO)
         {
             try
             {
-                UpdatePurchaseDTO updateDTO = purchaseDTO.ToUpdatePurchaseDTO();
+                string url = PurchaseEndpoints.GetSpendingsForLastYearFromUser(userDTO.ID);
+                var response = await HTTPClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    options.PropertyNameCaseInsensitive = true;
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    IEnumerable<double> spendings = JsonSerializer.Deserialize<IEnumerable<double>>(json, options);
+                    return spendings;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Updated 'Purchase' in database
+        /// </summary>
+        /// <param name="purchase"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdatePurchase(Purchase purchase)
+        {
+            try
+            {
+                UpdatePurchaseDTO updateDTO = purchase.ToUpdateDTO();
 
                 var json = JsonSerializer.Serialize(updateDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                string url = PurchaseEndpoints.Update(purchaseDTO.ID);
+                string url = PurchaseEndpoints.Update(purchase.ID);
                 var response = await HTTPClient.PutAsync(url, content);
 
                 return response.IsSuccessStatusCode;
@@ -179,11 +216,11 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// <summary>
         /// Deletes 'Purchase' from database.
         /// </summary>
-        /// <param name="purchaseDTO"></param>
+        /// <param name="purchase"></param>
         /// <returns></returns>
-        public async Task<bool> DeletePuchase(PurchaseDTO purchaseDTO)
+        public async Task<bool> DeletePuchase(Purchase purchase)
         {
-            string url = PurchaseEndpoints.Delete(purchaseDTO.ID);
+            string url = PurchaseEndpoints.Delete(purchase.ID);
             var response = await HTTPClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }

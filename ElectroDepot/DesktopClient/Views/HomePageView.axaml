@@ -45,13 +45,26 @@
                  Margin="0 0 0 10">
             Latest projects
           </Label>
-          <ScrollViewer Width="485"
-                        HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-            <UniformGrid Rows="1">
-              <controls:Menu_Project_Node Margin="10"/>
-              <controls:Menu_Project_Node Margin="10"/>
-              <controls:Menu_Project_Node Margin="10"/>
-            </UniformGrid>
+          <ScrollViewer Height="270">
+            <ItemsControl ItemsSource="{Binding Projects}" HorizontalAlignment="Left" VerticalAlignment="Top">
+              <!-- Define the panel as UniformGrid -->
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <UniformGrid Columns="2" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+
+              <!-- Template for displaying each item -->
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <CustomControls:ProjectNodeButton ProjectName ="{Binding Project.Name}"
+                                                    ProjectDescription="{Binding Project.Description}"
+                                                    ProjectImage="{Binding Project.Image}"
+                                                    Command="{Binding ItemClickedCommand}"
+                                                    Margin="10"/>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
           </ScrollViewer>
         </StackPanel>
       </Grid>

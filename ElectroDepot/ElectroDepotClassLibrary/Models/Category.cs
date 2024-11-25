@@ -14,11 +14,11 @@ namespace ElectroDepotClassLibrary.Models
         {
             get
             {
-                return ImageConverter.BytesToBitmap(ByteImage);
+                return ImageConverterUtility.BytesToBitmap(ByteImage);
             }
             set
             {
-                ByteImage = ImageConverter.BitmapToBytes(value);
+                ByteImage = ImageConverterUtility.BitmapToBytes(value);
             }
         }
         public Category(int id, string name, string description, byte[] image)

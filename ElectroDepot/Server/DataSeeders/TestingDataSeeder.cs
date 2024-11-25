@@ -1,4 +1,5 @@
-﻿using ElectroDepotClassLibrary.Utility;
+﻿using ElectroDepotClassLibrary.Services;
+using ElectroDepotClassLibrary.Utility;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
 using Server.Models;
@@ -285,22 +286,32 @@ public static class TestingDataSeeder
             context.PurchaseItems.AddRange(purchaseItems);
             await context.SaveChangesAsync();
 
+            ImageStorageService ISS = new ImageStorageService(AppDomain.CurrentDomain.BaseDirectory);
+            ISS.Initialize();
+
+            byte[] image = File.ReadAllBytes("D:\\Repo\\ElectronDepot\\ElectroDepot\\ElectroDepotClassLibraryTests\\Assets\\image2.png");
+            List<string> imageIDS = new List<string>();
+            for(int i = 0; i < 14; i++)
+            {
+                imageIDS.Add(ISS.InsertProjectImage(image));
+            }
+
             List<Project> projects = new List<Project>
             {
-                new Project { UserID = users[0].UserID, Name = "Smart Home System", Description = "System automatyzacji domu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[1].UserID, Name = "Weather Station", Description = "Monitorowanie pogody", CreatedAt = DateTime.Now },
-                new Project { UserID = users[2].UserID, Name = "Automated Irrigation System", Description = "System do automatycznego nawadniania ogrodu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[3].UserID, Name = "Home Security System", Description = "System monitorowania bezpieczeństwa domu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[0].UserID, Name = "Fitness Tracker", Description = "Aplikacja do monitorowania aktywności fizycznej", CreatedAt = DateTime.Now },
-                new Project { UserID = users[1].UserID, Name = "Air Quality Monitor", Description = "System monitorowania jakości powietrza", CreatedAt = DateTime.Now },
-                new Project { UserID = users[2].UserID, Name = "Industrial Automation", Description = "Automatyzacja procesów przemysłowych", CreatedAt = DateTime.Now },
-                new Project { UserID = users[3].UserID, Name = "Plant Monitoring System", Description = "System monitorowania wilgotności gleby i zdrowia roślin", CreatedAt = DateTime.Now },
-                new Project { UserID = users[4].UserID, Name = "Smart Lighting System", Description = "Automatyczne oświetlenie zależne od warunków otoczenia", CreatedAt = DateTime.Now },
-                new Project { UserID = users[5].UserID, Name = "Remote Health Monitoring", Description = "Zdalny system monitorowania parametrów zdrowotnych", CreatedAt = DateTime.Now },
-                new Project { UserID = users[6].UserID, Name = "Energy Management System", Description = "Monitorowanie zużycia energii elektrycznej w domu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[7].UserID, Name = "Robot Navigation", Description = "System nawigacji dla robota autonomicznego", CreatedAt = DateTime.Now },
-                new Project { UserID = users[8].UserID, Name = "Voice Controlled Assistant", Description = "Asystent głosowy do sterowania urządzeniami w domu", CreatedAt = DateTime.Now },
-                new Project { UserID = users[9].UserID, Name = "Smart Thermostat", Description = "Inteligentny system zarządzania temperaturą w domu", CreatedAt = DateTime.Now }
+                new Project { UserID = users[0].UserID, ImageURI = imageIDS[0], Name = "Smart Home System", Description = "System automatyzacji domu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[1].UserID, ImageURI = imageIDS[1], Name = "Weather Station", Description = "Monitorowanie pogody", CreatedAt = DateTime.Now },
+                new Project { UserID = users[2].UserID, ImageURI = imageIDS[2], Name = "Automated Irrigation System", Description = "System do automatycznego nawadniania ogrodu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[3].UserID, ImageURI = imageIDS[3], Name = "Home Security System", Description = "System monitorowania bezpieczeństwa domu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[0].UserID, ImageURI = imageIDS[4], Name = "Fitness Tracker", Description = "Aplikacja do monitorowania aktywności fizycznej", CreatedAt = DateTime.Now },
+                new Project { UserID = users[1].UserID, ImageURI = imageIDS[5], Name = "Air Quality Monitor", Description = "System monitorowania jakości powietrza", CreatedAt = DateTime.Now },
+                new Project { UserID = users[2].UserID, ImageURI = imageIDS[6], Name = "Industrial Automation", Description = "Automatyzacja procesów przemysłowych", CreatedAt = DateTime.Now },
+                new Project { UserID = users[3].UserID, ImageURI = imageIDS[7], Name = "Plant Monitoring System", Description = "System monitorowania wilgotności gleby i zdrowia roślin", CreatedAt = DateTime.Now },
+                new Project { UserID = users[4].UserID, ImageURI = imageIDS[8], Name = "Smart Lighting System", Description = "Automatyczne oświetlenie zależne od warunków otoczenia", CreatedAt = DateTime.Now },
+                new Project { UserID = users[5].UserID, ImageURI = imageIDS[9], Name = "Remote Health Monitoring", Description = "Zdalny system monitorowania parametrów zdrowotnych", CreatedAt = DateTime.Now },
+                new Project { UserID = users[6].UserID, ImageURI = imageIDS[10], Name = "Energy Management System", Description = "Monitorowanie zużycia energii elektrycznej w domu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[7].UserID, ImageURI = imageIDS[11], Name = "Robot Navigation", Description = "System nawigacji dla robota autonomicznego", CreatedAt = DateTime.Now },
+                new Project { UserID = users[8].UserID, ImageURI = imageIDS[12], Name = "Voice Controlled Assistant", Description = "Asystent głosowy do sterowania urządzeniami w domu", CreatedAt = DateTime.Now },
+                new Project { UserID = users[9].UserID, ImageURI = imageIDS[13], Name = "Smart Thermostat", Description = "Inteligentny system zarządzania temperaturą w domu", CreatedAt = DateTime.Now }
             };
             context.Projects.AddRange(projects);
             await context.SaveChangesAsync();
