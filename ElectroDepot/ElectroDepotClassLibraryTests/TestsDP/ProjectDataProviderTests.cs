@@ -15,12 +15,12 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find any User
-                IEnumerable<UserDTO> users = await UserDP.GetAllUsers();
-                UserDTO? user = users.FirstOrDefault();
+                IEnumerable<User> users = await UserDP.GetAllUsers();
+                User? user = users.FirstOrDefault();
 
                 Assert.NotNull(user);
 
-                Project project = new Project(id: 0, userID: user.ID, name: "Stacja meterologiczna", image: null, description: "Na SMIW", createdAt: DateTime.Now);
+                Project project = new Project(id: 0, userID: user.ID, name: "Stacja meterologiczna", user: user, image: null, description: "Na SMIW", createdAt: DateTime.Now);
                 bool wasCreate = await ProjectDP.CreateProject(project);
                 Assert.True(wasCreate);
 
@@ -56,8 +56,8 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find any User
-                IEnumerable<UserDTO> users = await UserDP.GetAllUsers();
-                UserDTO? user = users.FirstOrDefault();
+                IEnumerable<User> users = await UserDP.GetAllUsers();
+                User? user = users.FirstOrDefault();
                 Assert.NotNull(user);
 
                 IEnumerable<Project> projects = await ProjectDP.GetAllProjectOfUser(user);
@@ -102,8 +102,8 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find any User
-                IEnumerable<UserDTO> users = await UserDP.GetAllUsers();
-                UserDTO? user = users.FirstOrDefault();
+                IEnumerable<User> users = await UserDP.GetAllUsers();
+                User? user = users.FirstOrDefault();
                 Assert.NotNull(user);
 
                 IEnumerable<Project> projects = await ProjectDP.GetAllProjectOfUser(user);
@@ -115,7 +115,7 @@ namespace ElectroDepotClassLibraryTests.Tests
                 }
 
                 Project projectUpdated = projects.FirstOrDefault();
-                Project projectToSend = new Project(id: 0, userID: projectUpdated.UserID, name: "Fajna stacja pogodowa", image: null, description: projectUpdated.Description, createdAt: projectUpdated.CreatedAt);
+                Project projectToSend = new Project(id: 0, userID: projectUpdated.UserID, name: "Fajna stacja pogodowa", image: null, user: user, description: projectUpdated.Description, createdAt: projectUpdated.CreatedAt);
 
                 bool wasChanged = await ProjectDP.UpdateProject(projectToSend);
                 Assert.True(wasChanged);

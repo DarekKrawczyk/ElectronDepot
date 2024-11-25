@@ -6,10 +6,10 @@ namespace ElectroDepotClassLibrary.Models
 {
     public class Supplier
     {
-        public byte[] ByteImage { get; set; }
         public int ID { get; }
         public string Name { get; set; } 
         public string Website { get; set; }
+        public byte[] ByteImage { get; set; }
         public Bitmap Image
         {
             get

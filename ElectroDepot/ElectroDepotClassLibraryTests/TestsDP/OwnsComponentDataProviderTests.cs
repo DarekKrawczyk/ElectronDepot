@@ -19,10 +19,10 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<UserDTO> allUsers = await UserDP.GetAllUsers();
+                IEnumerable<User> allUsers = await UserDP.GetAllUsers();
                 Assert.NotNull(allUsers);
                 Assert.NotEmpty(allUsers);
-                UserDTO foundUser = allUsers.FirstOrDefault();
+                User foundUser = allUsers.FirstOrDefault();
                 Assert.NotNull(foundUser);
 
                 IEnumerable<Component> allComponents = await ComponentDP.GetAllComponents();

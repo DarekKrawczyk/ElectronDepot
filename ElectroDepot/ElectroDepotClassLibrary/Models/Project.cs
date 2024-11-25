@@ -8,16 +8,17 @@ namespace ElectroDepotClassLibrary.Models
     {
         public int ID { get; }
         public int UserID { get; }
-        // TODO: User Model
+        public User User { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; }
         public Bitmap Image { get; set; }
-        public Project(int id, int userID, string name, string description, DateTime createdAt, Bitmap image)
+        public Project(int id, int userID, string name, User user, string description, DateTime createdAt, Bitmap image)
         {
             ID = id;
             UserID = userID;
             Name = name;
+            User = user;
             Description = description;
             CreatedAt = createdAt;
             Image = image;
@@ -27,7 +28,6 @@ namespace ElectroDepotClassLibrary.Models
         {
             return $"ID: '{ID}', UserID: '{UserID}', Name: '{Name}', Description: '{Description}', CreatedAt: '{CreatedAt}'";
         }
-
     }
 
     internal static class ProjectExtensionMethods
@@ -86,6 +86,7 @@ namespace ElectroDepotClassLibrary.Models
                 Description: project.Description,
                 Image: imageAsBytes);
         }
+
         internal static Project ToModel(this ProjectDTO projectDTO)
         {
             Bitmap bitmap = null;
@@ -99,7 +100,8 @@ namespace ElectroDepotClassLibrary.Models
             }
             return new Project(
                 id: projectDTO.ID, 
-                userID: projectDTO.UserID, 
+                userID: projectDTO.UserID,
+                user: null,
                 name: projectDTO.Name, 
                 image: bitmap,
                 description: projectDTO.Description, 

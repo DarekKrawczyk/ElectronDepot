@@ -3,31 +3,21 @@
     public record UserDTO(
         int ID,
         string Username,
-        string Email
+        string Email,
+        byte[] ProfilePicture
     );
 
     public record CreateUserDTO(
         string Username,
         string Email,
-        string Password
+        string Password,
+        byte[] ProfilePicture
     );
 
     public record UpdateUserDTO(
         string Username,
         string Email,
-        string Password
+        string Password,
+        byte[] ProfilePicture
     );
-
-    public static class UsersDTOsExtensions
-    {
-        //public static CreateUserDTO ToCreateUserDTO(this UserDTO userDTO)
-        //{
-        //    return new CreateUserDTO(Username: userDTO.Username, Email: userDTO.Email, Password: userDTO.Pas);
-        //}
-
-        //public static UpdateUserDTO ToUpdateUserDTO(this UserDTO componentDTO)
-        //{
-        //    return new UpdateUserDTO(Name: componentDTO.Name, Manufacturer: componentDTO.Manufacturer, Description: componentDTO.Description);
-        //}
-    }
 }

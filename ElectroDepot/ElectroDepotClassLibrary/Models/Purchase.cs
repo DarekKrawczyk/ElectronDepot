@@ -6,15 +6,16 @@ namespace ElectroDepotClassLibrary.Models
     {
         public int ID { get; }
         public int UserID { get; }
-        // Model User
+        public User User { get; set; }
         public int SupplierID { get; }
         public Supplier Supplier { get; set; }
         public DateTime PurchaseDate { get; set; }
         public double TotalPrice { get; set; }
-        public Purchase(int iD, int userID, int supplierID, Supplier supplier, DateTime purchaseDate, double totalPrice)
+        public Purchase(int iD, int userID, User user, int supplierID, Supplier supplier, DateTime purchaseDate, double totalPrice)
         {
             ID = iD;
             UserID = userID;
+            User = user;
             SupplierID = supplierID;
             Supplier = supplier;
             PurchaseDate = purchaseDate;
@@ -45,7 +46,7 @@ namespace ElectroDepotClassLibrary.Models
     {
         public static Purchase ToModel(this PurchaseDTO purchaseDTO)
         {
-            return new Purchase(iD: purchaseDTO.ID, userID: purchaseDTO.UserID, supplierID: purchaseDTO.SupplierID, supplier: null, purchaseDate: purchaseDTO.PurchaseDate, totalPrice: purchaseDTO.TotalPrice);
+            return new Purchase(iD: purchaseDTO.ID, userID: purchaseDTO.UserID, user: null, supplierID: purchaseDTO.SupplierID, supplier: null, purchaseDate: purchaseDTO.PurchaseDate, totalPrice: purchaseDTO.TotalPrice);
         }
     }
 }

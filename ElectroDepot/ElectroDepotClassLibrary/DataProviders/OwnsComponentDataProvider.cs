@@ -47,7 +47,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<OwnsComponentDTO>> GetAllUsedComponentsFromUser(UserDTO user)
+        public async Task<IEnumerable<OwnsComponentDTO>> GetAllUsedComponentsFromUser(User user)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<OwnsComponentDTO>> GetAllFreeToUseComponentsFromUser(UserDTO user)
+        public async Task<IEnumerable<OwnsComponentDTO>> GetAllFreeToUseComponentsFromUser(User user)
         {
             try
             {
@@ -101,11 +101,11 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<OwnsComponentDTO>> GetAllOwnsComponentsFromUser(UserDTO userDTO)
+        public async Task<IEnumerable<OwnsComponentDTO>> GetAllOwnsComponentsFromUser(User user)
         {
             try
             {
-                string url = OwnsComponentEndpoints.GetAllOwnComponentFromUser(userDTO.ID);
+                string url = OwnsComponentEndpoints.GetAllOwnComponentFromUser(user.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -128,11 +128,11 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<OwnsComponentDTO> GetOwnComponentsFromUser(UserDTO userDTO, Component component)
+        public async Task<OwnsComponentDTO> GetOwnComponentsFromUser(User user, Component component)
         {
             try
             {
-                string url = OwnsComponentEndpoints.GetOwnComponentFromUser(userDTO.ID, component.ID);
+                string url = OwnsComponentEndpoints.GetOwnComponentFromUser(user.ID, component.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)

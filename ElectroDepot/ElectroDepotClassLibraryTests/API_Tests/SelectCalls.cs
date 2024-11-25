@@ -29,9 +29,9 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                     new string[] { "grzegorz.baron", "grzegorz.baron@gmail.com" },
                     new string[] { "joanna.pawlowska", "joanna.pawlowska@gmail.com" }
                 };
-                IEnumerable<UserDTO> allUsersFromDB = await UserDP.GetAllUsers();
+                IEnumerable<User> allUsersFromDB = await UserDP.GetAllUsers();
 
-                foreach (UserDTO user in allUsersFromDB)
+                foreach (User user in allUsersFromDB)
                 {
                     Console.WriteLine(user.ToString());
                     string[] dbUserData = new string[] {user.Username, user.Email };
@@ -54,7 +54,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
             {
                 int[] CompsIDsOfJacekJaworek = new int[] { 77, 2, 5, 38, 82, 67, 9 };
 
-                UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
+                User user = await UserDP.GetUserByUsername("jacek.jaworek");
                 IEnumerable<Component> componentsOfUser = await ComponentDP.GetAllUserComponent(user.ID);
                 foreach(Component component in componentsOfUser)
                 {
@@ -79,7 +79,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
 
                 int[] ProjectsIDsOfJacekJaworek = new int[] { 0, 4 };
 
-                UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
+                User user = await UserDP.GetUserByUsername("jacek.jaworek");
                 IEnumerable<Project> projectsOfUser = await ProjectDP.GetAllProjectOfUser(user);
                 foreach (Project project in projectsOfUser)
                 {
@@ -112,7 +112,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                     new int[] { 9, 2 },
                 };
 
-                UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
+                User user = await UserDP.GetUserByUsername("jacek.jaworek");
                 Assert.NotNull(user);
 
                 IEnumerable<OwnsComponentDTO> OwnedComponentsOfUser = await OwnsComponentDP.GetAllOwnsComponentsFromUser(user);
@@ -188,7 +188,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 int[] purchaseIDS = new int[] { 1, 2 };
                 //
 
-                UserDTO user = await UserDP.GetUserByUsername(username);
+                User user = await UserDP.GetUserByUsername(username);
                 Assert.NotNull(user);
 
                 IEnumerable<Purchase> purchases = await PurchaseDP.GetAllPurchasesFromUser(user);
@@ -297,7 +297,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 // Data definition
                 int userID = Utility.UserIDBias;
                 
-                UserDTO user = await UserDP.GetUserByID(userID);
+                User user = await UserDP.GetUserByID(userID);
                 Assert.NotNull(user);
 
                 IEnumerable<OwnsComponentDTO> freeToUseComponents = await OwnsComponentDP.GetAllFreeToUseComponentsFromUser(user);
@@ -322,7 +322,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 // Data definition
                 int userID = Utility.UserIDBias;
 
-                UserDTO user = await UserDP.GetUserByID(userID);
+                User user = await UserDP.GetUserByID(userID);
                 Assert.NotNull(user);
 
                 IEnumerable<OwnsComponentDTO> freeToUseComponents = await OwnsComponentDP.GetAllUsedComponentsFromUser(user);
@@ -349,7 +349,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
                 int[] IDsArray = new int[] { 77, 2, 5, 38, 82, 67, 9 };
                 int[] quantities = new int[] { 1, 1, 2, 1, 2, 2, 2 };
                 
-                UserDTO user = await UserDP.GetUserByID(userID);
+                User user = await UserDP.GetUserByID(userID);
                 Assert.NotNull(user);
 
                 IEnumerable<OwnsComponentDTO> ownedComponents = await OwnsComponentDP.GetAllOwnsComponentsFromUser(user);
@@ -415,7 +415,7 @@ namespace ElectroDepotClassLibraryTests.TestsOperations
         {
             try
             {
-                UserDTO user = await UserDP.GetUserByUsername("jacek.jaworek");
+                User user = await UserDP.GetUserByUsername("jacek.jaworek");
 
                 IEnumerable<double> spendings = await PurchaseDP.GetSpendingsForLastYearFromUser(user);
                 Assert.NotEmpty(spendings);

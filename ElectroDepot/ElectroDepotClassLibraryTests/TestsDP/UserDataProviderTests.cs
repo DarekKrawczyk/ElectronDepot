@@ -1,20 +1,19 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
 using Xunit.Abstractions;
 
 namespace ElectroDepotClassLibraryTests.Tests
 {
     public class UserDataProviderTests : BaseDataProviderTest
     {
-        public UserDataProviderTests(ITestOutputHelper output) : base(output)
-        {
-        }
+        public UserDataProviderTests(ITestOutputHelper output) : base(output) { }
 
         [Fact]
         public async Task Create()
         {
             try
             {
-                CreateUserDTO user = new CreateUserDTO(Username: "Darek", Email: "Darek@gmail.com", Password: "Pieczarka");
+                User user = new User(id: -1, username: "Darek", email: "Darek@gmail.com", password: "Pieczarka", profilePicture: null);
 
                 bool wasCreated = await UserDP.CreateUser(user);
                 Assert.True(wasCreated);
@@ -32,9 +31,9 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<UserDTO> users = await UserDP.GetAllUsers();
+                IEnumerable<User> users = await UserDP.GetAllUsers();
                 Assert.NotNull(users);
-                foreach (UserDTO user in users)
+                foreach (User user in users)
                 {
                     Console.WriteLine($"{user.ToString()}");
                 }
@@ -50,7 +49,7 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                UserDTO? user = await UserDP.GetUserByUsername("Darek");
+                User? user = await UserDP.GetUserByUsername("Darek");
                 Assert.NotNull(user);
             }
             catch (Exception ex)
@@ -64,18 +63,18 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<UserDTO> allUsers = await UserDP.GetAllUsers();
+                IEnumerable<User> allUsers = await UserDP.GetAllUsers();
                 Assert.NotNull(allUsers);
                 Assert.NotEmpty(allUsers);
 
-                foreach (UserDTO singleuser in allUsers)
+                foreach (User singleuser in allUsers)
                 {
                     Console.WriteLine(singleuser.ToString());
                 }
 
                 int ID = allUsers.FirstOrDefault().ID;
 
-                UserDTO? user = await UserDP.GetUserByID(ID);
+                User? user = await UserDP.GetUserByID(ID);
                 Assert.NotNull(user);
                 Console.WriteLine(user.ToString());
             }
@@ -90,16 +89,16 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<UserDTO> allUsers = await UserDP.GetAllUsers();
+                IEnumerable<User> allUsers = await UserDP.GetAllUsers();
                 Assert.NotNull(allUsers);
                 Assert.NotEmpty(allUsers);
 
-                foreach (UserDTO singleuser in allUsers)
+                foreach (User singleuser in allUsers)
                 {
                     Console.WriteLine(singleuser.ToString());
                 }
 
-                UserDTO firstUser = allUsers.FirstOrDefault();
+                User firstUser = allUsers.FirstOrDefault();
 
                 bool wasDeleted = await UserDP.DeleteUser(firstUser);
                 Assert.True(wasDeleted);

@@ -27,6 +27,9 @@ namespace Server.Models
         [Required]
         [Column(TypeName = "nvarchar(255)")]
         public string Email { get; set; }
+
+        [Column(TypeName = "nvarchar(255)")]
+        public string ProfilePictureURI { get; set; }
         #endregion
     }
 }

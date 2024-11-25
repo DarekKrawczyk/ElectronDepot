@@ -1,4 +1,5 @@
 ﻿using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Context;
@@ -13,10 +14,13 @@ namespace Server.Controllers
     public class UsersController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly ImageStorageService ISS;
 
         public UsersController(DatabaseContext context)
         {
             _context = context;
+            ISS = new ImageStorageService(AppDomain.CurrentDomain.BaseDirectory);
+            ISS.Initialize();
         }
 
         #region Create
@@ -52,7 +56,7 @@ namespace Server.Controllers
             _context.Users.Add(userToCreate);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { id = userToCreate.ToDTO().ID }, userToCreate.ToDTO());
+            return CreatedAtAction(nameof(GetUser), new { id = userToCreate.ToDTO(ISS).ID }, userToCreate.ToDTO(ISS));
         }
 
         #endregion
@@ -64,7 +68,7 @@ namespace Server.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
-            return Ok(await _context.Users.Select(x=>x.ToDTO()).ToListAsync());
+            return Ok(await _context.Users.Select(x=>x.ToDTO(ISS)).ToListAsync());
         }
 
         /// <summary>
@@ -82,7 +86,27 @@ namespace Server.Controllers
                 return NotFound(new { title = "not found", status = 404 });
             }
 
-            return Ok(user.ToDTO());
+            return Ok(user.ToDTO(ISS));
+        }
+
+        /// <summary>
+        /// GET: ElectroDepot/Projects/GetImageOfUserByID/{ID}
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        [HttpGet("GetImageOfUserByID/{ID}")]
+        public async Task<ActionResult<byte[]>> GetImageOfUserByID(int ID)
+        {
+            User user = await _context.Users.FindAsync(ID);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            byte[] image = ISS.RetrieveProjectImage(user.ProfilePictureURI);
+
+            return Ok(image);
         }
 
         /// <summary>
@@ -100,7 +124,7 @@ namespace Server.Controllers
                 return NotFound(new { title = "not found", status = 404 });
             }
 
-            return Ok(user.ToDTO());
+            return Ok(user.ToDTO(ISS));
         }
 
         /// <summary>
@@ -118,7 +142,7 @@ namespace Server.Controllers
                 return NotFound(new { title = "not found", status = 404 });
             }
 
-            return Ok(user.ToDTO());
+            return Ok(user.ToDTO(ISS));
         }
         #endregion
         #region Update

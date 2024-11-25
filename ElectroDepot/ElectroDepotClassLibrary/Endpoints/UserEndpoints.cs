@@ -7,6 +7,7 @@
         public static string GetByID(int ID) => $"ElectroDepot/Users/GetUserByID/{ID}";
         public static string GetByUsername(string Name) => $"ElectroDepot/Users/GetUserByUsername/{Name}";
         public static string GetByEMail(string EMail) => $"ElectroDepot/Users/GetUserByEMail/{EMail}";
+        public static string GetImageOfUserByID(int ID) => $"ElectroDepot/Users/GetImageOfUserByID/{ID}";
         public static string Update(int ID) => $"ElectroDepot/Users/Update/{ID}";
         public static string Delete(int ID) => $"ElectroDepot/Users/Delete/{ID}";
     }

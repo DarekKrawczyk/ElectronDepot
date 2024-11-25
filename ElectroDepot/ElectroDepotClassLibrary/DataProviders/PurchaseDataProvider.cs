@@ -97,11 +97,11 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// </summary>
         /// <param name="userDTO"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Purchase>> GetAllPurchasesFromUser(UserDTO userDTO)
+        public async Task<IEnumerable<Purchase>> GetAllPurchasesFromUser(User user)
         {
             try
             {
-                string url = PurchaseEndpoints.GetAllByUserID(userDTO.ID);
+                string url = PurchaseEndpoints.GetAllByUserID(user.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -162,11 +162,11 @@ namespace ElectroDepotClassLibrary.DataProviders
         /// </summary>
         /// <param name="userDTO"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<double>> GetSpendingsForLastYearFromUser(UserDTO userDTO)
+        public async Task<IEnumerable<double>> GetSpendingsForLastYearFromUser(User user)
         {
             try
             {
-                string url = PurchaseEndpoints.GetSpendingsForLastYearFromUser(userDTO.ID);
+                string url = PurchaseEndpoints.GetSpendingsForLastYearFromUser(user.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)

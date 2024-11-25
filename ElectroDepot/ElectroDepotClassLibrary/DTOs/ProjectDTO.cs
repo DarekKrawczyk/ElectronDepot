@@ -21,12 +21,4 @@
         string Description,
         byte[] Image
     );
-
-    public static class ProjectDTOExtensionMethods
-    {
-        public static UpdateProjectDTO ToUpdateProjectDTO(this ProjectDTO projectDTO)
-        {
-            return new UpdateProjectDTO(Name: projectDTO.Name, Description: projectDTO.Description, Image: projectDTO.Image);
-        }
-    }
 }

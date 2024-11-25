@@ -23,17 +23,4 @@ namespace ElectroDepotClassLibrary.DTOs
         string Manufacturer,
         string Description
     );
-
-    public static class ComponentDTOsExtensions
-    {
-        public static CreateComponentDTO ToCreateComponentDTO(this ComponentDTO componentDTO)
-        {
-            return new CreateComponentDTO(CategoryID: componentDTO.CategoryID, Name: componentDTO.Name, Manufacturer: componentDTO.Manufacturer, Description: componentDTO.Description);
-        }
-
-        public static UpdateComponentDTO ToUpdateComponentDTO(this ComponentDTO componentDTO)
-        {
-            return new UpdateComponentDTO(Name: componentDTO.Name, Manufacturer: componentDTO.Manufacturer, Description: componentDTO.Description);
-        }
-    }
 }
