@@ -1,50 +1,137 @@
-# ElectroDepot
+# ⚡ ElectroDepot  
 
-## Project Overview
-ElectroDepot is a comprehensive inventory management application for electronic components, designed to help users keep track of their integrated circuits (ICs) and other electronic parts. Many electronics enthusiasts and professionals accumulate a variety of components over time and often lose track of what they own or need to purchase. This project provides a solution to that problem by maintaining a digital inventory of electronic parts through a client-server architecture.
+**ElectroDepot** is a comprehensive **inventory management application** for electronic components. It helps electronics enthusiasts and professionals keep track of their **integrated circuits (ICs)** and other parts, solving the common problem of losing track of components or making unnecessary purchases.  
 
-## Purpose
-ElectroDepot was created to address the common issue of disorganized component storage. Users often find themselves with components they forgot they owned or are unsure if they need to order specific parts. By tracking what’s on hand and what’s used in projects, ElectroDepot makes it easier to manage component stock, plan projects, and automate updates on new purchases.
+The application leverages a **client-server architecture** to maintain a digital inventory and integrates with popular electronic component sellers like **DigiKey** and **Mouser**. Users can automatically **update their inventory** when new parts are ordered or delivered.  
 
-## Features
+ElectroDepot is much more than an Excel spreadsheet for managing IC names:  
+- It provides an intuitive interface to organize components into **projects**.  
+- It simplifies access to sellers for specific parts.  
 
-### Server
-- **Database of Components**: Stores a database of electronic components for each user, tracking available stock and usage history.
-- **REST API**: Provides a REST API that allows clients to retrieve data from the database and interact with stored information.
-- **Automated Order Tracking**: Automatically updates inventory by scanning emails or notifications from popular electronics suppliers (e.g., Allegro, Botland, Kamami, MSalamon, and AliExpress).
-- **Project Usage Tracking**: Tracks and stores information on which components were used in specific projects, allowing users to see part usage by project.
+ElectroDepot aims to be the **go-to application** for every electronics enthusiast striving to organize their workflow efficiently.  
 
-### Client
-- **Cross-Platform Interface**: Offers a desktop or web interface built in C# and possibly .NET MAUI for cross-platform support, allowing users to interact with the server, check stock levels, and manage inventory.
-- **Filtering, Sorting, and Searching**: Allows users to filter, sort, and search through their inventory to quickly find specific parts.
-- **Component Management**: Users can add new components or update details on existing ones.
-- **Project Management**: Enables users to create new projects and assign components for easy tracking of project needs.
-- **Notification Configuration**: Supports the setup of email and notification services to automatically add purchased parts to the inventory.
-- **User Authentication**: Supports user login to secure personal inventory and project data.
-
-## Architecture and Modules
-
-The ElectroDepot project consists of several core modules:
-
-1. **Server Module**
-   - Developed in **C# with ASP.NET Core**, providing a REST API that enables interactions with the component database.
-   - Supports a **web-scraping module** written in C# to parse email notifications and automatically update the inventory based on purchase confirmations.
-
-2. **Client Module**
-   - A cross-platform client application, developed in **C#** and potentially **.NET MAUI** for compatibility across Windows, macOS, iOS, and Android.
-   - Includes a **class library** for client-side operations, handling UI interactions, data management, and project tracking.
-   
-3. **REST API Class Library**
-   - A dedicated library that handles REST API calls, encapsulating all interactions with the server and ensuring reliable communication between the client and server.
-   - Comprehensive **unit tests** for this library to ensure reliable performance and error handling.
-
-4. **Monitoring and Update Module**
-   - A module responsible for monitoring purchase activity and updating the component database in real time whenever a new item is bought.
-   - Supports integration with third-party services and email parsing to track incoming parts and update stock levels automatically.
-
-5. **Client-Side Code Library**
-   - A reusable class library designed to support various client-side operations, including filtering, sorting, and managing component data, ensuring a consistent experience across platforms.
+### If you’re interested in the **technology stack** used to develop this system, check out the [Architecture and Technologies Information](#architecture-and-technologies-information) section.
 
 ---
 
-ElectroDepot is a tailored solution for electronics enthusiasts and professionals who need an organized, automated, and searchable way to manage their electronic components. This project ensures users always know what they have on hand and where components are being utilized in their projects.
+## 🎯 Purpose  
+
+ElectroDepot was created to solve the widespread problem of **disorganized component storage**.  
+
+As an embedded systems enthusiast, I often struggled to:  
+- Track which components I used in certain **projects**.  
+- Determine whether I already had parts in storage before purchasing duplicates.  
+
+Many users face similar challenges:  
+- Components get forgotten in boxes or drawers.  
+- Projects become difficult to plan due to uncertainty about component availability.  
+
+ElectroDepot addresses these issues by:  
+- Keeping a clear **digital record** of components.  
+- Tracking their usage across **projects**.  
+- Automating updates when new parts are ordered or delivered.  
+
+With ElectroDepot, users can **save time, reduce costs**, and improve project planning.  
+
+---
+
+## 🚀 Key Features  
+
+ElectroDepot offers a tailored solution for electronics enthusiasts and professionals by providing:  
+
+- 📋 **Digital Inventory Management**: Always know what components are on hand.  
+- 🗂️ **Project Organization**: Link parts to specific projects for better tracking.  
+- 🔗 **Integration with Popular Sellers**: Connect with DigiKey, Mouser, and other suppliers to update inventory seamlessly when ordering new parts.  
+- 🔍 **Searchable Interface**: Quickly find components and check their availability.  
+- ⚙️ **Automated Updates**: Ensure inventory stays up-to-date with new purchases or deliveries.  
+
+ElectroDepot is designed to be the ultimate tool for organizing components, streamlining workflows, and ensuring electronics enthusiasts and professionals always have a clear overview of their **inventory** and **projects**.  
+
+
+## 📊 Current State of Development  
+
+### 🖥️ Desktop Client Application  
+
+![Desktop Application](PresentationFiles/BasicUI.gif)  
+
+#### ✅ Implemented  
+- Basic **Home Page**  
+
+#### 🛠️ To Be Implemented  
+- **Projects Component**  
+- **Components Component**  
+- **Purchases Component**  
+- **Tracking Component**
+- **User Profile Component**  
+- **User Login and Authentication**  
+
+
+---
+
+### 🌐 Cross-Platform Client Application  
+Development will begin **after the desktop application is completed**.  
+
+---
+
+### 🔧 Server  
+- **Status**: Core functionality is implemented  
+- **Next Steps**: Perform code refactoring as needed  
+
+---
+
+### 🛒 Parts Distributors Purchase Tracking Service  
+Development has **not yet started**.  
+
+---
+
+## Architecture and Technologies Information  
+
+<details>
+  <summary>Display details</summary>
+  <p>
+  
+### 🛠️ Technology Stack  
+
+#### 🌐 Server  
+- **Language**: C#  
+- **Framework**: ASP.NET Core 8  
+- **ORM**: Entity Framework  
+- **Database**: MS SQL  
+
+#### 💻 Client  
+- **Language**: C#  
+- **Framework**: .NET 8  
+- **UI Library**: AvaloniaUI 11.0.7  
+
+#### 🛒 Purchase Tracking Module  
+- **Language**: C#  
+- **Framework**: .NET 8  
+
+#### 🧪 Testing  
+- **Framework**: XUnit  
+
+---
+
+### 📦 Project Solution Overview  
+
+1. **🌐 Server**  
+   - Handles backend architecture, REST API development, and image upload/storage procedures.  
+
+2. **💻 Desktop Client**  
+   - A desktop application built with **C#** and the **AvaloniaUI** library.  
+   - Future-proof design to enable **cross-platform migration** after development completion.  
+
+3. **🔗 ElectroDepotClassLibrary**  
+   - A shared library for **data exchange** between the server and client.  
+   - Provides basic functionalities and reusable client-side code.  
+
+4. **🧪 ElectroDepotClassLibraryTests**  
+   - Includes tests for server endpoints and client-side code using **XUnit**.  
+
+
+  </p>
+</details>
+
+
+
+
