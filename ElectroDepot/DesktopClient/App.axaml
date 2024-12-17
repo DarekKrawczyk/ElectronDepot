@@ -17,6 +17,7 @@
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source='avares://DesktopClient/CustomControls/MenuNavigationToggleButton.axaml' />
         <ResourceInclude Source='avares://DesktopClient/CustomControls/SupplierNodeButton.axaml' />
         <ResourceInclude Source='avares://DesktopClient/CustomControls/ComponentNodeButton.axaml' />
         <ResourceInclude Source='avares://DesktopClient/CustomControls/ProjectNodeButton.axaml' />
@@ -29,23 +30,43 @@
     </ResourceDictionary>
     <FontFamily x:Key="Roboto">avares://DesktopClient/Assets#Roboto</FontFamily>
 
-    <!-- Primary Purple -->
-    <SolidColorBrush x:Key="UIDeepPurple" Color="#6A4C9C" />
+    <!-- Blue: 1 -->
+    <SolidColorBrush x:Key="TrueBlue" Color="#0466C8" />
+    <Color x:Key="TrueBlueColor">#0466C8</Color>    
+    <!-- Blue: 2 -->
+    <SolidColorBrush x:Key="Sapphire" Color="#0353A4" />
+    <Color x:Key="SapphireColor">#0353A4</Color>
+    <!-- Blue: 3 -->
+    <SolidColorBrush x:Key="YaleBlue" Color="#023E7D" />
+    <Color x:Key="YaleBlueColor">#023E7D</Color>
+    <!-- Blue: 4 -->
+    <SolidColorBrush x:Key="OxfordBlue1" Color="#002855" />
+    <Color x:Key="OxfordBlue1Color">#002855</Color>
+    <!-- Blue: 5 -->
+    <SolidColorBrush x:Key="OxfordBlue2" Color="#001845" />
+    <Color x:Key="OxfordBlue2Color">#001845</Color>
 
-    <!-- Accent Purple -->
-    <SolidColorBrush x:Key="UIAccentPurple" Color="#9B7BC0" />
+    <!-- Gray: 1 -->
+    <SolidColorBrush x:Key="CoolGray" Color="#979DAC" />
+    <Color x:Key="CoolGrayColor">#979DAC</Color>
+    <!-- Gray: 2 -->
+    <SolidColorBrush x:Key="SlateGray" Color="#7D8597" />
+    <Color x:Key="SlateGrayColor">#7D8597</Color>
+    <!-- Gray: 3 -->
+    <SolidColorBrush x:Key="PaynesGray" Color="#5C677D" />
+    <Color x:Key="PaynesGrayColor">#5C677D</Color>
+    <!-- Gray: 4  -->
+    <SolidColorBrush x:Key="DelftBlue" Color="#33415C" />
+    <Color x:Key="DelftBlueColor">#33415C</Color>
 
-    <!-- Dark Gray -->
-    <SolidColorBrush x:Key="UIDarkGray" Color="#333333" />
-
-    <!-- Medium Gray -->
-    <SolidColorBrush x:Key="UIMediumGray" Color="#808080" />
-
-    <!-- Light Gray -->
-    <SolidColorBrush x:Key="UILightGray" Color="#D3D3D3" />
-
-    <!-- Off White -->
-    <SolidColorBrush x:Key="UIOffWhite" Color="#F4F4F4" />
+    <!-- Red: 1-->
+    <SolidColorBrush x:Key="Red" Color="#D00000" />
+    <Color x:Key="RedColor">#D00000</Color>
+    
+    <!-- White: 1-->
+    <SolidColorBrush x:Key="Milk" Color="#fffcf2" />
+    <Color x:Key="MilkColor">#fffcf2</Color>
+    
   </Application.Resources>
 
 </Application>

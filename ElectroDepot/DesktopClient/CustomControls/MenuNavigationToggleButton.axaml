@@ -1,0 +1,109 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:DesktopClient.CustomControls">
+
+  <Design.PreviewWith>
+    <controls:MenuNavigationToggleButton/>
+  </Design.PreviewWith>
+ 
+  <ControlTheme x:Key="{x:Type controls:MenuNavigationToggleButton}" TargetType="controls:MenuNavigationToggleButton">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ToggleButton x:Name="OutterButton"
+                Command="{TemplateBinding Command}"
+                CommandParameter="{TemplateBinding CommandParameter}">
+          <ToggleButton.Content>
+            <!-- Use a Border or Panel to define the visual style -->
+            <Border x:Name="MainBorder"
+                    Padding="0">
+              <Grid MaxWidth="350"
+                    Width="200"
+                    MaxHeight="50"
+                    MinHeight="50"
+                    x:Name="MainGrid"
+                    RowDefinitions="*"
+                    ColumnDefinitions="20*, auto, 80*">
+
+                <!-- Image -->
+                <Grid Grid.Column="0">
+                  <Border CornerRadius="1.8">
+                    <Image x:Name="MainImage"/>
+                  </Border>
+                </Grid>
+
+                <!-- Component name -->
+                <Grid Grid.Column="2">
+                  <TextBlock x:Name="ComponentName">
+                  </TextBlock>
+                </Grid>
+
+              </Grid>
+            </Border>
+          </ToggleButton.Content>
+
+          <ToggleButton.Styles>
+            <Style Selector="ToggleButton#OutterButton">
+              <Setter Property="Background" Value="{DynamicResource CoolGray}"/>
+            </Style>
+
+            <Style Selector="ToggleButton#OutterButton:pointerover /template/ContentPresenter">
+              <Setter Property="Background" Value="{DynamicResource TrueBlue}"/>
+            </Style>
+            
+            <Style Selector="ToggleButton#OutterButton:pressed /template/ContentPresenter">
+              <Setter Property="Background" Value="{DynamicResource Sapphire}"/>
+            </Style>
+
+            <Style Selector="ToggleButton#OutterButton:checked /template/ContentPresenter">
+              <Setter Property="Background" Value="{DynamicResource YaleBoue}"/>
+            </Style>
+
+            <!-- Border style -->
+            <Style Selector="Border#MainBorder">
+              <Setter Property="Background" Value="{DynamicResource UIDeepPurple}"/>
+              <Setter Property="BorderBrush" Value="{DynamicResource UIDarkGray}"/>
+              <Setter Property="BorderThickness" Value="1"/>
+              <Setter Property="CornerRadius" Value="2"/>
+              <Setter Property="Padding" Value="0"/>
+              <Setter Property="Margin" Value="0"/>
+
+              <!-- Image styles -->
+              <Style Selector="^ Grid#MainGrid Image#MainImage">
+                <Setter Property="Transitions">
+                  <Transitions>
+                    <DoubleTransition Property="Width" Duration="0:0:0.1"/>
+                    <DoubleTransition Property="Height" Duration="0:0:0.1"/>
+                  </Transitions>
+                </Setter>
+                <Setter Property="Source" Value="{TemplateBinding Icon}"></Setter>
+                <Setter Property="Width" Value="36"></Setter>
+                <Setter Property="Height" Value="36"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Margin" Value="0,0,0,0"></Setter>
+              </Style>
+
+              <!-- Textbox styles -->
+              <Style Selector="^ Grid#MainGrid TextBlock#ComponentName">
+                <Setter Property="Transitions">
+                  <Transitions>
+                    <DoubleTransition Property="FontSize" Duration="0:0:0.1"/>
+                  </Transitions>
+                </Setter>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Margin" Value="0,0,0,0"></Setter>
+                <Setter Property="Text" Value="{TemplateBinding Name}"></Setter>
+                <Setter Property="FontFamily" Value="{StaticResource Roboto}"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource UIOffWhite}"></Setter>
+                <Setter Property="FontSize" Value="18"></Setter>
+              </Style>
+            </Style>
+
+            <!-- Hover border style -->
+          </ToggleButton.Styles>
+        </ToggleButton>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

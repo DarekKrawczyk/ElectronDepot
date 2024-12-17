@@ -1,17 +1,18 @@
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media.Imaging;
+using DesktopClient.Templates;
 using System;
 
-namespace DesktopClient.Templates;
+namespace DesktopClient.CustomControls;
 
-public class MenuButton : TemplatedControl
+public class MenuNavigationToggleButton : ToggleButton
 {
     /// <summary>
     /// Name StyledProperty definition
     /// </summary>
     public static readonly StyledProperty<string> NameProperty =
-        AvaloniaProperty.Register<MenuButton, string>(nameof(Name), "Component");
+        AvaloniaProperty.Register<MenuButton, string>(nameof(Name), "Components");
 
     /// <summary>
     /// Gets or sets the Name property. This StyledProperty
@@ -23,12 +24,11 @@ public class MenuButton : TemplatedControl
         set => SetValue(NameProperty, value);
     }
 
-
     /// <summary>
     /// ProjectImage StyledProperty definition
     /// </summary>
     public static readonly StyledProperty<Bitmap> IconProperty =
-        AvaloniaProperty.Register<MenuButton, Bitmap>(nameof(Icon), ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/ComponentIcon.png")));
+        AvaloniaProperty.Register<MenuButton, Bitmap>(nameof(Icon), ImageHelper.LoadFromResource(new Uri($"avares://DesktopClient/Assets/HomeIcon.png")));
 
     /// <summary>
     /// Gets or sets the ProjectImage property. This StyledProperty 
@@ -39,6 +39,5 @@ public class MenuButton : TemplatedControl
         get => this.GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
-
 
 }

@@ -25,6 +25,13 @@ namespace DesktopClient.ViewModels
             //_currentPage = new HomePageViewModel();
         }
 
+        public MainWindowViewModel() : base(null)
+        {
+            //OnSelectedListItemChanged(Items[0]);
+            //CurrentPage = new ComponentsPageViewModel();
+            //_currentPage = new HomePageViewModel();
+        }
+
 
 
         public ObservableCollection<ListItemTemplate> Items { get; set; } = new()
