@@ -1,29 +1,151 @@
-﻿using ElectroDepotClassLibrary.Stores;
-using System.Collections.ObjectModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using ElectroDepotClassLibrary.Stores;
 using ElectroDepotClassLibrary.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
+using DesktopClient.Containers;
+using Avalonia.Collections;
+using System.Transactions;
+using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.Input;
 
 namespace DesktopClient.ViewModels
 {
-    public class ComponentsPageViewModel : ViewModelBase
+    public partial class ComponentsPageViewModel : ViewModelBase
     {
-        public ObservableCollection<Component> Components { get; } = new ObservableCollection<Component>(
-            new List<Component>
-            {
-                new Component(0, 0, new Category(0, "First", "D1", new byte[]{ }), "Component", "Analog Devices", "Description"),
-                new Component(1, 0, new Category(0, "Second", "D2", new byte[]{ }), "Component", "Texas Instruments", "Description"),
-                new Component(2, 0, new Category(0, "Third", "D3", new byte[]{ }), "Component", "Microchip", "Description"),
-                new Component(3, 0, new Category(0, "Forth", "D4", new byte[]{ }), "Component", "Raspberry Pi", "Description")
-            }
-        );
+        public ObservableCollection<string> Manufacturers { get; set; }
+        public ObservableCollection<string> Categories { get; set; }
+        public DataGridCollectionView Components { get; set; }
+        //public ObservableCollection<DetailedComponentContainer> Components { get; set; }
+        public List<DetailedComponentContainer> ComponentsSource { get; set; }
+
+        [ObservableProperty]
+        private string _searchByNameOrDesc = string.Empty;
+
+        partial void OnSearchByNameOrDescChanged(string value)
+        {
+            Console.WriteLine(value);
+            Components.Refresh();
+        }
+
+        [ObservableProperty]
+        private bool _onlyAvailableFlag;
+
+        partial void OnOnlyAvailableFlagChanged(bool value)
+        {
+            Components.Refresh();
+            Console.WriteLine(value);
+        }
+
+        [ObservableProperty]
+        private string _selectedManufacturer;
+
+        partial void OnSelectedManufacturerChanged(string value)
+        {
+            Components.Refresh();
+            Console.WriteLine($"{value}");
+        }
+
+        [ObservableProperty]
+        private string _selectedCategory;
+
+        partial void OnSelectedCategoryChanged(string value)
+        {
+            Components.Refresh();
+            Console.WriteLine($"{value}");
+        }
+
+        [RelayCommand]
+        public void ClearAllFiltersAndSorting()
+        {
+            SelectedCategory = null;
+            SelectedManufacturer = null;
+            OnlyAvailableFlag = false;
+            SearchByNameOrDesc = string.Empty;
+            Components.Refresh();
+            Console.WriteLine();
+        }
+
         public ComponentsPageViewModel(DatabaseStore databaseStore) : base(databaseStore)
         {
+            ComponentsSource = new List<DetailedComponentContainer>();
+            
+            Components = new DataGridCollectionView(ComponentsSource);
+            Components.Filter = (object component) =>
+            {
+                if(component is DetailedComponentContainer detailedComponent)
+                {
+                    bool isManufacturer = true;
+                    bool isCategory = true;
+                    bool isNameOrDesc = false;
+                    
+                    if(SelectedManufacturer != null)
+                    {
+                        if (!detailedComponent.Manufacturer.Contains(SelectedManufacturer, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            isManufacturer = false;
+                        }
+                    }
 
+                    if (SelectedCategory!= null)
+                    {
+                        if (!detailedComponent.Category.Name.Contains(SelectedCategory, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            isCategory = false;
+                        }
+                    }
+
+                    if (detailedComponent.Name.Contains(_searchByNameOrDesc, StringComparison.InvariantCultureIgnoreCase) ||
+                       detailedComponent.Description.Contains(_searchByNameOrDesc, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        isNameOrDesc = true;
+                    }
+
+                    if(isNameOrDesc == true && isManufacturer == true && isCategory == true)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            Manufacturers = new ObservableCollection<string>() { };
+            DatabaseStore.ComponentStore.Load();
+            DatabaseStore.ComponentStore.ComponentsLoaded += HandleComponentsLoaded;
+
+            Categories = new ObservableCollection<string>() { };
+            DatabaseStore.CategorieStore.Load();
+            DatabaseStore.CategorieStore.CategoriesLoaded += HandleCategoriesLoaded;
+        }
+
+        private void HandleComponentsLoaded()
+        {
+            Manufacturers.Clear();
+            IEnumerable<Component> components = DatabaseStore.ComponentStore.Components;
+            foreach (Component component in components)
+            {
+                // TODO: This components part should by in separate handler but we are waiting for mOwnsCOmponent model implementation
+                ComponentsSource.Add(new DetailedComponentContainer(component, -1));
+                Manufacturers.Add(component.Manufacturer);
+            }
+            Components.Refresh();
+        }
+
+        private void HandleCategoriesLoaded()
+        {
+            Categories.Clear();
+            IEnumerable<Category> categories = DatabaseStore.CategorieStore.Categories;
+            foreach(Category category in categories)
+            {
+                Categories.Add(category.Name);
+            }
         }
 
         public override void Dispose()
         {
+            DatabaseStore.CategorieStore.CategoriesLoaded -= HandleCategoriesLoaded;
+            DatabaseStore.ComponentStore.ComponentsLoaded -= HandleComponentsLoaded;
         }
     }
 }

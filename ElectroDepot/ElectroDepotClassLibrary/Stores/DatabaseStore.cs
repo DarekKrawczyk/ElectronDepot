@@ -55,7 +55,7 @@ namespace ElectroDepotClassLibrary.Stores
             PurchaseDataProvider purchaseDataProvicer)
         {
             _supplierStore = new SuppliersStore(supplierDataProvider);
-            _componentsStore = new ComponentsStore(componentDataProvider);
+            _componentsStore = new ComponentsStore(componentDataProvider, null);
             _categoriesStore = new CategoriesStore(categoryDataProvider);
             _projectsStore = new ProjectsStore(projectDataProvider);
             _purchasesStore = new PurchasesStore(purchaseDataProvicer);

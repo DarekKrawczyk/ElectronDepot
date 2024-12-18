@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:DesktopClient.ViewModels"
+             xmlns:cont="using:DesktopClient.Containers"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="1440" d:DesignHeight="720"
              x:Class="DesktopClient.Views.ComponentsPageView"
@@ -13,26 +14,19 @@
     <StyleInclude Source="avares://DesktopClient/Styles/LabelDefaultOverrideStyle.axaml"/>
     <StyleInclude Source="avares://DesktopClient/Styles/TextBoxDefaultOverrideStyle.axaml"/>
     <StyleInclude Source="avares://DesktopClient/Styles/ToggleButtonDefaultOverrideStyle.axaml"/>
-    <StyleInclude Source="avares://DesktopClient/Styles/ExpanderDefaultOverrideStyle.axaml"/>
   </UserControl.Styles>
 
   <Grid ColumnDefinitions="10, *, 10">
     <Grid RowDefinitions="10, auto, 10, *, 10, auto, 10" Grid.Column="1">
 
-      <Expander Grid.Row="1">
-        <Expander.Header>
         <!-- Header with filters, selectors and search-->
-        <StackPanel  
-                    Spacing="10" 
+        <StackPanel Grid.Row="1" 
+                    Spacing="10"
                     Orientation="Horizontal"
                     VerticalAlignment="Center">
           <!-- Manufacturer -->
           <Label HorizontalAlignment="Right">Manufacturer</Label>
-          <ComboBox PlaceholderText="">
-            <ComboBoxItem>Analog Device</ComboBoxItem>
-            <ComboBoxItem>Texas Instruments</ComboBoxItem>
-            <ComboBoxItem>Raspberry Pi</ComboBoxItem>
-            <ComboBoxItem>Arduino</ComboBoxItem>
+          <ComboBox ItemsSource="{Binding Manufacturers}" SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}" PlaceholderText="">
           </ComboBox>
 
           <!-- Separator -->
@@ -42,11 +36,7 @@
         
           <!-- Category -->
           <Label HorizontalAlignment="Right">Category</Label>
-          <ComboBox PlaceholderText="">
-            <ComboBoxItem>Inline Items</ComboBoxItem>
-            <ComboBoxItem>Inline Item 2</ComboBoxItem>
-            <ComboBoxItem>Inline Item 3</ComboBoxItem>
-            <ComboBoxItem>Inline Item 4</ComboBoxItem>
+          <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" PlaceholderText="">
           </ComboBox>
 
           <!-- Separator -->
@@ -55,7 +45,7 @@
                   VerticalAlignment="Stretch"/>
 
           <!-- Only avaiable -->
-          <ToggleButton>Only available</ToggleButton>
+          <ToggleButton IsChecked="{Binding OnlyAvailableFlag, Mode=TwoWay}">Only available</ToggleButton>
 
           <!-- Separator -->
           <Border Width="4"
@@ -64,7 +54,9 @@
 
 
           <!-- Search bar -->
-          <TextBox Watermark="Search by Name or Description"/>
+          <TextBox Watermark="Search by Name or Description"
+                   Text="{Binding SearchByNameOrDesc}"
+                   />
 
           <!-- Separator -->
           <Border Width="4"
@@ -72,12 +64,8 @@
                   VerticalAlignment="Stretch"/>
 
           <!-- Clear settings -->
-          <Button>Clear settings</Button>
+          <Button Command="{Binding ClearAllFiltersAndSorting}">Clear settings</Button>
         </StackPanel>
-          
-        </Expander.Header>
-      </Expander>
-      
 
       <!-- Components grid -->
       <DataGrid ItemsSource="{Binding Components}"
@@ -86,12 +74,11 @@
                 Grid.Row="3"
                 BorderThickness="1" BorderBrush="Gray">
         <DataGrid.Columns>
-          <DataGridTextColumn Header="Name"  Binding="{Binding Name}"/>
-          <DataGridTextColumn Header="Manufacturer" Binding="{Binding Manufacturer}" />
-          <DataGridTextColumn Header="Category" Binding="{Binding Category.Name}" />
-          <DataGridTextColumn Header="Used in project"/>
-          <DataGridTextColumn Header="Available to use"/>
-          <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+          <DataGridTextColumn Header="Manufacturer" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Manufacturer}" Width="200"/>
+          <DataGridTextColumn Header="Name" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Name}" Width="200"/>
+          <DataGridTextColumn Header="Category" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Category.Name}" Width="200"/>
+          <DataGridTextColumn Header="Available" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Available}" Width="200"/>
+          <DataGridTextColumn Header="Description" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Description}" Width="*"/>
         </DataGrid.Columns>
       </DataGrid>
       
