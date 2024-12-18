@@ -110,7 +110,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<Component>> GetAllAvailableComponentsFromUser(UserDTO user)
+        public async Task<IEnumerable<Component>> GetAllAvailableComponentsFromUser(User user)
         {
             try
             {

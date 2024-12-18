@@ -8,13 +8,11 @@ namespace ElectroDepotClassLibrary.DataProviders
 {
     public class ProjectComponentDataProvider : BaseDataProvider
     {
-        public ProjectComponentDataProvider(string url) : base(url)
-        {
-        }
+        public ProjectComponentDataProvider(string url) : base(url) { }
         #region API Calls
-        public async Task<bool> CreateProjectComponent(CreateProjectComponentDTO projectComponentDTO)
+        public async Task<bool> CreateProjectComponent(ProjectComponent ProjectComponent)
         {
-            var json = JsonSerializer.Serialize(projectComponentDTO);
+            var json = JsonSerializer.Serialize(ProjectComponent.ToCreateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             string url = ProjectComponentEndpoints.Create();
@@ -22,7 +20,8 @@ namespace ElectroDepotClassLibrary.DataProviders
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<IEnumerable<ProjectComponentDTO>> GetAllProjectComponents()
+
+        public async Task<IEnumerable<ProjectComponent>> GetAllProjectComponents()
         {
             try
             {
@@ -37,7 +36,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<ProjectComponentDTO> projects = JsonSerializer.Deserialize<IEnumerable<ProjectComponentDTO>>(json, options);
 
-                    return projects;
+                    return projects.Select(x=>x.ToModel()).ToList();
                 }
                 else
                 {
@@ -49,7 +48,8 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<IEnumerable<ProjectComponentDTO>> GetAllProjectComponentsOfProject(Project project)
+
+        public async Task<IEnumerable<ProjectComponent>> GetAllProjectComponentsOfProject(Project project)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<ProjectComponentDTO> projectsOfUser = JsonSerializer.Deserialize<IEnumerable<ProjectComponentDTO>>(json, options);
 
-                    return projectsOfUser;
+                    return projectsOfUser.Select(x=>x.ToModel()).ToList();
                 }
                 else
                 {
@@ -76,19 +76,21 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<bool> UpdateProjectComponent(ProjectComponentDTO projectComponentDTO)
+
+        public async Task<bool> UpdateProjectComponent(ProjectComponent ProjectComponent)
         {
-            var json = JsonSerializer.Serialize(projectComponentDTO.ToUpdateProjectComponentDTO());
+            var json = JsonSerializer.Serialize(ProjectComponent.ToUpdateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = ProjectComponentEndpoints.Update(projectComponentDTO.ID);
+            string url = ProjectComponentEndpoints.Update(ProjectComponent.ID);
             var response = await HTTPClient.PutAsync(url, content);
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<bool> DeleteProjectComponent(ProjectComponentDTO projectComponentDTO)
+
+        public async Task<bool> DeleteProjectComponent(ProjectComponent ProjectComponent)
         {
-            string url = ProjectComponentEndpoints.Delete(projectComponentDTO.ID);
+            string url = ProjectComponentEndpoints.Delete(ProjectComponent.ID);
             var response = await HTTPClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }

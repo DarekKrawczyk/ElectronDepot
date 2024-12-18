@@ -13,10 +13,10 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find 'User'
-                IEnumerable<UserDTO> users = await UserDP.GetAllUsers();
+                IEnumerable<User> users = await UserDP.GetAllUsers();
                 Assert.NotNull(users);
                 Assert.NotEmpty(users);
-                UserDTO? user = users.FirstOrDefault();
+                User? user = users.FirstOrDefault();
                 Assert.NotNull(user);
 
                 // Find 'Supplier'
@@ -27,7 +27,7 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Assert.NotNull(supplier);
 
                 // Create new 'Purchase'
-                Purchase newPurchase = new Purchase(iD: 0, userID: user.ID, supplierID: supplier.ID, supplier: supplier, purchaseDate: DateTime.Now, totalPrice: 0);
+                Purchase newPurchase = new Purchase(iD: 0, userID: user.ID, user: user, supplierID: supplier.ID, supplier: supplier, purchaseDate: DateTime.Now, totalPrice: 0);
                 bool wasCreated = await PurchaseDP.CreatePurchase(newPurchase);
                 Assert.True(wasCreated);
 
@@ -61,10 +61,10 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find 'User'
-                IEnumerable<UserDTO> users = await UserDP.GetAllUsers();
+                IEnumerable<User> users = await UserDP.GetAllUsers();
                 Assert.NotNull(users);
                 Assert.NotEmpty(users);
-                UserDTO? user = users.FirstOrDefault();
+                User? user = users.FirstOrDefault();
                 Assert.NotNull(user);
 
                 IEnumerable<Purchase> purchaeses = await PurchaseDP.GetAllPurchasesFromUser(user);
@@ -122,7 +122,7 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Console.WriteLine(purchaseToBeEdited.ToString());
 
                 // Update
-                Purchase purchase = new Purchase(iD: purchaseToBeEdited.ID, userID: purchaseToBeEdited.UserID, supplierID: purchaseToBeEdited.SupplierID, supplier: null, purchaseDate: purchaseToBeEdited.PurchaseDate, totalPrice: 201);
+                Purchase purchase = new Purchase(iD: purchaseToBeEdited.ID, userID: purchaseToBeEdited.UserID, user: null, supplierID: purchaseToBeEdited.SupplierID, supplier: null, purchaseDate: purchaseToBeEdited.PurchaseDate, totalPrice: 201);
                 bool wasUpdated = await PurchaseDP.UpdatePurchase(purchase);
                 Assert.True(wasUpdated);
                 Console.WriteLine(purchase.ToString());

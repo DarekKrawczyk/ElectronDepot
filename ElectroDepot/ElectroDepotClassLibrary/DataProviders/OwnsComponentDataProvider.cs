@@ -10,9 +10,9 @@ namespace ElectroDepotClassLibrary.DataProviders
     {
         public OwnsComponentDataProvider(string url) : base(url) { }
         #region API Calls
-        public async Task<bool> CreateOwnComponent(CreateOwnsComponentDTO ownsComponentDTO)
+        public async Task<bool> CreateOwnComponent(OwnsComponent ownsComponent)
         {
-            var json = JsonSerializer.Serialize(ownsComponentDTO);
+            var json = JsonSerializer.Serialize(ownsComponent.ToCreateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             string url = OwnsComponentEndpoints.Create();
@@ -20,7 +20,8 @@ namespace ElectroDepotClassLibrary.DataProviders
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<IEnumerable<OwnsComponentDTO>> GetAllOwnsComponents()
+
+        public async Task<IEnumerable<OwnsComponent>> GetAllOwnsComponents()
         {
             try
             {
@@ -34,7 +35,7 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<OwnsComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<OwnsComponentDTO>>(json, options);
-                    return components;
+                    return components.Select(x=>x.ToModel()).ToList();
                 }
                 else
                 {
@@ -47,7 +48,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<OwnsComponentDTO>> GetAllUsedComponentsFromUser(UserDTO user)
+        public async Task<IEnumerable<OwnsComponent>> GetAllUsedComponentsFromUser(User user)
         {
             try
             {
@@ -61,7 +62,7 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<OwnsComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<OwnsComponentDTO>>(json, options);
-                    return components;
+                    return components.Select(x => x.ToModel()).ToList();
                 }
                 else
                 {
@@ -74,7 +75,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<OwnsComponentDTO>> GetAllFreeToUseComponentsFromUser(UserDTO user)
+        public async Task<IEnumerable<OwnsComponent>> GetAllFreeToUseComponentsFromUser(User user)
         {
             try
             {
@@ -88,7 +89,7 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<OwnsComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<OwnsComponentDTO>>(json, options);
-                    return components;
+                    return components.Select(x => x.ToModel()).ToList();
                 }
                 else
                 {
@@ -101,11 +102,11 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<OwnsComponentDTO>> GetAllOwnsComponentsFromUser(UserDTO userDTO)
+        public async Task<IEnumerable<OwnsComponent>> GetAllOwnsComponentsFromUser(User user)
         {
             try
             {
-                string url = OwnsComponentEndpoints.GetAllOwnComponentFromUser(userDTO.ID);
+                string url = OwnsComponentEndpoints.GetAllOwnComponentFromUser(user.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -115,7 +116,7 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<OwnsComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<OwnsComponentDTO>>(json, options);
-                    return components;
+                    return components.Select(x => x.ToModel()).ToList();
                 }
                 else
                 {
@@ -128,11 +129,11 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<OwnsComponentDTO> GetOwnComponentsFromUser(UserDTO userDTO, Component component)
+        public async Task<OwnsComponent> GetOwnComponentsFromUser(User user, Component component)
         {
             try
             {
-                string url = OwnsComponentEndpoints.GetOwnComponentFromUser(userDTO.ID, component.ID);
+                string url = OwnsComponentEndpoints.GetOwnComponentFromUser(user.ID, component.ID);
                 var response = await HTTPClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
@@ -142,7 +143,7 @@ namespace ElectroDepotClassLibrary.DataProviders
 
                     var json = await response.Content.ReadAsStringAsync();
                     OwnsComponentDTO ownsComponent = JsonSerializer.Deserialize<OwnsComponentDTO>(json, options);
-                    return ownsComponent;
+                    return ownsComponent.ToModel();
                 }
                 else
                 {
@@ -155,21 +156,20 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<bool> UpdateOwnsComponent(OwnsComponentDTO ownsComponentDTO)
+        public async Task<bool> UpdateOwnsComponent(OwnsComponent ownsComponent)
         {
-            UpdateOwnsComponentDTO updateDTO = ownsComponentDTO.ToUpdateOwnsComponentsDTO();
-
-            var json = JsonSerializer.Serialize(updateDTO);
+            var json = JsonSerializer.Serialize(ownsComponent.ToUpdateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = ComponentEndpoints.Update(ownsComponentDTO.ID);
+            string url = ComponentEndpoints.Update(ownsComponent.ID);
             var response = await HTTPClient.PutAsync(url, content);
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<bool> DeleteComponent(OwnsComponentDTO ownsComponentDTO)
+
+        public async Task<bool> DeleteComponent(OwnsComponent ownsComponent)
         {
-            string url = ComponentEndpoints.Delete(ownsComponentDTO.ID);
+            string url = ComponentEndpoints.Delete(ownsComponent.ID);
             var response = await HTTPClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }

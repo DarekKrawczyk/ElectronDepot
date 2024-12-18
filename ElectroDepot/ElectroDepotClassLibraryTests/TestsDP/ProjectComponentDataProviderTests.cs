@@ -26,7 +26,7 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Component? component = components.FirstOrDefault();
                 Assert.NotNull(component);
 
-                CreateProjectComponentDTO projectComponent = new CreateProjectComponentDTO(ComponentID: component.ID, ProjectID: project.ID, 20);
+                ProjectComponent projectComponent = new ProjectComponent(id: 0, projectID: project.ID, componentID: component.ID, quantity: 20);
                 bool wasCreated = await ProjectComponentDP.CreateProjectComponent(projectComponent);
                 Assert.True(wasCreated);
 
@@ -48,10 +48,10 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Project? project = projects.FirstOrDefault();
                 Assert.NotNull(project);
 
-                IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponentsOfProject(project);
+                IEnumerable<ProjectComponent> projectComponents = await ProjectComponentDP.GetAllProjectComponentsOfProject(project);
                 Assert.NotNull(projectComponents);
 
-                foreach (ProjectComponentDTO projectComponent in projectComponents)
+                foreach (ProjectComponent projectComponent in projectComponents)
                 {
                     Console.WriteLine($"{projectComponent.ToString()}");
                 }
@@ -67,10 +67,10 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
+                IEnumerable<ProjectComponent> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
                 Assert.NotNull(projectComponents);
 
-                foreach (ProjectComponentDTO projectComponent in projectComponents)
+                foreach (ProjectComponent projectComponent in projectComponents)
                 {
                     Console.WriteLine($"{projectComponent.ToString()}");
                 }
@@ -86,13 +86,13 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
+                IEnumerable<ProjectComponent> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
                 Assert.NotNull(projectComponents);
 
-                ProjectComponentDTO? projectComp = projectComponents.FirstOrDefault();
+                ProjectComponent? projectComp = projectComponents.FirstOrDefault();
                 Assert.NotNull(projectComp);
 
-                ProjectComponentDTO projectCompUpdated = new ProjectComponentDTO(ID: projectComp.ID, ComponentID: projectComp.ComponentID, ProjectID: projectComp.ProjectID, Quantity: 300); ;
+                ProjectComponent projectCompUpdated = new ProjectComponent(id: projectComp.ID, componentID: projectComp.ComponentID, projectID: projectComp.ProjectID, quantity: 300); ;
 
                 bool wasUpdated = await ProjectComponentDP.UpdateProjectComponent(projectCompUpdated);
                 Assert.True(wasUpdated);
@@ -108,10 +108,10 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<ProjectComponentDTO> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
+                IEnumerable<ProjectComponent> projectComponents = await ProjectComponentDP.GetAllProjectComponents();
                 Assert.NotNull(projectComponents);
                 Assert.NotEmpty(projectComponents);
-                ProjectComponentDTO? projectComp = projectComponents.FirstOrDefault();
+                ProjectComponent? projectComp = projectComponents.FirstOrDefault();
                 Assert.NotNull(projectComp);
 
                 bool wasDeleted = await ProjectComponentDP.DeleteProjectComponent(projectComp);

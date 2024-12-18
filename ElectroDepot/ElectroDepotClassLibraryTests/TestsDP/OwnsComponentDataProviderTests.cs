@@ -19,10 +19,10 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<UserDTO> allUsers = await UserDP.GetAllUsers();
+                IEnumerable<User> allUsers = await UserDP.GetAllUsers();
                 Assert.NotNull(allUsers);
                 Assert.NotEmpty(allUsers);
-                UserDTO foundUser = allUsers.FirstOrDefault();
+                User foundUser = allUsers.FirstOrDefault();
                 Assert.NotNull(foundUser);
 
                 IEnumerable<Component> allComponents = await ComponentDP.GetAllComponents();
@@ -31,7 +31,7 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Component foundComponent = allComponents.FirstOrDefault();
                 Assert.NotNull(foundComponent);
 
-                CreateOwnsComponentDTO ownsComponentDTO = new CreateOwnsComponentDTO(UserID: foundUser.ID, ComponentID: foundComponent.ID, 20);
+                OwnsComponent ownsComponentDTO = new OwnsComponent(id: 0, userID: foundUser.ID, componentID: foundComponent.ID, quantity: 20);
                 bool wasCreated = await OwnsComponentDP.CreateOwnComponent(ownsComponentDTO);
                 Assert.True(wasCreated);
             }
@@ -45,10 +45,10 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<OwnsComponentDTO> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
+                IEnumerable<OwnsComponent> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
                 Assert.NotNull(allOwnsComponents);
 
-                foreach(OwnsComponentDTO ownsComponent in allOwnsComponents)
+                foreach(OwnsComponent ownsComponent in allOwnsComponents)
                 {
                     Console.WriteLine(ownsComponent.ToString());
                 }
@@ -64,15 +64,15 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<OwnsComponentDTO> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
+                IEnumerable<OwnsComponent> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
                 Assert.NotNull(allOwnsComponents);
                 Assert.NotEmpty(allOwnsComponents);
-                OwnsComponentDTO ownsComponent = allOwnsComponents.FirstOrDefault();
+                OwnsComponent ownsComponent = allOwnsComponents.FirstOrDefault();
                 Assert.NotNull(ownsComponent);
 
                 int newQuantity = 3000;
 
-                OwnsComponentDTO updateOwnsComponent = new OwnsComponentDTO(ID: ownsComponent.ID, UserID: ownsComponent.UserID, ComponentID: ownsComponent.ComponentID, Quantity: newQuantity);
+                OwnsComponent updateOwnsComponent = new OwnsComponent(id: ownsComponent.ID, userID: ownsComponent.UserID, componentID: ownsComponent.ComponentID, quantity: newQuantity);
                 bool wasUpdated = await OwnsComponentDP.UpdateOwnsComponent(ownsComponent);
                 Assert.True(wasUpdated);
             }
@@ -86,10 +86,10 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<OwnsComponentDTO> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
+                IEnumerable<OwnsComponent> allOwnsComponents = await OwnsComponentDP.GetAllOwnsComponents();
                 Assert.NotNull(allOwnsComponents);
                 Assert.NotEmpty(allOwnsComponents);
-                OwnsComponentDTO ownsComponent = allOwnsComponents.FirstOrDefault();
+                OwnsComponent ownsComponent = allOwnsComponents.FirstOrDefault();
                 Assert.NotNull(ownsComponent);
 
                 bool wasDeleted = await OwnsComponentDP.DeleteComponent(ownsComponent);

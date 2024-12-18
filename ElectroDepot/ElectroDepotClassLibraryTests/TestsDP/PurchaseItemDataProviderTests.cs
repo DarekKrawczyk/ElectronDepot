@@ -27,7 +27,7 @@ namespace ElectroDepotClassLibraryTests.Tests
                 Component? component = componenets.FirstOrDefault();
                 Assert.NotNull(component);
 
-                CreatePurchaseItemDTO purchaseItem = new CreatePurchaseItemDTO(PurchaseID: purchase.ID, ComponentID: component.ID, Quantity: 30, PricePerUnit: 19.99);
+                PurchaseItem purchaseItem = new PurchaseItem(id: 0, purchaseID: purchase.ID, componentID: component.ID, quantity: 30, pricePerUnit: 19.99);
                 bool wasCreated = await PurchaseItemDP.CreatePurchaseItem(purchaseItem);
                 Assert.True(wasCreated);
 
@@ -43,16 +43,16 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<PurchaseItemDTO> purchases = await PurchaseItemDP.GetAllPurchaseItems();
+                IEnumerable<PurchaseItem> purchases = await PurchaseItemDP.GetAllPurchaseItems();
                 Assert.NotNull(purchases);
                 Assert.NotEmpty(purchases);
-                PurchaseItemDTO? purchase = purchases.FirstOrDefault();
+                PurchaseItem? purchase = purchases.FirstOrDefault();
                 Assert.NotNull(purchase);
 
                 int ID = purchase.ID;
                 purchase = null;
 
-                PurchaseItemDTO purchaseItem = await PurchaseItemDP.GetPurchaseItemByID(ID);
+                PurchaseItem purchaseItem = await PurchaseItemDP.GetPurchaseItemByID(ID);
                 Assert.NotNull(purchaseItem);
                 Console.WriteLine(purchaseItem.ToString());
             }
@@ -66,9 +66,9 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<PurchaseItemDTO> purchaseItems = await PurchaseItemDP.GetAllPurchaseItems();
+                IEnumerable<PurchaseItem> purchaseItems = await PurchaseItemDP.GetAllPurchaseItems();
                 Assert.NotNull(purchaseItems);
-                foreach (PurchaseItemDTO purchaseItem in purchaseItems)
+                foreach (PurchaseItem purchaseItem in purchaseItems)
                 {
                     Console.WriteLine(purchaseItem.ToString());
                 }
@@ -84,16 +84,16 @@ namespace ElectroDepotClassLibraryTests.Tests
             try
             {
                 // Find
-                IEnumerable<PurchaseItemDTO> allPurchases = await PurchaseItemDP.GetAllPurchaseItems();
+                IEnumerable<PurchaseItem> allPurchases = await PurchaseItemDP.GetAllPurchaseItems();
                 Assert.NotNull(allPurchases);
                 Assert.NotEmpty(allPurchases);
-                PurchaseItemDTO? purchaseToBeEdited = allPurchases.FirstOrDefault();
+                PurchaseItem? purchaseToBeEdited = allPurchases.FirstOrDefault();
                 Assert.NotNull(purchaseToBeEdited);
 
                 Console.WriteLine(purchaseToBeEdited.ToString());
 
                 // Update
-                PurchaseItemDTO purchase = new PurchaseItemDTO(ID: purchaseToBeEdited.ID, PurchaseID: purchaseToBeEdited.PurchaseID, ComponentID: purchaseToBeEdited.ComponentID, Quantity: 2000, PricePerUnit: purchaseToBeEdited.PricePerUnit);
+                PurchaseItem purchase = new PurchaseItem(id: purchaseToBeEdited.ID, purchaseID: purchaseToBeEdited.PurchaseID, componentID: purchaseToBeEdited.ComponentID, quantity: 2000, pricePerUnit: purchaseToBeEdited.PricePerUnit);
                 bool wasUpdated = await PurchaseItemDP.UpdatePurchaseItem(purchase);
                 Assert.True(wasUpdated);
                 Console.WriteLine(purchase.ToString());
@@ -108,16 +108,16 @@ namespace ElectroDepotClassLibraryTests.Tests
         {
             try
             {
-                IEnumerable<PurchaseItemDTO> allPurchaseItems = await PurchaseItemDP.GetAllPurchaseItems();
+                IEnumerable<PurchaseItem> allPurchaseItems = await PurchaseItemDP.GetAllPurchaseItems();
                 Assert.NotNull(allPurchaseItems);
                 Assert.NotEmpty(allPurchaseItems);
 
-                foreach (PurchaseItemDTO singleItem in allPurchaseItems)
+                foreach (PurchaseItem singleItem in allPurchaseItems)
                 {
                     Console.WriteLine(singleItem.ToString());
                 }
 
-                PurchaseItemDTO? firstItem = allPurchaseItems.FirstOrDefault();
+                PurchaseItem? firstItem = allPurchaseItems.FirstOrDefault();
                 bool wasDeleted = await PurchaseItemDP.DeletePuchaseItem(firstItem);
                 Assert.True(wasDeleted);
             }

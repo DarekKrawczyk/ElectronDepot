@@ -1,8 +1,8 @@
-﻿using ElectroDepotClassLibrary.DTOs;
-using ElectroDepotClassLibrary.Endpoints;
+﻿using System.Text;
 using System.Text.Json;
-using System.Text;
+using ElectroDepotClassLibrary.DTOs;
 using ElectroDepotClassLibrary.Models;
+using ElectroDepotClassLibrary.Endpoints;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
@@ -12,9 +12,9 @@ namespace ElectroDepotClassLibrary.DataProviders
         {
         }
         #region API Calls
-        public async Task<bool> CreatePurchaseItem(CreatePurchaseItemDTO createPurchaseItemDTO)
+        public async Task<bool> CreatePurchaseItem(PurchaseItem PurchaseItem)
         {
-            var json = JsonSerializer.Serialize(createPurchaseItemDTO);
+            var json = JsonSerializer.Serialize(PurchaseItem.ToCreateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             string url = PurchaseItemEndpoints.Create();
@@ -22,7 +22,8 @@ namespace ElectroDepotClassLibrary.DataProviders
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<IEnumerable<PurchaseItemDTO>> GetAllPurchaseItems()
+
+        public async Task<IEnumerable<PurchaseItem>> GetAllPurchaseItems()
         {
             try
             {
@@ -37,7 +38,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<PurchaseItemDTO> purchaseItems = JsonSerializer.Deserialize<IEnumerable<PurchaseItemDTO>>(json, options);
 
-                    return purchaseItems;
+                    return purchaseItems.Select(x=>x.ToModel()).ToList();
                 }
                 else
                 {
@@ -50,7 +51,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<ComponentDTO>> GetAllComponentsFromPurchase(PurchaseDTO purchase)
+        public async Task<IEnumerable<Component>> GetAllComponentsFromPurchase(Purchase purchase)
         {
             try
             {
@@ -65,7 +66,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<ComponentDTO> components = JsonSerializer.Deserialize<IEnumerable<ComponentDTO>>(json, options);
 
-                    return components;
+                    return components.Select(x=>x.ToModel()).ToList();
                 }
                 else
                 {
@@ -78,7 +79,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<PurchaseItemDTO>> GetAllPurchaseItemsFromPurchase(Purchase purchase)
+        public async Task<IEnumerable<PurchaseItem>> GetAllPurchaseItemsFromPurchase(Purchase purchase)
         {
             try
             {
@@ -93,7 +94,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<PurchaseItemDTO> components = JsonSerializer.Deserialize<IEnumerable<PurchaseItemDTO>>(json, options);
 
-                    return components;
+                    return components.Select(x => x.ToModel()).ToList();
                 }
                 else
                 {
@@ -106,7 +107,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<PurchaseItemDTO> GetPurchaseItemByID(int ID)
+        public async Task<PurchaseItem> GetPurchaseItemByID(int ID)
         {
             try
             {
@@ -121,7 +122,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     PurchaseItemDTO purchaseItems = JsonSerializer.Deserialize<PurchaseItemDTO>(json, options);
 
-                    return purchaseItems;
+                    return purchaseItems.ToModel();
                 }
                 else
                 {
@@ -133,19 +134,20 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<bool> UpdatePurchaseItem(PurchaseItemDTO purchaseItemDTO)
+
+        public async Task<bool> UpdatePurchaseItem(PurchaseItem PurchaseItem)
         {
-            var json = JsonSerializer.Serialize(purchaseItemDTO.ToUpdatePurchaseItemDTO());
+            var json = JsonSerializer.Serialize(PurchaseItem.ToUpdateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string url = PurchaseItemEndpoints.Update(purchaseItemDTO.ID);
+            string url = PurchaseItemEndpoints.Update(PurchaseItem.ID);
             var response = await HTTPClient.PutAsync(url, content);
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeletePuchaseItem(PurchaseItemDTO purchaseItemDTO)
+        public async Task<bool> DeletePuchaseItem(PurchaseItem PurchaseItem)
         {
-            string url = PurchaseItemEndpoints.Delete(purchaseItemDTO.ID);
+            string url = PurchaseItemEndpoints.Delete(PurchaseItem.ID);
             var response = await HTTPClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }

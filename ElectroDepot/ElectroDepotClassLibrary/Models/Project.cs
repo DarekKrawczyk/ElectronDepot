@@ -8,15 +8,16 @@ namespace ElectroDepotClassLibrary.Models
     {
         public int ID { get; }
         public int UserID { get; }
-        // TODO: User Model
+        public User User { get; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; }
         public Bitmap Image { get; set; }
-        public Project(int id, int userID, string name, string description, DateTime createdAt, Bitmap image)
+        public Project(int id, int userID, User user, string name, string description, DateTime createdAt, Bitmap image)
         {
             ID = id;
             UserID = userID;
+            User = user;
             Name = name;
             Description = description;
             CreatedAt = createdAt;
@@ -100,6 +101,7 @@ namespace ElectroDepotClassLibrary.Models
             return new Project(
                 id: projectDTO.ID, 
                 userID: projectDTO.UserID, 
+                user: null,
                 name: projectDTO.Name, 
                 image: bitmap,
                 description: projectDTO.Description, 

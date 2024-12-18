@@ -9,6 +9,7 @@ namespace ElectroDepotClassLibrary.Stores
         private CategoriesStore _categoriesStore;
         private ProjectsStore _projectsStore;
         private PurchasesStore _purchasesStore;
+        private UsersStore _usersStore;
         public SuppliersStore SupplierStore
         {
             get
@@ -49,16 +50,26 @@ namespace ElectroDepotClassLibrary.Stores
             }
         }
 
+        public UsersStore UsersStore
+        {
+            get
+            {
+                return _usersStore;
+            }
+        }
+
         public DatabaseStore(
             SupplierDataProvider supplierDataProvider, ComponentDataProvider componentDataProvider, 
             CategoryDataProvider categoryDataProvider, ProjectDataProvider projectDataProvider,
-            PurchaseDataProvider purchaseDataProvicer)
+            PurchaseDataProvider purchaseDataProvicer, UserDataProvider userDataProvider,
+            OwnsComponentDataProvider ownsComponentDataProvider, ProjectComponentDataProvider projectComponentDataProvider)
         {
             _supplierStore = new SuppliersStore(supplierDataProvider);
-            _componentsStore = new ComponentsStore(componentDataProvider, null);
+            _componentsStore = new ComponentsStore(componentDataProvider, ownsComponentDataProvider);
             _categoriesStore = new CategoriesStore(categoryDataProvider);
             _projectsStore = new ProjectsStore(projectDataProvider);
             _purchasesStore = new PurchasesStore(purchaseDataProvicer);
+            _usersStore = new UsersStore(userDataProvider);
         }
     }
 }

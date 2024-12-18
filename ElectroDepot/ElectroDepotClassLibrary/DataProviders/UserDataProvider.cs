@@ -1,7 +1,8 @@
-﻿using ElectroDepotClassLibrary.DTOs;
-using ElectroDepotClassLibrary.Endpoints;
+﻿using System.Text;
 using System.Text.Json;
-using System.Text;
+using ElectroDepotClassLibrary.DTOs;
+using ElectroDepotClassLibrary.Models;
+using ElectroDepotClassLibrary.Endpoints;
 
 namespace ElectroDepotClassLibrary.DataProviders
 {
@@ -9,9 +10,9 @@ namespace ElectroDepotClassLibrary.DataProviders
     {
         public UserDataProvider(string url) : base(url) { }
         #region API Calls
-        public async Task<bool> CreateUser(CreateUserDTO user)
+        public async Task<bool> CreateUser(User user)
         {
-            var json = JsonSerializer.Serialize(user);
+            var json = JsonSerializer.Serialize(user.ToCreateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             string url = UserEndpoints.Create();
@@ -19,7 +20,8 @@ namespace ElectroDepotClassLibrary.DataProviders
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<UserDTO> GetUserByUsername(string name)
+
+        public async Task<User> GetUserByUsername(string name)
         {
             try
             {
@@ -34,7 +36,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     UserDTO? user = JsonSerializer.Deserialize<UserDTO>(json, options);
 
-                    return user;
+                    return user.ToModel();
                 }
                 else
                 {
@@ -46,16 +48,18 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
+
         public async Task<bool> UserWithUsernameExists(string username)
         {
-            UserDTO? found = await GetUserByUsername(username);
+            User? found = await GetUserByUsername(username);
             if (found == null)
             {
                 return false;
             }
             return true;
         }
-        public async Task<UserDTO> GetUserByEMail(string EMail)
+
+        public async Task<User> GetUserByEMail(string EMail)
         {
             try
             {
@@ -70,7 +74,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     UserDTO? user = JsonSerializer.Deserialize<UserDTO>(json, options);
 
-                    return user;
+                    return user.ToModel();
                 }
                 else
                 {
@@ -84,14 +88,15 @@ namespace ElectroDepotClassLibrary.DataProviders
         }
         public async Task<bool> UserWithEMailExists(string EMail)
         {
-            UserDTO? found = await GetUserByEMail(EMail);
+            User? found = await GetUserByEMail(EMail);
             if (found == null)
             {
                 return false;
             }
             return true;
         }
-        public async Task<UserDTO> GetUserByID(int ID)
+
+        public async Task<User> GetUserByID(int ID)
         {
             try
             {
@@ -106,7 +111,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     UserDTO? user = JsonSerializer.Deserialize<UserDTO>(json, options);
 
-                    return user;
+                    return user.ToModel();
                 }
                 else
                 {
@@ -118,9 +123,10 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<bool> UpdateUser(int UserID, UpdateUserDTO user)
+
+        public async Task<bool> UpdateUser(int UserID, User user)
         {
-            var json = JsonSerializer.Serialize(user);
+            var json = JsonSerializer.Serialize(user.ToUpdateDTO());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             string url = UserEndpoints.Update(UserID);
@@ -128,7 +134,8 @@ namespace ElectroDepotClassLibrary.DataProviders
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<IEnumerable<UserDTO>> GetAllUsers()
+
+        public async Task<IEnumerable<User>> GetAllUsers()
         {
             try
             {
@@ -143,7 +150,7 @@ namespace ElectroDepotClassLibrary.DataProviders
                     var json = await response.Content.ReadAsStringAsync();
                     IEnumerable<UserDTO> users = JsonSerializer.Deserialize<IEnumerable<UserDTO>>(json, options);
 
-                    return users;
+                    return users.Select(x=>x.ToModel()).ToList();
                 }
                 else
                 {
@@ -155,12 +162,14 @@ namespace ElectroDepotClassLibrary.DataProviders
                 return null;
             }
         }
-        public async Task<bool> DeleteUser(UserDTO user)
+
+        public async Task<bool> DeleteUser(User user)
         {
             string url = UserEndpoints.Delete(user.ID);
             var response = await HTTPClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }
+
         public async Task<bool> DeleteUser(int ID)
         {
             string url = UserEndpoints.Delete(ID);

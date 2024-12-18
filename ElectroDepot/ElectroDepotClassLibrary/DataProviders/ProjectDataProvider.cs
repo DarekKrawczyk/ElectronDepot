@@ -139,7 +139,7 @@ namespace ElectroDepotClassLibrary.DataProviders
             }
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjectOfUser(UserDTO user)
+        public async Task<IEnumerable<Project>> GetAllProjectOfUser(User user)
         {
             try
             {
