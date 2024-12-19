@@ -3,7 +3,7 @@ using ElectroDepotClassLibrary.Models;
 
 namespace ElectroDepotClassLibrary.Stores
 {
-    public class SuppliersStore
+    public class SuppliersStore : RootStore
     {
         private readonly SupplierDataProvider _supplierDataProvider;
         private List<Supplier> _suppliers;
@@ -18,7 +18,7 @@ namespace ElectroDepotClassLibrary.Stores
 
         public event Action SuppliersLoaded;
 
-        public SuppliersStore(SupplierDataProvider supplierDataProvider)
+        public SuppliersStore(DatabaseStore dbStore, SupplierDataProvider supplierDataProvider) : base(dbStore)
         {
             _supplierDataProvider = supplierDataProvider;
             _suppliers = new List<Supplier>();

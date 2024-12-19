@@ -4,19 +4,21 @@ namespace DesktopClient.Containers
 {
     public class DetailedComponentContainer
     {
-        public int ID { get { return Component.ID; } }
-        public int CategoryID { get { return Component.CategoryID; } }
-        public Category Category { get { return Component.Category; } }
-        public string Name { get { return Component.Name; } }
-        public string Manufacturer { get { return Component.Manufacturer; } }
-        public string Description { get { return Component.Description; } }
-        public int Available { get; }
-        public Component Component { get; }
+        private readonly Component _component;
+        private readonly OwnsComponent _ownedComponent;
+        public Category Category { get { return _component.Category; } }
+        public int ID { get { return _component.ID; } }
+        public int CategoryID { get { return _component.CategoryID; } }
+        public string Name { get { return _component.Name; } }
+        public string Manufacturer { get { return _component.Manufacturer; } }
+        public string Description { get { return _component.Description; } }
+        public int OwnedAmount { get { return _ownedComponent.Quantity; } }
+        public int AvailableAmount { get { return -1; } }
 
-        public DetailedComponentContainer(Component component, int available)
+        public DetailedComponentContainer(Component component, OwnsComponent ownedComponent)
         {
-            Component = component;
-            Available = available;
+            _component = component;
+            _ownedComponent = ownedComponent;
         }
     }
 }

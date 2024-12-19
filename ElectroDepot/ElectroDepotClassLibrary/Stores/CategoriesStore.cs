@@ -3,7 +3,7 @@ using ElectroDepotClassLibrary.Models;
 
 namespace ElectroDepotClassLibrary.Stores
 {
-    public class CategoriesStore
+    public class CategoriesStore : RootStore
     {
         private readonly CategoryDataProvider _categoryDataProvider;
         private List<Category> _categories;
@@ -13,7 +13,7 @@ namespace ElectroDepotClassLibrary.Stores
 
         public event Action CategoriesLoaded;
 
-        public CategoriesStore(CategoryDataProvider categoryDataProvider)
+        public CategoriesStore(DatabaseStore dbStore, CategoryDataProvider categoryDataProvider) : base(dbStore)
         {
             _categoryDataProvider = categoryDataProvider;
             _categories = new List<Category>();

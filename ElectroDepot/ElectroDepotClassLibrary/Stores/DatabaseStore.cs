@@ -64,12 +64,12 @@ namespace ElectroDepotClassLibrary.Stores
             PurchaseDataProvider purchaseDataProvicer, UserDataProvider userDataProvider,
             OwnsComponentDataProvider ownsComponentDataProvider, ProjectComponentDataProvider projectComponentDataProvider)
         {
-            _supplierStore = new SuppliersStore(supplierDataProvider);
-            _componentsStore = new ComponentsStore(componentDataProvider, ownsComponentDataProvider);
-            _categoriesStore = new CategoriesStore(categoryDataProvider);
-            _projectsStore = new ProjectsStore(projectDataProvider);
-            _purchasesStore = new PurchasesStore(purchaseDataProvicer);
-            _usersStore = new UsersStore(userDataProvider);
+            _supplierStore = new SuppliersStore(this, supplierDataProvider);
+            _componentsStore = new ComponentsStore(this, componentDataProvider, ownsComponentDataProvider);
+            _categoriesStore = new CategoriesStore(this, categoryDataProvider);
+            _projectsStore = new ProjectsStore(this, projectDataProvider);
+            _purchasesStore = new PurchasesStore(this, purchaseDataProvicer);
+            _usersStore = new UsersStore(this, userDataProvider);
         }
     }
 }

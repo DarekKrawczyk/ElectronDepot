@@ -1,9 +1,9 @@
-﻿using ElectroDepotClassLibrary.DTOs;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Server.Models;
 using Server.Context;
 using Server.ExtensionMethods;
-using Server.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ElectroDepotClassLibrary.DTOs;
 
 namespace Server.Controllers
 {
@@ -80,6 +80,61 @@ namespace Server.Controllers
             }
 
             return ownsComponent.ToOwnsComponentDTO();
+        }
+
+        [HttpGet("GetAllUnusedComponents/{userID}")]
+        public async Task<ActionResult<IEnumerable<OwnsComponentDTO>>> GetAllUnusedComponents(int userID)
+        {
+            // Does user exists
+            User user = await _context.Users.FindAsync(userID);
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            //var _context.ProjectComponents.GroupBy(x => x.ComponentID).Select(x=> new { ComponentID = x.Key, Quantity = x.Sum(y=>y.Quantity)}).ToListAsync();
+
+            var projcomps = await (from component in _context.Components
+                                   join projectComp in (
+                                       _context.ProjectComponents
+                                           .GroupBy(x => x.ComponentID)
+                                           .Select(g => new
+                                           {
+                                               ComponentID = g.Key,
+                                               Quantity = g.Sum(y => (int?)y.Quantity) ?? 0 // Ensure Sum returns a non-null value
+                                           })
+                                   )
+                                   on component.ComponentID equals projectComp.ComponentID into cp
+                                   from cps in cp.DefaultIfEmpty() // Handle left join
+                                   select new
+                                   {
+                                       ComponentID = component.ComponentID,
+                                       Quantity = cps != null ? cps.Quantity : 0 // Null check
+                                   }).ToListAsync();
+
+
+
+
+
+            //var projcomps = await (from component in _context.Components
+            //                       join projectComp in _context.ProjectComponents
+            //                       on component.ComponentID equals projectComp
+
+
+            //IEnumerable<OwnsComponent> unusedItems = await (from owned in _context.OwnsComponent
+            //                                                join component in _context.Components
+            //                                                on owned.ComponentID equals component.ComponentID
+            //                                                join usedInProject in _context.ProjectComponents
+            //                                                on owned.ComponentID equals usedInProject.ComponentID
+            //                                                where owned.UserID == userID
+            //                                                select new OwnsComponent()
+            //                                                {
+            //                                                    OwnsComponentID = owned.ComponentID,
+            //                                                    UserID = owned.UserID,
+            //                                                    ComponentID = owned.ComponentID,
+            //                                                    Quantity = (owned.Quantity - usedInProject.Quantity)
+            //                                                }).ToListAsync();
+            return Ok(null);
         }
 
         /// <summary>

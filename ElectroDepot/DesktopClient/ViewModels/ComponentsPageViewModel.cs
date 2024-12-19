@@ -9,6 +9,7 @@ using Avalonia.Collections;
 using System.Transactions;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.Input;
+using System.Linq;
 
 namespace DesktopClient.ViewModels
 {
@@ -45,6 +46,7 @@ namespace DesktopClient.ViewModels
         {
             Components.Refresh();
             Console.WriteLine($"{value}");
+            var user = DatabaseStore.UsersStore.LoggedInUser;
         }
 
         [ObservableProperty]
@@ -122,11 +124,16 @@ namespace DesktopClient.ViewModels
         private void HandleComponentsLoaded()
         {
             Manufacturers.Clear();
+            ComponentsSource.Clear();
+
+            IEnumerable<OwnsComponent> ownedComponents = DatabaseStore.ComponentStore.OwnedComponents;
             IEnumerable<Component> components = DatabaseStore.ComponentStore.Components;
-            foreach (Component component in components)
+            for(int i = 0; i < components.Count(); i++)
             {
-                // TODO: This components part should by in separate handler but we are waiting for mOwnsCOmponent model implementation
-                ComponentsSource.Add(new DetailedComponentContainer(component, -1));
+                Component component = components.ElementAt(i);
+                OwnsComponent ownedComponent = ownedComponents.ElementAt(i);
+
+                ComponentsSource.Add(new DetailedComponentContainer(component, ownedComponent));
                 Manufacturers.Add(component.Manufacturer);
             }
             Components.Refresh();

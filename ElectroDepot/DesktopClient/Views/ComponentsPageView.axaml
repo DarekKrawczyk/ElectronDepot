@@ -77,7 +77,7 @@
           <DataGridTextColumn Header="Manufacturer" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Manufacturer}" Width="200"/>
           <DataGridTextColumn Header="Name" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Name}" Width="200"/>
           <DataGridTextColumn Header="Category" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Category.Name}" Width="200"/>
-          <DataGridTextColumn Header="Available" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Available}" Width="200"/>
+          <DataGridTextColumn Header="Available" x:DataType="cont:DetailedComponentContainer" Binding="{Binding AvailableAmount}" Width="200"/>
           <DataGridTextColumn Header="Description" x:DataType="cont:DetailedComponentContainer" Binding="{Binding Description}" Width="*"/>
         </DataGrid.Columns>
       </DataGrid>

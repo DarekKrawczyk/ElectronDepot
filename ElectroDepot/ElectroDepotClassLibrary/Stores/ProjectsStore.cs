@@ -4,7 +4,7 @@ using ElectroDepotClassLibrary.Models;
 
 namespace ElectroDepotClassLibrary.Stores
 {
-    public class ProjectsStore
+    public class ProjectsStore : RootStore
     {
         private readonly ProjectDataProvider _projectDataProvider;
         private List<Project> _projects;
@@ -14,7 +14,7 @@ namespace ElectroDepotClassLibrary.Stores
 
         public event Action ProjectsLoaded;
 
-        public ProjectsStore(ProjectDataProvider projectDataProvider)
+        public ProjectsStore(DatabaseStore dbStore, ProjectDataProvider projectDataProvider) : base(dbStore)
         {
             _projectDataProvider = projectDataProvider;
             _projects = new List<Project>();

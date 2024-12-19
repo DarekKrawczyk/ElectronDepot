@@ -33,6 +33,8 @@ namespace DesktopClient
                 ownsComponentDataProvider,
                 projectComponentDataProvider);
 
+            _databaseStore.UsersStore.TryLoginUser("test", "test");
+
             AvaloniaXamlLoader.Load(this);
         }
 

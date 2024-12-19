@@ -1,32 +1,53 @@
-﻿using ElectroDepotClassLibrary.DataProviders;
-using ElectroDepotClassLibrary.Models;
+﻿using ElectroDepotClassLibrary.Models;
+using ElectroDepotClassLibrary.DataProviders;
 
 namespace ElectroDepotClassLibrary.Stores
 {
-    public class UsersStore
+    public class UsersStore : RootStore
     {
         private readonly UserDataProvider _userDataProvider;
-        private List<User> _users;
+        private User _loggedInUser;
 
-        public IEnumerable<User> Users { get { return _users; } }
-        public UserDataProvider UsersDB { get { return _userDataProvider; } }
+        public User LoggedInUser { get { return _loggedInUser; } }
+        public UserDataProvider UsersDP { get { return _userDataProvider; } }
 
-        public event Action UsersLoaded;
+        public event Action UserLoggedIn;
+        public event Action UserLoggedOut;
+        public event Action UserLoginFailed;
 
-        public UsersStore(UserDataProvider projectDataProvider)
+        public UsersStore(DatabaseStore dbStore, UserDataProvider projectDataProvider) : base(dbStore)
         {
             _userDataProvider = projectDataProvider;
-            _users = new List<User>();
         }
 
-        public async Task Load()
+        public async Task TryLogoutUser()
         {
-            _users.Clear();
+            if(_loggedInUser != null)
+            {
+                _loggedInUser = null;
+                UserLoggedOut?.Invoke();
+            }
+        }
 
-            IEnumerable<User> usersFromDB = await _userDataProvider.GetAllUsers();
-            _users.AddRange(usersFromDB);
+        public async Task TryLoginUser(string username, string password)
+        {
+            if(_loggedInUser != null)
+            {
+                _loggedInUser = null;
+                UserLoggedOut?.Invoke();
+            }
 
-            UsersLoaded?.Invoke();
+            // TODO: to be implemented when login/register form is ready but for now it will do.
+            User userFromDB = await _userDataProvider.GetUserByUsername(username);
+            if(userFromDB != null)
+            {
+                _loggedInUser = userFromDB;
+                UserLoggedIn?.Invoke();
+            }
+            else
+            {
+                UserLoginFailed?.Invoke();
+            }
         }
     }
 }

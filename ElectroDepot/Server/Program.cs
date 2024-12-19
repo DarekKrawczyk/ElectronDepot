@@ -32,7 +32,7 @@ namespace Server
             //    try
             //    {
             //        var context = services.GetRequiredService<DatabaseContext>();
-            //        await TestingDataSeeder.SeedDataAsync(context);
+            //        await SingleUserTestingDataSeeder.SeedDataAsync(context);
             //    }
             //    catch (Exception ex)
             //    {
