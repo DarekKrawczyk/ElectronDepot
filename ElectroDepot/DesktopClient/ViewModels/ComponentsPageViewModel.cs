@@ -81,7 +81,16 @@ namespace DesktopClient.ViewModels
                     bool isManufacturer = true;
                     bool isCategory = true;
                     bool isNameOrDesc = false;
+                    bool onlyAvailable = true;
                     
+                    if(OnlyAvailableFlag == true)
+                    {
+                        if (detailedComponent.AvailableAmount <= 0)
+                        {
+                            onlyAvailable = false;
+                        }
+                    }
+
                     if(SelectedManufacturer != null)
                     {
                         if (!detailedComponent.Manufacturer.Contains(SelectedManufacturer, StringComparison.InvariantCultureIgnoreCase))
@@ -104,7 +113,7 @@ namespace DesktopClient.ViewModels
                         isNameOrDesc = true;
                     }
 
-                    if(isNameOrDesc == true && isManufacturer == true && isCategory == true)
+                    if(isNameOrDesc == true && isManufacturer == true && isCategory == true && onlyAvailable == true)
                     {
                         return true;
                     }
@@ -127,13 +136,15 @@ namespace DesktopClient.ViewModels
             ComponentsSource.Clear();
 
             IEnumerable<OwnsComponent> ownedComponents = DatabaseStore.ComponentStore.OwnedComponents;
+            IEnumerable<OwnsComponent> unusedComponents = DatabaseStore.ComponentStore.UnusedComponents;
             IEnumerable<Component> components = DatabaseStore.ComponentStore.Components;
             for(int i = 0; i < components.Count(); i++)
             {
                 Component component = components.ElementAt(i);
                 OwnsComponent ownedComponent = ownedComponents.ElementAt(i);
+                OwnsComponent unusedComponent = unusedComponents.ElementAt(i);
 
-                ComponentsSource.Add(new DetailedComponentContainer(component, ownedComponent));
+                ComponentsSource.Add(new DetailedComponentContainer(component, ownedComponent, unusedComponent));
                 Manufacturers.Add(component.Manufacturer);
             }
             Components.Refresh();

@@ -115,6 +115,29 @@ namespace Server.Controllers
 
             try
             {
+                //IEnumerable<Component> usersComponents = await (from component in (from ownsComponent in _context.OwnsComponent
+                //                                                                   join component in _context.Components
+                //                                                                   on ownsComponent.ComponentID equals component.ComponentID
+                //                                                                   where ownsComponent.UserID == user.UserID
+                //                                                                   select new Component
+                //                                                                   {
+                //                                                                       ComponentID = component.ComponentID,
+                //                                                                       CategoryID = component.CategoryID,
+                //                                                                       Name = component.Name,
+                //                                                                       Manufacturer = component.Manufacturer,
+                //                                                                       Description = component.Description
+                //                                                                   })
+                //                                                group component by component.ComponentID
+                //                                   into groupedByComponentID
+                //                                                select new Component()
+                //                                                {
+                //                                                    ComponentID = groupedByComponentID.Key,
+                //                                                    CategoryID = groupedByComponentID.FirstOrDefault().CategoryID,
+                //                                                    Name = groupedByComponentID.FirstOrDefault().Name,
+                //                                                    Manufacturer = groupedByComponentID.FirstOrDefault().Manufacturer,
+                //                                                    Description = groupedByComponentID.FirstOrDefault().Description
+                //                                                }).ToListAsync();
+                //return Ok(usersComponents.Select(x => x.ToDTO()).ToList());
                 IEnumerable<ComponentDTO> usersComponents = await (from ownsComponent in _context.OwnsComponent
                                                                    join component in _context.Components
                                                                    on ownsComponent.ComponentID equals component.ComponentID

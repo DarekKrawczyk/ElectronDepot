@@ -51,14 +51,15 @@ ElectroDepot is designed to be the ultimate tool for organizing components, stre
 ## 📊 Current State of Development  
 
 ### 🖥️ Desktop Client Application  
+Once basic functionalities are be implemented, application will recieve UI upgrade.
 
-![Desktop Application](PresentationFiles/BasicUI.gif)  
-
-#### ✅ Implemented  
+#### ✅ Raw implementation  
 - Basic **Home Page**  
+![Desktop Application](PresentationFiles/BasicUI.gif)  
+- **Projects Component**  
+  ![Components tab](PresentationFiles/components.gif)  
 
 #### 🛠️ To Be Implemented  
-- **Projects Component**  
 - **Components Component**  
 - **Purchases Component**  
 - **Tracking Component**

@@ -61,7 +61,7 @@ namespace Server.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<OwnsComponentDTO>>> GetAllOwnsComponent()
         {
-            return await _context.OwnsComponent.Select(x=>x.ToOwnsComponentDTO()).ToListAsync();
+            return await _context.OwnsComponent.Select(x => x.ToOwnsComponentDTO()).ToListAsync();
         }
 
         /// <summary>
@@ -85,56 +85,85 @@ namespace Server.Controllers
         [HttpGet("GetAllUnusedComponents/{userID}")]
         public async Task<ActionResult<IEnumerable<OwnsComponentDTO>>> GetAllUnusedComponents(int userID)
         {
-            // Does user exists
             User user = await _context.Users.FindAsync(userID);
-            if(user == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            //var _context.ProjectComponents.GroupBy(x => x.ComponentID).Select(x=> new { ComponentID = x.Key, Quantity = x.Sum(y=>y.Quantity)}).ToListAsync();
+            //IEnumerable<OwnsComponent> result = await (from ownedComponent in _context.OwnsComponent
+            //                                           join usedInProjComp in (from component in _context.Components
+            //                                                                   join projectComponent in _context.ProjectComponents
+            //                                                                   on component.ComponentID equals projectComponent.ComponentID
+            //                                                                   into groupedByComponentID
+            //                                                                   select new { ComponentID = component.ComponentID, Quantity = groupedByComponentID.Sum(x => x.Quantity) })
+            //                                           on ownedComponent.ComponentID equals usedInProjComp.ComponentID
+            //                                           where ownedComponent.UserID == userID
+            //                                           select new OwnsComponent()
+            //                                           {
+            //                                               OwnsComponentID = ownedComponent.OwnsComponentID,
+            //                                               UserID = ownedComponent.UserID,
+            //                                               ComponentID = ownedComponent.ComponentID,
+            //                                               Quantity = ownedComponent.Quantity - usedInProjComp.Quantity,
+            //                                           }).ToListAsync();
 
-            var projcomps = await (from component in _context.Components
-                                   join projectComp in (
-                                       _context.ProjectComponents
-                                           .GroupBy(x => x.ComponentID)
-                                           .Select(g => new
-                                           {
-                                               ComponentID = g.Key,
-                                               Quantity = g.Sum(y => (int?)y.Quantity) ?? 0 // Ensure Sum returns a non-null value
-                                           })
-                                   )
-                                   on component.ComponentID equals projectComp.ComponentID into cp
-                                   from cps in cp.DefaultIfEmpty() // Handle left join
-                                   select new
-                                   {
-                                       ComponentID = component.ComponentID,
-                                       Quantity = cps != null ? cps.Quantity : 0 // Null check
-                                   }).ToListAsync();
+            IEnumerable<OwnsComponent> result = await (from ownedComponent in _context.OwnsComponent
+                                                       join usedInProjComp in (from component in _context.Components
+                                                                               join projectComponent in _context.ProjectComponents
+                                                                               on component.ComponentID equals projectComponent.ComponentID
+                                                                               into groupedByComponentID
+                                                                               select new { ComponentID = component.ComponentID, Quantity = groupedByComponentID.Sum(x => x.Quantity) })
+                                                       on ownedComponent.ComponentID equals usedInProjComp.ComponentID
+                                                       where ownedComponent.UserID == userID
+                                                       select new OwnsComponent()
+                                                       {
+                                                           OwnsComponentID = ownedComponent.OwnsComponentID,
+                                                           UserID = ownedComponent.UserID,
+                                                           ComponentID = ownedComponent.ComponentID,
+                                                           Quantity = ownedComponent.Quantity - usedInProjComp.Quantity,
+                                                       }).ToListAsync();
 
+            var grouped = (from ownedComponent in result
+                           group ownedComponent by ownedComponent.ComponentID
+                           into groupedByComponentID
+                           select new
+                           {
+                               ComponentID = groupedByComponentID.Key,
+                               Quantity = groupedByComponentID.Sum(x=>x.Quantity)
+                           }).ToList();
 
+            //var result = await (from ownedComponent in (from component in (from comp in _context.Components
+            //                                                              join ownsComp in _context.OwnsComponent
+            //                                                              on comp.ComponentID equals ownsComp.ComponentID
+            //                                                              where ownsComp.UserID == userID
+            //                                                              select new OwnsComponent()
+            //                                                              {
+            //                                                                  OwnsComponentID = ownsComp.OwnsComponentID,
+            //                                                                  UserID = userID,
+            //                                                                  ComponentID = ownsComp.ComponentID,
+            //                                                                  Quantity = ownsComp.Quantity
+            //                                                              })
+            //                                           join projectComponent in _context.ProjectComponents
+            //                                           on component.ComponentID equals projectComponent.ComponentID
+            //                                           into groupedByComponentID
+            //                                           select new OwnsComponent 
+            //                                           { 
+            //                                               OwnsComponentID = component.OwnsComponentID,
+            //                                               UserID = userID,
+            //                                               ComponentID = component.ComponentID, 
+            //                                               Quantity = component.Quantity - groupedByComponentID.Sum(x => x.Quantity) 
+            //                                           }) group new
+            //                                           {
+            //                                               OwnsComponentID = ownedComponent.OwnsComponentID,
+            //                                               UserID = ownedComponent.UserID,
+            //                                               //ComponentID = ownedComponent.ComponentID,
+            //                                               //Quantity = ownedComponent.Quantity
+            //                                           } by ownedComponent.ComponentID into groupedByCompID
+            //                                           orderby groupedByCompID.Key
+            //                                           select groupedByCompID).ToListAsync();
 
-
-
-            //var projcomps = await (from component in _context.Components
-            //                       join projectComp in _context.ProjectComponents
-            //                       on component.ComponentID equals projectComp
-
-
-            //IEnumerable<OwnsComponent> unusedItems = await (from owned in _context.OwnsComponent
-            //                                                join component in _context.Components
-            //                                                on owned.ComponentID equals component.ComponentID
-            //                                                join usedInProject in _context.ProjectComponents
-            //                                                on owned.ComponentID equals usedInProject.ComponentID
-            //                                                where owned.UserID == userID
-            //                                                select new OwnsComponent()
-            //                                                {
-            //                                                    OwnsComponentID = owned.ComponentID,
-            //                                                    UserID = owned.UserID,
-            //                                                    ComponentID = owned.ComponentID,
-            //                                                    Quantity = (owned.Quantity - usedInProject.Quantity)
-            //                                                }).ToListAsync();
-            return Ok(null);
+            //return Ok(result);
+            return Ok(result.Select(x => x.ToOwnsComponentDTO()).ToList());
         }
 
         /// <summary>
@@ -147,7 +176,7 @@ namespace Server.Controllers
         [HttpGet("GetOwnComponentFromUser/{UserID}/Component/{ComponentID}")]
         public async Task<ActionResult<OwnsComponentDTO>> GetOwnComponentFromUser(int UserID, int ComponentID)
         {
-            User? user= await _context.Users.FindAsync(UserID);
+            User? user = await _context.Users.FindAsync(UserID);
 
             if (user == null)
             {
@@ -161,9 +190,9 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            IEnumerable<OwnsComponentDTO> foundComponents = await _context.OwnsComponent.Where(x=>x.UserID == UserID && x.ComponentID == ComponentID).Select(y=>y.ToOwnsComponentDTO()).ToListAsync();
+            IEnumerable<OwnsComponentDTO> foundComponents = await _context.OwnsComponent.Where(x => x.UserID == UserID && x.ComponentID == ComponentID).Select(y => y.ToOwnsComponentDTO()).ToListAsync();
             OwnsComponentDTO foundComponent = foundComponents.FirstOrDefault();
-            if(foundComponent == null)
+            if (foundComponent == null)
             {
                 return NotFound();
             }
@@ -265,7 +294,7 @@ namespace Server.Controllers
                 }
                 else
                 {
-                    throw; 
+                    throw;
                 }
             }
 

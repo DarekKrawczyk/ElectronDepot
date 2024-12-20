@@ -8,7 +8,7 @@ namespace Server.ExtensionMethods
         public static OwnsComponentDTO ToOwnsComponentDTO(this OwnsComponent component)
         {
             return new OwnsComponentDTO(
-                ID: component.ComponentID, 
+                ID: component.OwnsComponentID, 
                 UserID: component.UserID, 
                 ComponentID: component.ComponentID, 
                 Quantity: component.Quantity);

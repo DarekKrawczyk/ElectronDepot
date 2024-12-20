@@ -36,6 +36,10 @@ namespace ElectroDepotClassLibrary.Stores
             User loggedInUser = MainStore.UsersStore.LoggedInUser;
             if (loggedInUser == null) throw new Exception("User not logged in!!");
 
+            _ownedComponents.Clear();
+            _components.Clear();
+            _unusedComponents.Clear();
+
             IEnumerable<OwnsComponent> ownedComponentsFromDB = await OwnsComponentDP.GetAllOwnsComponentsFromUser(loggedInUser);
             IEnumerable<Component> componentsFromDB = await ComponentDP.GetAllAvailableComponentsFromUser(loggedInUser);
             IEnumerable<OwnsComponent> unusedComponentsFromDB = await OwnsComponentDP.GetAllUnusedComponents(loggedInUser);
